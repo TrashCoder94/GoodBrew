@@ -1,0 +1,20 @@
+[submodule "GBEngine/ThirdParty/bgfx"]
+	path = GBEngine/ThirdParty/bgfx
+	url = https://github.com/TrashCoder94/bgfx.git
+	branch = dev
+[submodule "GBEngine/ThirdParty/bimg"]
+	path = GBEngine/ThirdParty/bimg
+	url = https://github.com/TrashCoder94/bimg.git
+	branch = dev
+[submodule "GBEngine/ThirdParty/bx"]
+	path = GBEngine/ThirdParty/bx
+	url = https://github.com/TrashCoder94/bx.git
+	branch = dev
+[submodule "GBEngine/ThirdParty/glfw"]
+	path = GBEngine/ThirdParty/glfw
+	url = https://github.com/TrashCoder94/glfw.git
+	branch = dev
+[submodule "GBEngine/ThirdParty/imgui"]
+	path = GBEngine/ThirdParty/imgui
+	url = https://github.com/TrashCoder94/imgui.git
+	branch = docking

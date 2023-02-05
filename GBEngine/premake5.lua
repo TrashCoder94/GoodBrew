@@ -1,7 +1,7 @@
 project "GBEngine"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++14"
+	cppdialect "C++17"
 	staticruntime "on"
 
 	targetdir ("%{wks.location}/Binaries/" .. outputdir .. "/%{prj.name}")

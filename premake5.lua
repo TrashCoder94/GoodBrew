@@ -2,6 +2,7 @@ include "./ThirdParty/premake/premake_customization/solution_items.lua"
 
 workspace "GB"
 	architecture "x86_64"
+	startproject "BGFXHelloWorldTest"
 	
 	configurations
 	{
@@ -100,11 +101,15 @@ end
 
 group "Dependencies"
 	include "ThirdParty/premake"
-	include "bgfx"
-	include "bimg"
-	include "bx"
-	include "glfw"
-	include "imgui"
+	include "GBEngine/ThirdParty/bgfx"
+	include "GBEngine/ThirdParty/bimg"
+	include "GBEngine/ThirdParty/bx"
+	include "GBEngine/ThirdParty/glfw"
+	include "GBEngine/ThirdParty/imgui"
+group ""
+
+group "Examples"
+	include "Examples/BGFXHelloWorldTest"
 group ""
 
 group "GB"

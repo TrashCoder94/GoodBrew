@@ -23,11 +23,12 @@ project "GBEngine"
 
 	includedirs
 	{
-		"Source",
+		"%{IncludeDir.GBEngine}",
 		"%{IncludeDir.bgfx}",
 		"%{IncludeDir.bx}",
 		"%{IncludeDir.glfw}",
-		"%{IncludeDir.imgui}"
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.spdlog}"
 	}
 
 	links { "bgfx", "bimg", "bx", "glfw", "ImGui" }

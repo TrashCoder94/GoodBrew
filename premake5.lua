@@ -88,6 +88,9 @@ IncludeDir["bxCompatMingW"] = "%{wks.location}/GBEngine/ThirdParty/bx/include/co
 IncludeDir["bxCompatOSX"] = "%{wks.location}/GBEngine/ThirdParty/bx/include/compat/osx"
 IncludeDir["glfw"] = "%{wks.location}/GBEngine/ThirdParty/glfw/include"
 IncludeDir["imgui"] = "%{wks.location}/GBEngine/ThirdParty/imgui"
+IncludeDir["spdlog"] = "%{wks.location}/GBEngine/ThirdParty/spdlog/include"
+
+IncludeDir["GBEngine"] = "%{wks.location}/GBEngine/Source"
 
 function setBxCompat()
 	filter "action:vs*"
@@ -110,6 +113,7 @@ group ""
 
 group "Examples"
 	include "Examples/BGFXHelloWorldTest"
+	include "Examples/Sandbox"
 group ""
 
 group "GB"

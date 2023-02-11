@@ -4,8 +4,9 @@
 // Windows
 #ifdef _WIN32
 	// Windows x64/x86
-	#define WIN32_LEAN_AND_MEAN
 	#define GB_PLATFORM_WINDOWS
+	#define WIN32_LEAN_AND_MEAN
+	#define GLFW_EXPOSE_NATIVE_WIN32
 // Apple
 #elif defined(__APPLE__) || defined(__MACH__)
 	#include <TargetConditionals.h>
@@ -21,6 +22,7 @@
 		#error "IOS is not supported!"
 	#elif TARGET_OS_MAC == 1
 		#define GB_PLATFORM_MACOS
+		#define GLFW_EXPOSE_NATIVE_COCOA
 	#else
 		#error "Unknown Apple platform!"
 	#endif
@@ -35,6 +37,7 @@
 // Linux
 #elif defined(__linux__)
 	#define GB_PLATFORM_LINUX
+	#define GLFW_EXPOSE_NATIVE_X11
 #else
 	#error "Unknown platform!"
 #endif	// End of platform detection.

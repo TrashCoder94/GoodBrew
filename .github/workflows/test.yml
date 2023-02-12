@@ -1,0 +1,173 @@
+name: Test
+
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  workflow_run:
+    workflows:
+      - "Build"
+    branches:
+      - main
+    types:
+      - completed
+
+env:
+  SOLUTION_FILE_PATH: .
+
+jobs:
+  Windows-x64-Debug:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+  
+      - name: Download Workflow Artifact
+        uses: dawidd6/action-download-artifact@v2.14.0
+        with:
+          workflow: build.yml
+          name: Windows-Binaries-Debug
+          path: Binaries
+  
+      - name: Test
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: Scripts/BuildMachine/BuildMachine-Windows-Run-Debug.bat
+
+  Windows-x64-Release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+  
+      - name: Download Workflow Artifact
+        uses: dawidd6/action-download-artifact@v2.14.0
+        with:
+          workflow: build.yml
+          name: Windows-Binaries-Release
+          path: Binaries
+  
+      - name: Test
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: Scripts/BuildMachine/BuildMachine-Windows-Run-Release.bat
+
+  Linux-x64-Debug:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: Download Workflow Artifact
+        uses: dawidd6/action-download-artifact@v2.14.0
+        with:
+          workflow: build.yml
+          name: Linux-Binaries-Debug
+          path: Binaries
+
+      - name: Setup Prerequisites
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: |
+          export DISPLAY=:99
+          sudo apt-get update
+          sudo apt install xvfb
+          
+      - name: Test
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: |
+          chmod +x Scripts/BuildMachine/BuildMachine-Linux-Run-Debug.sh
+          xvfb-run -a Scripts/BuildMachine/BuildMachine-Linux-Run-Debug.sh
+    
+  Linux-x64-Release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        
+      - name: Download Workflow Artifact
+        uses: dawidd6/action-download-artifact@v2.14.0
+        with:
+          workflow: build.yml
+          name: Linux-Binaries-Release
+          path: Binaries
+
+      - name: Setup Prerequisites
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: |
+          export DISPLAY=:99
+          sudo apt-get update
+          sudo apt install xvfb
+          
+      - name: Test
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: |
+          chmod +x Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
+          xvfb-run -a Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
+
+# Commented out Mac run implementation because metal device isn't valid on GitHub runners yet.
+#  Mac-x64-Debug:
+#    runs-on: macos-latest
+#
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v2
+#        
+#      - name: Download Workflow Artifact
+#        uses: dawidd6/action-download-artifact@v2.14.0
+#        with:
+#          workflow: build.yml
+#          name: Mac-Binaries-Debug
+#          path: Binaries
+#
+#      - name: Install Dependencies
+#        run: |
+#          brew install --cask xquartz
+#          echo "/opt/X11/bin" >> $GITHUB_PATH  
+#
+#      # Just running the exectuable without an virtual screen setup
+#      - name: Test
+#        working-directory: ${{env.GITHUB_WORKSPACE}}
+#        run: |
+#          chmod +x Scripts/BuildMachine/BuildMachine-Mac-Run-Debug.sh
+#          Scripts/BuildMachine/BuildMachine-Mac-Run-Debug.sh
+#
+#      # Commented out for reference in the future... maybe? Using Xvfb setup to run the exectuable
+#      #- name: Test
+#      #  working-directory: ${{env.GITHUB_WORKSPACE}}
+#      #  run: |
+#      #    export DISPLAY=:99
+#      #    chmod +x Scripts/BuildMachine/BuildMachine-Mac-Run-Debug.sh
+#      #    Xvfb :99 -screen 0 1024x768x8 & Scripts/BuildMachine/BuildMachine-Mac-Run-Debug.sh
+#  Mac-x64-Release:
+#    runs-on: macos-latest
+#
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v2
+#        
+#      - name: Download Workflow Artifact
+#        uses: dawidd6/action-download-artifact@v2.14.0
+#        with:
+#          workflow: build.yml
+#          name: Mac-Binaries-Release
+#          path: Binaries
+#
+#      - name: Install Dependencies
+#        run: |
+#          brew install --cask xquartz
+#          echo "/opt/X11/bin" >> $GITHUB_PATH  
+#
+#      # Just running the exectuable without an virtual screen setup
+#      - name: Test
+#        working-directory: ${{env.GITHUB_WORKSPACE}}
+#        run: |
+#          chmod +x Scripts/BuildMachine/BuildMachine-Mac-Run-Release.sh
+#          Scripts/BuildMachine/BuildMachine-Mac-Run-Release.sh
+#
+#      # Commented out for reference in the future... maybe? Using Xvfb setup to run the exectuable
+#      #- name: Test
+#      #  working-directory: ${{env.GITHUB_WORKSPACE}}
+#      #  run: |
+#      #    export DISPLAY=:99
+#      #    chmod +x Scripts/BuildMachine/BuildMachine-Mac-Run-Release.sh
+#      #    Xvfb :99 -screen 0 1024x768x8 & Scripts/BuildMachine/BuildMachine-Mac-Run-Release.sh

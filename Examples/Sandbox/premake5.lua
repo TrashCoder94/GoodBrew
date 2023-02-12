@@ -21,6 +21,10 @@ project "Sandbox"
 	includedirs
 	{
 		"Source",
+		"%{IncludeDir.bgfx}",
+		"%{IncludeDir.bx}",
+		"%{IncludeDir.glfw}",
+		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.GBEngine}"
 	}

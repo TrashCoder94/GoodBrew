@@ -26,15 +26,20 @@ namespace GB
 		s_pInstance = this;
 		
 		m_pWindow = Window::Create(WindowProperties(name));
-		EventSystem::Get().Bind(EEventType::WindowClose, this, GB_EVENT_FUNCTION(Application::OnWindowClose));
-		EventSystem::Get().Bind(EEventType::WindowResize, this, GB_EVENT_FUNCTION(Application::OnWindowResized));
-		EventSystem::Get().Bind(EEventType::WindowFocus, this, GB_EVENT_FUNCTION(Application::OnWindowFocus));
-		EventSystem::Get().Bind(EEventType::WindowLostFocus, this, GB_EVENT_FUNCTION(Application::OnWindowLostFocus));
+		GB_BIND_EVENT(EEventType::WindowClose, this, Application::OnWindowClose);
+		GB_BIND_EVENT(EEventType::WindowResize, this, Application::OnWindowResized);
+		GB_BIND_EVENT(EEventType::WindowFocus, this, Application::OnWindowFocus);
+		GB_BIND_EVENT(EEventType::WindowLostFocus, this, Application::OnWindowLostFocus);
 	}
 
 	Application::~Application()
 	{
 		GB_PROFILE_FUNCTION();
+
+		GB_UNBIND_EVENT(EEventType::WindowClose, this);
+		GB_UNBIND_EVENT(EEventType::WindowResize, this);
+		GB_UNBIND_EVENT(EEventType::WindowFocus, this);
+		GB_UNBIND_EVENT(EEventType::WindowLostFocus, this);
 	}
 
 	void Application::Close()
@@ -108,14 +113,10 @@ namespace GB
 		}
 
 		m_Minimized = false;
-
-		int width, height;
-		glfwGetWindowSize(static_cast<GLFWwindow*>(m_pWindow->GetNativeWindow()), &width, &height);
 		
-		GB_CORE_ASSERT(width == newWidth && height == newHeight, "WindowResizeEvent width and height do not match window width and height");
-
 		const bgfx::ViewId kClearView = 0;
-		bgfx::reset((uint32_t)width, (uint32_t)height, BGFX_RESET_VSYNC);
+		bgfx::reset((uint32_t)newWidth, (uint32_t)newHeight, BGFX_RESET_VSYNC);
+		bgfx::setViewClear(kClearView, BGFX_CLEAR_COLOR);
 		bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);
 
 		return false;

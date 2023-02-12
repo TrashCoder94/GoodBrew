@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "GBEngine/Core/PlatformDetection.h"
+#include "GBEngine/Events/EventSystem.h"
 
 // DLL support.
 #ifdef GB_PLATFORM_WINDOWS
@@ -36,6 +37,8 @@
 #define BIT(x) (1 << x)
 
 #define GB_EVENT_FUNCTION(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
+#define GB_BIND_EVENT(type, obj, func) EventSystem::Get().Bind(type, obj, GB_EVENT_FUNCTION(func));
+#define GB_UNBIND_EVENT(type, obj) EventSystem::Get().Unbind(type, obj);
 
 namespace GB
 {

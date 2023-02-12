@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Event.h"
+#include <functional>
 
 namespace GB
 {
 	class BaseObject;
+	class Event;
 	enum class EEventType;
 
 	class EventSystemListener

@@ -1,5 +1,6 @@
 #include "gbpch.h"
 #include "EventSystem.h"
+#include "Event.h"
 #include "EventTypes.h"
 
 namespace GB

@@ -24,6 +24,9 @@
 	#elif defined(GB_PLATFORM_LINUX)
 		#include <signal.h>
 		#define GB_DEBUGBREAK() raise(SIGTRAP)
+	#elif defined(GB_PLATFORM_MACOS)
+		#include <signal.h>
+		#define GB_DEBUGBREAK() raise(SIGTRAP)
 	#else
 		#error "Platform doesn't support debugbreak yet!"
 	#endif

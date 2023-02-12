@@ -20,7 +20,7 @@ namespace GB::Assert
 	}
 }
 
-#define GB_INTERNAL_ASSERT_IMPL(type, check, msg, ...) { if(!(check)) { GB##type##LOG_ERROR(msg, __VA_ARGS__); GB_DEBUGBREAK() } }
+#define GB_INTERNAL_ASSERT_IMPL(type, check, msg, ...) { if(!(check)) { GB##type##LOG_ERROR(msg, __VA_ARGS__); GB_DEBUGBREAK(); } }
 #define GB_INTERNAL_ASSERT_WITH_MSG(type, check, ...) GB_INTERNAL_ASSERT_IMPL(type, check, "Assertion failed: '{0}'", __VA_ARGS__)
 #define GB_INTERNAL_ASSERT_NO_MSG(type, check) GB_INTERNAL_ASSERT_IMPL(type, check, "Assertion '{0}' failed at '{1}':'{2}'", GB_STRINGIFY_MACRO(check), ::GB::Assert::CurrentFileName(__FILE__), __LINE__)
 

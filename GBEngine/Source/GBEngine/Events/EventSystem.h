@@ -24,13 +24,10 @@ namespace GB
 
 	class EventSystem
 	{
-		friend class GBSystems;
-
 	public:
 		EventSystem();
 		~EventSystem();
 
-	public:
 		static EventSystem& Get();
 
 		void Bind(const EEventType eventType, BaseObject* pOwner, const std::function<bool(Event*)>& function);

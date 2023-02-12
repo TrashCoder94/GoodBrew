@@ -3,6 +3,7 @@
 #include <memory>
 #include "GBEngine/Core/PlatformDetection.h"
 #include "GBEngine/Events/EventSystem.h"
+#include "GBEngine/Timer/TimerSystem.h"
 
 // DLL support.
 #ifdef GB_PLATFORM_WINDOWS
@@ -36,9 +37,12 @@
 
 #define BIT(x) (1 << x)
 
-#define GB_EVENT_FUNCTION(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
-#define GB_BIND_EVENT(type, obj, func) EventSystem::Get().Bind(type, obj, GB_EVENT_FUNCTION(func));
-#define GB_UNBIND_EVENT(type, obj) EventSystem::Get().Unbind(type, obj);
+#define GB_BIND_FUNCTION(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
+#define GB_BIND_EVENT(type, obj, func) GB::EventSystem::Get().Bind(type, obj, GB_BIND_FUNCTION(func));
+#define GB_UNBIND_EVENT(type, obj) GB::EventSystem::Get().Unbind(type, obj);
+
+#define GB_SET_TIMER(obj, func, time) GB::TimerSystem::Get().AddTimer(obj, GB_BIND_FUNCTION(func), time);
+#define GB_CLEAR_TIMER(timerHandle) GB::TimerSystem::Get().ClearTimer(timerHandle);
 
 namespace GB
 {

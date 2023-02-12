@@ -1,5 +1,6 @@
 #include "gbpch.h"
 #include "Application.h"
+#include "GBEngine/Core/GBSystems.h"
 #include "GBEngine/Core/Window.h"
 #include "GBEngine/Events/EventSystem.h"
 #include "GBEngine/Events/EventTypes.h"
@@ -70,11 +71,13 @@ namespace GB
 				float time = GetTime();
 				m_DeltaTime = time - m_LastFrameTime;
 				m_LastFrameTime = time;
-
+				
 				if (!m_Minimized)
 				{
 					// TODO: Update/Render calls here...
 				}
+			
+				GBSystems::Update(m_DeltaTime);
 			}
 
 			m_pWindow->OnUpdate();

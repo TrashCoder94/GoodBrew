@@ -117,5 +117,6 @@ group "Examples"
 group ""
 
 group "GB"
+	include "Tests/BuildMachine"
 	include "GBEngine"
 group ""

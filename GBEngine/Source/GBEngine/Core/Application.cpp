@@ -7,6 +7,7 @@
 #include "GBEngine/Events/WindowEvents.h"
 
 #include <GLFW/glfw3.h>
+#include <bgfx/bgfx.h>
 
 namespace GB
 {

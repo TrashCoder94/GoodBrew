@@ -6,6 +6,8 @@
 #include "GBEngine/Events/MouseEvents.h"
 #include "GBEngine/Events/WindowEvents.h"
 
+#include <bgfx/bgfx.h>
+#include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
 namespace GB

@@ -29,8 +29,7 @@ project "BuildMachine"
 		"%{IncludeDir.GBEngine}"
 	}
 
-	filter "system:windows"
-		links { "GBEngine" }
+	links { "GBEngine" }
 	
 	filter "system:linux"
 		links { "GBEngine:static" }

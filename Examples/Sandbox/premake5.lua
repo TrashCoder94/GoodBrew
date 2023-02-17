@@ -31,10 +31,4 @@ project "Sandbox"
 	
 	links { "GBEngine" }
 	
-	filter "system:linux"
-		links { "GBEngine:static" }
-	
-	filter "system:macosx"
-		links { "GBEngine:static" }
-	
 	setBxCompat()

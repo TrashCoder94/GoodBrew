@@ -29,5 +29,5 @@ project "BuildMachine"
 		"%{IncludeDir.GBEngine}"
 	}
 
-	links { "GBEngine" }
+	links { "GBEngine", "bgfx", "bimg", "bx", "glfw", "ImGui" }
 	setBxCompat()

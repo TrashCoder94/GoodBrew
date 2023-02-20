@@ -37,6 +37,7 @@ project "GBEngine"
 		links { "gdi32", "kernel32", "psapi" }
 	
 	filter "system:linux"
+		pic "on"
 		links { "dl", "GL", "pthread", "X11" }
 	
 	filter "system:macosx"

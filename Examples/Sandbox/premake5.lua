@@ -28,18 +28,7 @@ project "Sandbox"
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.GBEngine}"
 	}
-	
-	-- links { "GBEngine" }
-	
-	links { "GBEngine", "bgfx", "bimg", "bx", "glfw", "ImGui" }
-
-	filter "system:windows"
-		links { "gdi32", "kernel32", "psapi" }
-	
-	filter "system:linux"
-		links { "dl", "GL", "pthread", "X11" }
-	
-	filter "system:macosx"
-		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework", "CoreGraphics.framework" }
+		
+	links { "GBEngine" }
 	
 	setBxCompat()

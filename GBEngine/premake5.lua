@@ -32,6 +32,7 @@ project "GBEngine"
 	}
 
 	links { "bgfx", "bimg", "bx", "glfw", "ImGui" }
+	libdirs { "%{wks.location}/Binaries/" .. outputdir .. "/**" }
 
 	filter "system:windows"
 		links { "gdi32", "kernel32", "psapi" }

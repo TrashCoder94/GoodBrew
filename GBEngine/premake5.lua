@@ -31,8 +31,8 @@ project "GBEngine"
 		"%{IncludeDir.spdlog}"
 	}
 
-	links { "bgfx", "bimg", "bx", "glfw", "ImGui" }
 	libdirs { "%{wks.location}/Binaries/" .. outputdir .. "/**" }
+	links { "bgfx", "bimg", "bx", "glfw", "ImGui" }
 
 	filter "system:windows"
 		links { "gdi32", "kernel32", "psapi" }

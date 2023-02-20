@@ -29,7 +29,6 @@ project "BuildMachine"
 		"%{IncludeDir.GBEngine}"
 	}
 
-	libdirs { "%{wks.location}/Binaries/" .. outputdir .. "/**" }
 	links { "GBEngine" }
 	
 	setBxCompat()

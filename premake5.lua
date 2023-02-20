@@ -109,6 +109,7 @@ group "Dependencies"
 	include "GBEngine/ThirdParty/bx"
 	include "GBEngine/ThirdParty/glfw"
 	include "GBEngine/ThirdParty/imgui"
+	include "ThirdParty/Shared"
 group ""
 
 group "Examples"

@@ -9,6 +9,7 @@ echo "Generating project files failed, exiting out..."
 exit 1
 fi
 
+sudo chmod o+x /ThirdParty/Shared
 cd /ThirdParty/Shared
 pwd
 echo "Generating binaries for ThirdParty dependencies..."

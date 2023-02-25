@@ -9,10 +9,11 @@ echo "Generating project files failed, exiting out..."
 exit 1
 fi
 
+echo "Generating binaries for ThirdParty dependencies..."
 sudo chmod o+x ./ThirdParty/Shared
 cd ./ThirdParty/Shared
 pwd
-echo "Generating binaries for ThirdParty dependencies..."
+find . -type f
 make config=debug_x86_64
 if [ $? -ne 0 ] 
 then
@@ -21,9 +22,10 @@ find . -type f
 exit 1
 fi
 
+echo "Linking binaries for ThirdParty dependencies..."
 cd ../../
 pwd
-echo "Linking binaries for ThirdParty dependencies..."
+find . -type f
 ThirdParty/premake/Binaries/premake5 --file=premake5.lua gmake2
 if [ $? -ne 0 ] 
 then

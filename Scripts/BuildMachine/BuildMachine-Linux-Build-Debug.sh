@@ -14,23 +14,24 @@ sudo chmod o+x ./ThirdParty/Shared
 cd ./ThirdParty/Shared
 pwd
 find . -type f
-make -f Makefile config=debug_x86_64
+echo "About to try and just make the Shared project"
+make -d config=debug_x86_64
 if [ $? -ne 0 ] 
 then
 echo "Building ThirdParty dependencies failed, exiting out..."
-find . -type f
+#find . -type f
 exit 1
 fi
 
 echo "Linking binaries for ThirdParty dependencies..."
 cd ../../
 pwd
-find . -type f
+#find . -type f
 ThirdParty/premake/Binaries/premake5 --file=premake5.lua gmake2
 if [ $? -ne 0 ] 
 then
 echo "Linking binaries for ThirdParty dependencies failed, exiting out..."
-find . -type f
+#find . -type f
 exit 1
 fi
 
@@ -39,6 +40,6 @@ make config=debug_x86_64
 if [ $? -ne 0 ] 
 then
 echo "Building Debug Configuration failed, exiting out..."
-find . -type f
+#find . -type f
 exit 1
 fi

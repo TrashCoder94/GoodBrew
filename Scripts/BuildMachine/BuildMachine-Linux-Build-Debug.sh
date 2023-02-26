@@ -14,7 +14,7 @@ sudo chmod o+x ./ThirdParty/Shared
 cd ./ThirdParty/Shared
 pwd
 echo "About to try and just make the Shared project"
-make Makefile config=debug_x86_64
+make Makefile --always-make config=debug_x86_64
 if [ $? -ne 0 ] 
 then
 echo "Building ThirdParty dependencies failed, exiting out..."
@@ -35,7 +35,7 @@ exit 1
 fi
 
 echo "Building Debug Configuration"
-make -B config=debug_x86_64
+make config=debug_x86_64
 if [ $? -ne 0 ] 
 then
 echo "Building Debug Configuration failed, exiting out..."

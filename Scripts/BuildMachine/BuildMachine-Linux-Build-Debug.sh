@@ -14,7 +14,7 @@ sudo chmod o+x ./ThirdParty/Shared
 cd ./ThirdParty/Shared
 pwd
 find . -type f
-make config=debug_x86_64
+make -f Makefile config=debug_x86_64
 if [ $? -ne 0 ] 
 then
 echo "Building ThirdParty dependencies failed, exiting out..."

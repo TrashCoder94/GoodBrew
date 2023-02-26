@@ -13,9 +13,8 @@ echo "Generating binaries for ThirdParty dependencies..."
 sudo chmod o+x ./ThirdParty/Shared
 cd ./ThirdParty/Shared
 pwd
-find . -type f
 echo "About to try and just make the Shared project"
-make -d config=debug_x86_64
+make -B config=debug_x86_64
 if [ $? -ne 0 ] 
 then
 echo "Building ThirdParty dependencies failed, exiting out..."
@@ -36,7 +35,7 @@ exit 1
 fi
 
 echo "Building Debug Configuration"
-make config=debug_x86_64
+make -B config=debug_x86_64
 if [ $? -ne 0 ] 
 then
 echo "Building Debug Configuration failed, exiting out..."

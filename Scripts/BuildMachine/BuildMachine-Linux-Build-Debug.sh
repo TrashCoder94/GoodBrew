@@ -25,6 +25,22 @@ echo "Linking binaries for ThirdParty dependencies failed, exiting out..."
 exit 1
 fi
 
+echo "Generating binaries for GBEngine"
+make GBEngine config=debug_x86_64
+if [ $? -ne 0 ] 
+then
+echo "Building GBEngine failed, exiting out..."
+exit 1
+fi
+
+echo "Linking binaries for GBEngine"
+ThirdParty/premake/Binaries/premake5 --file=premake5.lua gmake2
+if [ $? -ne 0 ] 
+then
+echo "Linking binaries for ThirdParty dependencies failed, exiting out..."
+exit 1
+fi
+
 echo "Building Debug Configuration"
 make config=debug_x86_64
 if [ $? -ne 0 ] 

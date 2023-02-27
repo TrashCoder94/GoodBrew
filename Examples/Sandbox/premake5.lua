@@ -29,6 +29,7 @@ project "Sandbox"
 		"%{IncludeDir.GBEngine}"
 	}
 
+	libdirs { "%{wks.location}/Binaries/" .. outputdir .. "/**" }
 	links { "GBEngine" }
 	
 	setBxCompat()

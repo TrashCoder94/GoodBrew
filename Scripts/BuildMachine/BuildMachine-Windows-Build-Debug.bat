@@ -6,14 +6,6 @@ call ThirdParty\premake\Binaries\premake5.exe vs2022
 devenv GB.sln /rebuild Debug /project Premake
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-echo "Generating binaries for ThirdParty dependencies..."
-devenv GB.sln /rebuild Debug /project Shared
-if %errorlevel% neq 0 exit /b %errorlevel%
-
-echo "Linking binaries for ThirdParty dependencies..."
-devenv GB.sln /rebuild Debug /project Premake
-if %errorlevel% neq 0 exit /b %errorlevel%
-
 echo "Building Debug Configuration"
 devenv GB.sln /rebuild Debug
 if %errorlevel% neq 0 exit /b %errorlevel%

@@ -102,6 +102,29 @@ function setBxCompat()
 		buildoptions { "-x objective-c++" }
 end
 
+function includeAndLinkGBEngineLibraryFiles()
+	includedirs
+	{
+		"%{IncludeDir.bgfx}",
+		"%{IncludeDir.bx}",
+		"%{IncludeDir.glfw}",
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.GBEngine}"
+	}
+
+	links { "bgfx", "bimg", "bx", "glfw", "ImGui", "GBEngine" }
+		
+	filter "system:windows"
+		links { "gdi32", "kernel32", "psapi" }
+	
+	filter "system:linux"
+		links { "dl", "GL", "pthread", "X11" }
+	
+	filter "system:macosx"
+		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework", "CoreGraphics.framework" }
+end
+
 group "Dependencies"
 	include "ThirdParty/premake"
 	include "GBEngine/ThirdParty/bgfx"
@@ -109,7 +132,6 @@ group "Dependencies"
 	include "GBEngine/ThirdParty/bx"
 	include "GBEngine/ThirdParty/glfw"
 	include "GBEngine/ThirdParty/imgui"
-	include "ThirdParty/Shared"
 group ""
 
 group "Examples"

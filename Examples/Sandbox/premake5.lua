@@ -20,16 +20,8 @@ project "Sandbox"
 
 	includedirs
 	{
-		"Source",
-		"%{IncludeDir.bgfx}",
-		"%{IncludeDir.bx}",
-		"%{IncludeDir.glfw}",
-		"%{IncludeDir.imgui}",
-		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.GBEngine}"
+		"Source"
 	}
 
-	libdirs { "%{wks.location}/Binaries/" .. outputdir .. "/**" }
-	links { "GBEngine" }
-	
+	includeAndLinkGBEngineLibraryFiles()
 	setBxCompat()

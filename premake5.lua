@@ -39,6 +39,7 @@ workspace "GB"
 		}
 		runtime "Debug"
 		symbols "on"
+	filter ""
 	filter "configurations:Release"
 		defines
 		{
@@ -47,6 +48,7 @@ workspace "GB"
 		}
 		runtime "Release"
 		optimize "on"
+	filter ""
 	filter "configurations:Distribution"
 		defines
 		{
@@ -55,19 +57,24 @@ workspace "GB"
 		}
 		runtime "Release"
 		optimize "on"
-		
+	filter ""
+	
 	filter "platforms:x86"
 		architecture "x86"
+	filter ""
 	filter "platforms:x86_64"
 		architecture "x86_64"
+	filter ""
 	filter "system:windows"
 		toolset "v143"
 		buildoptions { "/Zc:__cplusplus" }
+	filter ""
 	filter "system:macosx"
 		xcodebuildsettings {
 			["MACOSX_DEPLOYMENT_TARGET"] = "10.9",
 			["ALWAYS_SEARCH_USER_PATHS"] = "YES",
 		};
+	filter ""
 
 -- Folder to put Binaries and Intermediate files into
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -95,11 +102,14 @@ IncludeDir["GBEngine"] = "%{wks.location}/GBEngine/Source"
 function setBxCompat()
 	filter "action:vs*"
 		includedirs { "%{IncludeDir.bxCompatMSVC}" }
+	filter ""
 	filter { "system:windows", "action:gmake" }
 		includedirs { "%{IncludeDir.bxCompatMingW}" }
+	filter ""
 	filter { "system:macosx" }
 		includedirs { "%{IncludeDir.bxCompatOSX}" }
 		buildoptions { "-x objective-c++" }
+	filter ""
 end
 
 function includeAndLinkGBEngineLibraryFiles()
@@ -117,12 +127,15 @@ function includeAndLinkGBEngineLibraryFiles()
 		
 	filter "system:windows"
 		links { "gdi32", "kernel32", "psapi" }
+	filter ""
 	
 	filter "system:linux"
 		links { "dl", "GL", "pthread", "X11" }
+	filter ""
 	
 	filter "system:macosx"
 		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework", "CoreGraphics.framework" }
+	filter ""
 end
 
 group "Dependencies"

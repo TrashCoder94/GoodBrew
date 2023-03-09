@@ -23,5 +23,5 @@ project "BuildMachine"
 		"Source"
 	}
 
-	includeAndLinkGBEngineLibraryFiles()
 	setBxCompat()
+	includeAndLinkGBEngineLibraryFiles()

@@ -7,15 +7,6 @@ project "GBEngine"
 	targetdir ("%{wks.location}/Binaries/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/Intermediate/" .. outputdir .. "/%{prj.name}")
 
-	filter "action:vs*"
-		pchheader "gbpch.h"
-		pchsource "Source/gbpch.cpp"
-	filter ""
-	filter "action:not vs*"
-		pchheader "Source/gbpch.h"
-		pchsource "Source/gbpch.cpp"
-	filter ""
-
 	files
 	{
 		"Source/**.h",
@@ -40,14 +31,20 @@ project "GBEngine"
 	links { "bgfx", "bimg", "bx", "glfw", "ImGui" }
 		
 	filter "system:windows"
+		pchheader "gbpch.h"
+		pchsource "Source/gbpch.cpp"
 		links { "gdi32", "kernel32", "psapi" }
 	filter ""
 	
 	filter "system:linux"
+		pchheader "gbpch.h"
+		pchsource "Source/gbpch.cpp"
 		links { "dl", "GL", "pthread", "X11" }
 	filter ""
 	
 	filter "system:macosx"
+		pchheader "Source/gbpch.h"
+		pchsource "Source/gbpch.cpp"
 		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework", "CoreGraphics.framework" }
 	filter ""
 	

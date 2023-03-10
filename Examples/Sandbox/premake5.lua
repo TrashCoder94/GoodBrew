@@ -23,5 +23,5 @@ project "Sandbox"
 		"Source"
 	}
 	
-	setBxCompat()
 	includeAndLinkGBEngineLibraryFiles()
+	setBxCompat()

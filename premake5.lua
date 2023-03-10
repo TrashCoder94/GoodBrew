@@ -123,19 +123,23 @@ function includeAndLinkGBEngineLibraryFiles()
 		"%{IncludeDir.GBEngine}"
 	}
 
-	links { "bgfx", "bimg", "bx", "glfw", "ImGui", "GBEngine" }
+	if os.host() == "windows" then
+		links { "GBEngine" }
+	else	
+		links { "bgfx", "bimg", "bx", "glfw", "ImGui", "GBEngine" }
+			
+		filter "system:windows"
+			links { "gdi32", "kernel32", "psapi" }
+		filter ""
 		
-	filter "system:windows"
-		links { "gdi32", "kernel32", "psapi" }
-	filter ""
-	
-	filter "system:linux"
-		links { "dl", "GL", "pthread", "X11" }
-	filter ""
-	
-	filter "system:macosx"
-		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework", "CoreGraphics.framework" }
-	filter ""
+		filter "system:linux"
+			links { "dl", "GL", "pthread", "X11" }
+		filter ""
+		
+		filter "system:macosx"
+			links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework", "CoreGraphics.framework" }
+		filter ""
+	end
 end
 
 group "Dependencies"

@@ -23,7 +23,7 @@ project "GBEngine"
 
 	includedirs
 	{
-		"%{IncludeDir.GBEngine}",
+		"Source",
 		"%{IncludeDir.bgfx}",
 		"%{IncludeDir.bx}",
 		"%{IncludeDir.glfw}",

@@ -43,8 +43,8 @@ project "GBEngine"
 	filter ""
 	
 	filter "system:macosx"
-		pchheader "Source/gbpch.h"
-		pchsource "Source/gbpch.cpp"
+		pchheader "Source/gb.pch.h"
+		pchsource "Source/gb.pch.cpp"
 		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework", "CoreGraphics.framework" }
 	filter ""
 	

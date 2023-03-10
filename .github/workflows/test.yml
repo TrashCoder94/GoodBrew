@@ -20,7 +20,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-  
+        with:
+            submodules: recursive
+      
       - name: Download Workflow Artifact
         uses: dawidd6/action-download-artifact@v2.26.0
         with:
@@ -38,7 +40,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-  
+        with:
+            submodules: recursive
+      
       - name: Download Workflow Artifact
         uses: dawidd6/action-download-artifact@v2.26.0
         with:
@@ -56,7 +60,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        
+        with:
+            submodules: recursive
+      
       - name: Download Workflow Artifact
         uses: dawidd6/action-download-artifact@v2.26.0
         with:
@@ -83,7 +89,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        
+        with:
+            submodules: recursive
+      
       - name: Download Workflow Artifact
         uses: dawidd6/action-download-artifact@v2.26.0
         with:
@@ -111,7 +119,9 @@ jobs:
 #    steps:
 #      - name: Checkout Repository
 #        uses: actions/checkout@v3
-#        
+#        with:
+#            submodules: recursive        
+#
 #      - name: Download Workflow Artifact
 #        uses: dawidd6/action-download-artifact@v2.26.0
 #        with:
@@ -144,7 +154,9 @@ jobs:
 #    steps:
 #      - name: Checkout Repository
 #        uses: actions/checkout@v3
-#        
+#        with:
+#            submodules: recursive   
+#   
 #      - name: Download Workflow Artifact
 #        uses: dawidd6/action-download-artifact@v2.26.0
 #        with:

@@ -19,10 +19,10 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
   
       - name: Download Workflow Artifact
-        uses: dawidd6/action-download-artifact@v2.14.0
+        uses: dawidd6/action-download-artifact@v2.26.0
         with:
           workflow: build.yml
           name: Windows-Binaries-Debug
@@ -37,10 +37,10 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
   
       - name: Download Workflow Artifact
-        uses: dawidd6/action-download-artifact@v2.14.0
+        uses: dawidd6/action-download-artifact@v2.26.0
         with:
           workflow: build.yml
           name: Windows-Binaries-Release
@@ -55,10 +55,10 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         
       - name: Download Workflow Artifact
-        uses: dawidd6/action-download-artifact@v2.14.0
+        uses: dawidd6/action-download-artifact@v2.26.0
         with:
           workflow: build.yml
           name: Linux-Binaries-Debug
@@ -82,10 +82,10 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         
       - name: Download Workflow Artifact
-        uses: dawidd6/action-download-artifact@v2.14.0
+        uses: dawidd6/action-download-artifact@v2.26.0
         with:
           workflow: build.yml
           name: Linux-Binaries-Release
@@ -110,10 +110,10 @@ jobs:
 #
 #    steps:
 #      - name: Checkout Repository
-#        uses: actions/checkout@v2
+#        uses: actions/checkout@v3
 #        
 #      - name: Download Workflow Artifact
-#        uses: dawidd6/action-download-artifact@v2.14.0
+#        uses: dawidd6/action-download-artifact@v2.26.0
 #        with:
 #          workflow: build.yml
 #          name: Mac-Binaries-Debug
@@ -143,10 +143,10 @@ jobs:
 #
 #    steps:
 #      - name: Checkout Repository
-#        uses: actions/checkout@v2
+#        uses: actions/checkout@v3
 #        
 #      - name: Download Workflow Artifact
-#        uses: dawidd6/action-download-artifact@v2.14.0
+#        uses: dawidd6/action-download-artifact@v2.26.0
 #        with:
 #          workflow: build.yml
 #          name: Mac-Binaries-Release

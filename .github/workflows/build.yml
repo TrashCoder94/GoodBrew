@@ -22,7 +22,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
             submodules: recursive
   
@@ -34,7 +34,7 @@ jobs:
         run: Scripts/BuildMachine/BuildMachine-Windows-Build-Debug.bat
         
       - name: Archive Windows Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Windows-Binaries-Debug
           path: |
@@ -45,7 +45,7 @@ jobs:
     
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
             submodules: recursive
   
@@ -57,7 +57,7 @@ jobs:
         run: Scripts/BuildMachine/BuildMachine-Windows-Build-Release.bat
         
       - name: Archive Windows Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Windows-Binaries-Release
           path: |
@@ -68,7 +68,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
             submodules: recursive
 
@@ -86,7 +86,7 @@ jobs:
           Scripts/BuildMachine/BuildMachine-Linux-Build-Debug.sh
         
       - name: Archive Linux Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Linux-Binaries-Debug
           path: |
@@ -97,7 +97,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
             submodules: recursive
 
@@ -115,7 +115,7 @@ jobs:
           Scripts/BuildMachine/BuildMachine-Linux-Build-Release.sh
         
       - name: Archive Linux Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Linux-Binaries-Release
           path: |
@@ -126,7 +126,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
             submodules: recursive
       
@@ -137,7 +137,7 @@ jobs:
           Scripts/BuildMachine/BuildMachine-Mac-Build-Debug.sh
 
       - name: Archive Mac Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Mac-Binaries-Debug
           path: |
@@ -148,7 +148,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
             submodules: recursive
       
@@ -159,7 +159,7 @@ jobs:
           Scripts/BuildMachine/BuildMachine-Mac-Build-Release.sh
 
       - name: Archive Mac Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Mac-Binaries-Release
           path: |

@@ -126,7 +126,7 @@ function includeAndLinkGBEngineLibraryFiles()
 	if os.host() == "windows" then
 		links { "GBEngine" }
 	else	
-		links { "bgfx", "bimg", "bx", "glfw", "ImGui", "GBEngine" }
+		links { "GBEngine", "bgfx", "bimg", "bx", "glfw", "ImGui" }
 			
 		filter "system:windows"
 			links { "gdi32", "kernel32", "psapi" }

@@ -7,8 +7,14 @@ project "GBEngine"
 	targetdir ("%{wks.location}/Binaries/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/Intermediate/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "gbpch.h"
-	pchsource "Source/gbpch.cpp"
+	filter "action:vs*"
+		pchheader "gbpch.h"
+		pchsource "Source/gbpch.cpp"
+	filter ""
+	filter "action:not vs*"
+		pchheader "Source/gbpch.h"
+		pchsource "Source/gbpch.cpp"
+	filter ""
 
 	files
 	{

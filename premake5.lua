@@ -138,16 +138,16 @@ function includeAndLinkGBEngineLibraryFiles()
 		absolutePathForProjectLocation = path.getabsolute("%{prj.location}")
 		
 		-- might have to use -R instead for mac specifically...
+		-- dir=$(pwd)
+		-- echo "$dir"
 		postbuildcommands
 		{
-			"echo \"Workspace Location = %{wks.location}\"",
-			"echo \"Project Location = %{prj.location}\"",
-			"echo \"Absolute Workspace Location = %{absolutePathForWorkspaceLocation}\"",
-			"echo \"Absolute Project Location = %{absolutePathForProjectLocation}\"",
-			"chmod o+rx /%{prj.location}/../../GBEngine/Assets",
-			"chmod o+rx /%{prj.location}/Assets",
-			"cp -R /%{prj.location}/../../GBEngine/Assets/. /%{prj.location}/Assets/.",
-			"cp -R /%{prj.location}/Assets/. /%{cfg.targetdir}/Assets/."
+			"dir=$(pwd)",
+			"echo \"$dir\"",
+			"chmod o+rx /$dir/../../GBEngine/Assets",
+			"chmod o+rx /$dir/Assets",
+			"cp -R /$dir/../../GBEngine/Assets/. /$dir/Assets/.",
+			"cp -R /$dir/Assets/. /$dir/../../%{cfg.targetdir}/Assets/."
 		}
 		
 		-- cp: cannot stat '/../../GBEngine/Assets/.': No such file or directory

@@ -16,6 +16,7 @@ env:
 jobs:
   Windows-x64-Debug:
     runs-on: windows-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout Repository
@@ -36,6 +37,7 @@ jobs:
 
   Windows-x64-Release:
     runs-on: windows-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout Repository
@@ -56,6 +58,7 @@ jobs:
 
   Linux-x64-Debug:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout Repository
@@ -85,6 +88,7 @@ jobs:
     
   Linux-x64-Release:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout Repository
@@ -115,6 +119,7 @@ jobs:
 # Commented out Mac run implementation because metal device isn't valid on GitHub runners yet.
 #  Mac-x64-Debug:
 #    runs-on: macos-latest
+#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 #
 #    steps:
 #      - name: Checkout Repository
@@ -150,6 +155,7 @@ jobs:
 #      #    Xvfb :99 -screen 0 1024x768x8 & Scripts/BuildMachine/BuildMachine-Mac-Run-Debug.sh
 #  Mac-x64-Release:
 #    runs-on: macos-latest
+#    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 #
 #    steps:
 #      - name: Checkout Repository

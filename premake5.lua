@@ -137,6 +137,7 @@ function includeAndLinkGBEngineLibraryFiles()
 		-- might have to use -R instead for mac specifically...
 		postbuildcommands
 		{
+			"pwd",
 			"cp -R /%{wks.location}/GBEngine/Assets/. /%{prj.location}/Assets/.",
 			"cp -R /%{prj.location}/Assets/. /%{cfg.targetdir}/Assets/."
 		}

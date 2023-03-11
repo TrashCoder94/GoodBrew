@@ -123,6 +123,13 @@ function includeAndLinkGBEngineLibraryFiles()
 		"%{IncludeDir.GBEngine}"
 	}
 
+	postbuildmessage "Copying engine assets to project assets and binaries folder!"
+	postbuildcommands
+	{
+		"{COPY} %{wks.location}/GBEngine/Assets %{prj.location}/Assets",
+		"{COPY} %{prj.location}Assets %{cfg.targetdir}/Assets"
+	}
+
 	if os.host() == "windows" then
 		links { "GBEngine" }
 	else	

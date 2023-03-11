@@ -5,6 +5,7 @@
 #include "GBEngine/Events/EventSystem.h"
 #include "GBEngine/Events/EventTypes.h"
 #include "GBEngine/Events/WindowEvents.h"
+#include "GBEngine/ImGui/ImGuiLayer.h"
 
 #include <GLFW/glfw3.h>
 #include <bgfx/bgfx.h>
@@ -15,6 +16,8 @@ namespace GB
 
 	Application::Application(const std::string& name /*= "GB Application"*/) :
 		m_pWindow(nullptr),
+		m_LayerStack(),
+		m_pImGuiLayer(nullptr),
 		m_Running(true),
 		m_Minimized(false),
 		m_IsFocused(true),
@@ -32,6 +35,9 @@ namespace GB
 		GB_BIND_EVENT(EEventType::WindowResize, this, Application::OnWindowResized);
 		GB_BIND_EVENT(EEventType::WindowFocus, this, Application::OnWindowFocus);
 		GB_BIND_EVENT(EEventType::WindowLostFocus, this, Application::OnWindowLostFocus);
+
+		m_pImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_pImGuiLayer);
 	}
 
 	Application::~Application()
@@ -44,11 +50,6 @@ namespace GB
 		GB_UNBIND_EVENT(EEventType::WindowLostFocus, this);
 	}
 
-	void Application::Close()
-	{
-		m_Running = false;
-	}
-
 	Window& Application::GetWindow()
 	{
 		return *m_pWindow;
@@ -59,6 +60,27 @@ namespace GB
 		return *s_pInstance;
 	}
 
+	void Application::PushLayer(Layer* layer)
+	{
+		GB_PROFILE_FUNCTION();
+
+		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+
+	void Application::PushOverlay(Layer* overlay)
+	{
+		GB_PROFILE_FUNCTION();
+
+		m_LayerStack.PushOverlay(overlay);
+		overlay->OnAttach();
+	}
+
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	void Application::Run()
 	{
 		GB_PROFILE_FUNCTION();
@@ -66,6 +88,8 @@ namespace GB
 		while (m_Running)
 		{
 			GB_PROFILE_SCOPE("RunLoop");
+
+			m_pWindow->OnUpdate();
 
 			if (m_IsFocused)
 			{
@@ -75,13 +99,43 @@ namespace GB
 				
 				if (!m_Minimized)
 				{
-					// TODO: Update/Render calls here...
+					{
+						GB_PROFILE_SCOPE("LayerStack OnUpdate");
+
+						for (Layer* layer : m_LayerStack)
+						{
+							layer->OnUpdate(m_DeltaTime);
+						}
+					}
+
+					{
+						GB_PROFILE_SCOPE("LayerStack OnRender");
+
+						for (Layer* layer : m_LayerStack)
+						{
+							layer->OnRender();
+						}
+					}
 				}
 			
 				GBSystems::Update(m_DeltaTime);
 			}
 
-			m_pWindow->OnUpdate();
+			m_pImGuiLayer->Begin();
+			{
+				GB_PROFILE_SCOPE("LayerStack OnImGuiRender");
+
+				for (Layer* layer : m_LayerStack)
+				{
+					layer->OnImGuiRender();
+				}
+			}
+			m_pImGuiLayer->End();
+
+			// This dummy draw call is here to make sure that view 0 is cleared if no other draw calls are submitted to view 0.
+			static constexpr bgfx::ViewId kClearView = 0;
+			bgfx::touch(kClearView);
+
 			bgfx::frame();
 		}
 	}

@@ -1,8 +1,4 @@
 #include <GBEngine.h>
-
-#include <bgfx/bgfx.h>
-#include <GLFW/glfw3.h>
-
 #include <GBEngine/Core/EntryPoint.h>
 
 class BuildMachineApplication : public GB::Application

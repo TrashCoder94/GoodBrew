@@ -1,14 +1,16 @@
 #pragma once
 
-#include "GBEngine/Objects/BaseObject.h"
 #include <string>
+#include "LayerStack.h"
+#include "GBEngine/Objects/BaseObject.h"
 
 int main(int argc, char** argv);
 
 namespace GB
 {
-	class Window;
 	class Event;
+	class ImGuiLayer;
+	class Window;
 
 	class Application : public BaseObject
 	{
@@ -16,10 +18,14 @@ namespace GB
 		Application(const std::string& name = "GB Application");
 		virtual ~Application();
 
-		void Close();
-
 		Window& GetWindow();
 		static Application& Get();
+
+	protected:
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* overlay);
+		void Close();
+
 	private:
 		void Run();
 		float GetTime();
@@ -30,6 +36,8 @@ namespace GB
 		bool OnWindowLostFocus(Event* e);
 
 		UniquePtr<Window> m_pWindow;
+		LayerStack m_LayerStack;
+		ImGuiLayer* m_pImGuiLayer;
 
 		bool m_Running;
 		bool m_Minimized;

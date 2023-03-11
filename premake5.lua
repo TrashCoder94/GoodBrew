@@ -133,23 +133,12 @@ function includeAndLinkGBEngineLibraryFiles()
 			"{COPY} %{wks.location}/GBEngine/Assets %{prj.location}/Assets",
 			"{COPY} %{prj.location}Assets %{cfg.targetdir}/Assets"
 		}
-	else
-		targetDirectoryAsString = "%{cfg.targetdir}"
-	
+	else	
 		postbuildcommands
 		{
-			"pwd",
-			"echo $(PWD)",
-			"echo $(CURDIR)/%{cfg.targetdir}",
-			--"chmod o+rx /$(PWD)/../../GBEngine/Assets",
-			--"chmod o+rx /$(PWD)/Assets",
 			"cp -R /$(PWD)/GBEngine/Assets/. /$(CURDIR)/Assets/",
 			"cp -R /$(CURDIR)/Assets/. /$(CURDIR)/%{cfg.targetdir}/Assets/"
 		}
-		
-		-- cp: cannot stat '/../../GBEngine/Assets/.': No such file or directory
-		-- /home/runner/work/GoodBrew/GoodBrew/Examples/Sandbox
-		-- cp -a /source/. /dest/
 	
 		links { "GBEngine", "bgfx", "bimg", "bx", "glfw", "ImGui" }
 			

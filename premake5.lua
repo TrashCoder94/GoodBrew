@@ -143,15 +143,12 @@ function includeAndLinkGBEngineLibraryFiles()
 		postbuildcommands
 		{
 			"pwd",
-			"echo pwd",
-			"echo $pwd",
-			"echo $(pwd)",
-			"echo $PWD",
 			"echo $(PWD)",
-			-- "chmod o+rx /$dir/../../GBEngine/Assets",
-			-- "chmod o+rx /$dir/Assets",
-			-- "cp -R /$dir/../../GBEngine/Assets/. /$dir/Assets/.",
-			-- "cp -R /$dir/Assets/. /$dir/../../%{cfg.targetdir}/Assets/."
+			"echo \"/\"$(PWD)\"/%{prj.location}\""
+			-- "chmod o+rx /$(PWD)/../../GBEngine/Assets",
+			-- "chmod o+rx /$(PWD)/Assets",
+			-- "cp -R /$(PWD)/../../GBEngine/Assets/. /$dir/Assets/.",
+			-- "cp -R /$(PWD)/Assets/. /$dir/../../%{cfg.targetdir}/Assets/."
 		}
 		
 		-- cp: cannot stat '/../../GBEngine/Assets/.': No such file or directory

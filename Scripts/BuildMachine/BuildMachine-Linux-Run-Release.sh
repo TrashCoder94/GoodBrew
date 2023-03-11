@@ -1,6 +1,7 @@
 #!/bin/sh
 
 echo "Running Release BuildMachine executable!"
+chmod o+rx Binaries/Release-linux-x86_64/BuildMachine/Assets
 chmod +x Binaries/Release-linux-x86_64/BuildMachine/BuildMachine
 Binaries/Release-linux-x86_64/BuildMachine/BuildMachine
 if [ $? -ne 0 ] 

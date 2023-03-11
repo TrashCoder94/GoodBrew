@@ -85,12 +85,12 @@ void ImGui_Implbgfx_RenderDrawLists(ImDrawData* draw_data)
         bgfx::allocTransientVertexBuffer(&tvb, numVertices, g_VertexLayout);
         bgfx::allocTransientIndexBuffer(&tib, numIndices);
 
-        ImDrawVert* verts = (ImDrawVert*)tvb.data;
+        ImDrawVert* verts = reinterpret_cast<ImDrawVert*>(tvb.data);
         memcpy(
             verts, cmd_list->VtxBuffer.begin(),
             numVertices * sizeof(ImDrawVert));
 
-        ImDrawIdx* indices = (ImDrawIdx*)tib.data;
+        ImDrawIdx* indices = reinterpret_cast<ImDrawIdx*>(tib.data);
         memcpy(
             indices, cmd_list->IdxBuffer.begin(),
             numIndices * sizeof(ImDrawIdx));
@@ -134,7 +134,7 @@ bool ImGui_Implbgfx_CreateFontsTexture()
         0, bgfx::copy(pixels, width * height * 4));
 
     // Store our identifier
-    io.Fonts->TexID = (void*)(intptr_t)g_FontTexture.idx;
+    io.Fonts->TexID = reinterpret_cast<void*>((intptr_t)g_FontTexture.idx);
 
     return true;
 }

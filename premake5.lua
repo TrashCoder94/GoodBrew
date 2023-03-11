@@ -124,15 +124,25 @@ function includeAndLinkGBEngineLibraryFiles()
 	}
 
 	postbuildmessage "Copying engine assets to project assets and binaries folder!"
-	postbuildcommands
-	{
-		"{COPY} %{wks.location}/GBEngine/Assets %{prj.location}/Assets",
-		"{COPY} %{prj.location}Assets %{cfg.targetdir}/Assets"
-	}
 
 	if os.host() == "windows" then
 		links { "GBEngine" }
-	else	
+			
+		postbuildcommands
+		{
+			"{COPY} %{wks.location}/GBEngine/Assets %{prj.location}/Assets",
+			"{COPY} %{prj.location}Assets %{cfg.targetdir}/Assets"
+		}
+	else
+		-- might have to use -R instead for mac specifically...
+		postbuildcommands
+		{
+			"cp -a /%{wks.location}/GBEngine/Assets %{prj.location}",
+			"cp -a /%{prj.location}/Assets %{cfg.targetdir}"
+		}
+		
+		-- cp -a /source/. /dest/
+	
 		links { "GBEngine", "bgfx", "bimg", "bx", "glfw", "ImGui" }
 			
 		filter "system:windows"

@@ -12,3 +12,9 @@ sudo apt-get update
 sudo apt install libgl-dev
 sudo apt install xorg-dev
 ```
+
+## How To Setup
+
+1. Clone using your source control provider (I use GitHub Desktop for example :octocat:).
+2. Go to `/GoodBrew/Scripts/` and run the `GenerateProjectFiles` script for your os.
+3. Premake should have generated `GB.sln` in your root folder. Open that and you should have code access now!

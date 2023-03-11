@@ -134,17 +134,19 @@ function includeAndLinkGBEngineLibraryFiles()
 			"{COPY} %{prj.location}Assets %{cfg.targetdir}/Assets"
 		}
 	else
-		absolutePathForWorkspaceLocation = path.getabsolute("%{wks.location}")
-		absolutePathForProjectLocation = path.getabsolute("%{prj.location}")
+		premakeWorkspaceLocationAsString = "%{wks.location}"
+		premakeProjectLocationAsString = "%{prj.location}"
+		premakePathAsString = path
+		premakePathAbsoluteAsString = path.getabsolute()
 		
-		-- might have to use -R instead for mac specifically...
-		-- dir=$(pwd)
-		-- echo "$dir"
 		postbuildcommands
 		{
 			"pwd",
 			"echo $(PWD)",
-			"echo $(PWD)/%{wks.location}"
+			"echo %{premakeWorkspaceLocationAsString}",
+			"echo %{premakeProjectLocationAsString}",
+			"echo %{premakePathAsString}",
+			"echo %{premakePathAbsoluteAsString}"
 			-- "chmod o+rx /$(PWD)/../../GBEngine/Assets",
 			-- "chmod o+rx /$(PWD)/Assets",
 			-- "cp -R /$(PWD)/../../GBEngine/Assets/. /$dir/Assets/.",

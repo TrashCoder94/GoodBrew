@@ -47,8 +47,8 @@ namespace GB
 			GB_PROFILE_SCOPE("glfwInit");
 			
 			GB_CORE_LOG_INFO("Initialising GLFW!");
-			int success = glfwInit();
-			GB_CORE_ASSERT(success, "Could not initialize GLFW!");
+			const int glfwInitSuccess = glfwInit();
+			GB_CORE_ASSERT(glfwInitSuccess, "Could not initialize GLFW!");
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
@@ -82,7 +82,9 @@ namespace GB
 			init.resolution.width = (uint32_t)width;
 			init.resolution.height = (uint32_t)height;
 			init.resolution.reset = BGFX_RESET_VSYNC;
-			GB_CORE_ASSERT(bgfx::init(init), "bgfx failed to init!");
+			
+			const bool bgfxInitSuccess = bgfx::init(init);
+			GB_CORE_ASSERT(bgfxInitSuccess, "bgfx failed to init!");
 
 			// Set view 0 to the same dimensions as the window and to clear the color buffer.
 			const bgfx::ViewId kClearView = 0;

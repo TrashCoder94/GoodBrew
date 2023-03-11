@@ -144,7 +144,7 @@ function includeAndLinkGBEngineLibraryFiles()
 		{
 			"pwd",
 			"echo $(PWD)",
-			"echo \"/\"$(PWD)\"/%{prj.location}\""
+			"echo $(PWD)/%{wks.location}"
 			-- "chmod o+rx /$(PWD)/../../GBEngine/Assets",
 			-- "chmod o+rx /$(PWD)/Assets",
 			-- "cp -R /$(PWD)/../../GBEngine/Assets/. /$dir/Assets/.",

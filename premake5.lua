@@ -140,12 +140,11 @@ function includeAndLinkGBEngineLibraryFiles()
 		{
 			"pwd",
 			"echo $(PWD)",
-			"echo $(CURDIR)",
-			"echo %{cfg.targetdir}",
+			"echo $(CURDIR)/%{cfg.targetdir}",
 			--"chmod o+rx /$(PWD)/../../GBEngine/Assets",
 			--"chmod o+rx /$(PWD)/Assets",
 			"cp -R /$(PWD)/GBEngine/Assets/. /$(CURDIR)/Assets/",
-			"cp -R /$(CURDIR)/Assets/. /$(PWD)/%{cfg.targetdir}/Assets/"
+			"cp -R /$(CURDIR)/Assets/. /$(CURDIR)/%{cfg.targetdir}/Assets/"
 		}
 		
 		-- cp: cannot stat '/../../GBEngine/Assets/.': No such file or directory

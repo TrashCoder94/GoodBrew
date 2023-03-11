@@ -136,7 +136,7 @@ function includeAndLinkGBEngineLibraryFiles()
 	else
 		premakeWorkspaceLocationAsString = "%{wks.location}"
 		premakeProjectLocationAsString = "%{prj.location}"
-		premakePathAsString = path
+		premakePathAsString = "%{path}"
 		
 		postbuildcommands
 		{
@@ -144,8 +144,7 @@ function includeAndLinkGBEngineLibraryFiles()
 			"echo $(PWD)",
 			"echo %{premakeWorkspaceLocationAsString}",
 			"echo %{premakeProjectLocationAsString}",
-			"echo %{premakePathAsString}",
-			"echo %{premakePathAbsoluteAsString}"
+			"echo %{premakePathAsString}"
 			-- "chmod o+rx /$(PWD)/../../GBEngine/Assets",
 			-- "chmod o+rx /$(PWD)/Assets",
 			-- "cp -R /$(PWD)/../../GBEngine/Assets/. /$dir/Assets/.",

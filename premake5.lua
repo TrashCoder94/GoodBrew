@@ -133,18 +133,13 @@ function includeAndLinkGBEngineLibraryFiles()
 			"{COPY} %{wks.location}/GBEngine/Assets %{prj.location}/Assets",
 			"{COPY} %{prj.location}Assets %{cfg.targetdir}/Assets"
 		}
-	else
-		premakeWorkspaceLocationAsString = "%{wks.location}"
-		premakeProjectLocationAsString = "%{prj.location}"
-		premakePathAsString = "%{path}"
-		
+	else		
 		postbuildcommands
 		{
 			"pwd",
 			"echo $(PWD)",
-			"echo %{premakeWorkspaceLocationAsString}",
-			"echo %{premakeProjectLocationAsString}",
-			"echo %{premakePathAsString}"
+			"currentDir = $(notdir $(shell pwd))"
+			"echo $currentDir"
 			-- "chmod o+rx /$(PWD)/../../GBEngine/Assets",
 			-- "chmod o+rx /$(PWD)/Assets",
 			-- "cp -R /$(PWD)/../../GBEngine/Assets/. /$dir/Assets/.",

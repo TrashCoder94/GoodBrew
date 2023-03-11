@@ -137,7 +137,6 @@ function includeAndLinkGBEngineLibraryFiles()
 		premakeWorkspaceLocationAsString = "%{wks.location}"
 		premakeProjectLocationAsString = "%{prj.location}"
 		premakePathAsString = path
-		premakePathAbsoluteAsString = path.getabsolute()
 		
 		postbuildcommands
 		{

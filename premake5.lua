@@ -127,16 +127,23 @@ function includeAndLinkGBEngineLibraryFiles()
 
 	if os.host() == "windows" then
 		links { "GBEngine" }
-			
+
 		postbuildcommands
 		{
 			"{COPY} %{wks.location}/GBEngine/Assets %{prj.location}/Assets",
 			"{COPY} %{prj.location}Assets %{cfg.targetdir}/Assets"
 		}
 	else
+		absolutePathForWorkspaceLocation = path.getabsolute("%{wks.location}")
+		absolutePathForProjectLocation = path.getabsolute("%{prj.location}")
+		
 		-- might have to use -R instead for mac specifically...
 		postbuildcommands
 		{
+			"echo \"Workspace Location = %{wks.location}\"",
+			"echo \"Project Location = %{prj.location}\"",
+			"echo \"Absolute Workspace Location = %{absolutePathForWorkspaceLocation}\"",
+			"echo \"Absolute Project Location = %{absolutePathForProjectLocation}\"",
 			"chmod o+rx /%{prj.location}/../../GBEngine/Assets",
 			"chmod o+rx /%{prj.location}/Assets",
 			"cp -R /%{prj.location}/../../GBEngine/Assets/. /%{prj.location}/Assets/.",

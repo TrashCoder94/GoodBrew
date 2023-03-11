@@ -137,12 +137,14 @@ function includeAndLinkGBEngineLibraryFiles()
 		-- might have to use -R instead for mac specifically...
 		postbuildcommands
 		{
-			"chmod o+rx /%{wks.location}/GBEngine/Assets",
+			"chmod o+rx /%{prj.location}/../../GBEngine/Assets",
 			"chmod o+rx /%{prj.location}/Assets",
-			"cp -R /%{wks.location}/GBEngine/Assets/. /%{prj.location}/Assets/.",
+			"cp -R /%{prj.location}/../../GBEngine/Assets/. /%{prj.location}/Assets/.",
 			"cp -R /%{prj.location}/Assets/. /%{cfg.targetdir}/Assets/."
 		}
 		
+		-- cp: cannot stat '/../../GBEngine/Assets/.': No such file or directory
+		-- /home/runner/work/GoodBrew/GoodBrew/Examples/Sandbox
 		-- cp -a /source/. /dest/
 	
 		links { "GBEngine", "bgfx", "bimg", "bx", "glfw", "ImGui" }

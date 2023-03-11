@@ -138,8 +138,7 @@ function includeAndLinkGBEngineLibraryFiles()
 		{
 			"pwd",
 			"echo $(PWD)",
-			"currentDir = $(notdir $(shell pwd))",
-			"echo $currentDir"
+			"echo $(CURDIR)"
 			-- "chmod o+rx /$(PWD)/../../GBEngine/Assets",
 			-- "chmod o+rx /$(PWD)/Assets",
 			-- "cp -R /$(PWD)/../../GBEngine/Assets/. /$dir/Assets/.",

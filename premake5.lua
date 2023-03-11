@@ -143,7 +143,8 @@ function includeAndLinkGBEngineLibraryFiles()
 		postbuildcommands
 		{
 			"dir=$(pwd)",
-			"echo \"$PWD\"",
+			"pwd",
+			"echo $pwd",
 			"echo \"$dir\"",
 			"chmod o+rx /$dir/../../GBEngine/Assets",
 			"chmod o+rx /$dir/Assets",

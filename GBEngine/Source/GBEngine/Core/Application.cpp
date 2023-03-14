@@ -50,6 +50,11 @@ namespace GB
 		GB_UNBIND_EVENT(EEventType::WindowResize, this);
 		GB_UNBIND_EVENT(EEventType::WindowFocus, this);
 		GB_UNBIND_EVENT(EEventType::WindowLostFocus, this);
+
+		PopOverlay(m_pImGuiLayer);
+		m_pImGuiLayer = nullptr;
+
+		m_pWindow.reset();
 	}
 
 	Window& Application::GetWindow()
@@ -67,7 +72,6 @@ namespace GB
 		GB_PROFILE_FUNCTION();
 
 		m_LayerStack.PushLayer(layer);
-		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay)
@@ -75,7 +79,20 @@ namespace GB
 		GB_PROFILE_FUNCTION();
 
 		m_LayerStack.PushOverlay(overlay);
-		overlay->OnAttach();
+	}
+
+	void Application::PopLayer(Layer* layer)
+	{
+		GB_PROFILE_FUNCTION();
+
+		m_LayerStack.PopLayer(layer);
+	}
+
+	void Application::PopOverlay(Layer* overlay)
+	{
+		GB_PROFILE_FUNCTION();
+
+		m_LayerStack.PopOverlay(overlay);
 	}
 
 	void Application::Close()
@@ -90,6 +107,8 @@ namespace GB
 		while (m_Running)
 		{
 			GB_PROFILE_SCOPE("RunLoop");
+
+			m_pWindow->OnUpdate();
 
 			if (m_IsFocused)
 			{
@@ -120,8 +139,6 @@ namespace GB
 			
 				GBSystems::Update(m_DeltaTime);
 			}
-			
-			m_pWindow->OnUpdate();
 
 #if IMGUI_ENABLED
 			m_pImGuiLayer->Begin();

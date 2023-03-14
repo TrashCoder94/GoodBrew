@@ -4,7 +4,7 @@
 #include "LayerStack.h"
 #include "GBEngine/Objects/BaseObject.h"
 
-#define IMGUI_ENABLED 0
+#define IMGUI_ENABLED 1
 
 int main(int argc, char** argv);
 

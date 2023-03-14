@@ -91,8 +91,6 @@ namespace GB
 		{
 			GB_PROFILE_SCOPE("RunLoop");
 
-			m_pWindow->OnUpdate();
-
 			if (m_IsFocused)
 			{
 				float time = GetTime();
@@ -122,6 +120,8 @@ namespace GB
 			
 				GBSystems::Update(m_DeltaTime);
 			}
+			
+			m_pWindow->OnUpdate();
 
 #if IMGUI_ENABLED
 			m_pImGuiLayer->Begin();

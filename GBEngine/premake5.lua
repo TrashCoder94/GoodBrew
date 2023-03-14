@@ -7,11 +7,6 @@ project "GBEngine"
 	targetdir ("%{wks.location}/Binaries/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/Intermediate/" .. outputdir .. "/%{prj.name}")
 
-	if not os.host() == "macosx" then
-		pchheader "gbpch.h"
-		pchsource "Source/gbpch.cpp"
-	end
-
 	files
 	{
 		"Source/**.h",
@@ -37,10 +32,14 @@ project "GBEngine"
 		
 	filter "system:windows"
 		links { "gdi32", "kernel32", "psapi" }
+		pchheader "gbpch.h"
+		pchsource "Source/gbpch.cpp"
 	filter ""
 	
 	filter "system:linux"
 		links { "dl", "GL", "pthread", "X11" }
+		pchheader "gbpch.h"
+		pchsource "Source/gbpch.cpp"
 	filter ""
 	
 	filter "system:macosx"

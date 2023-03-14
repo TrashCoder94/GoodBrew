@@ -4,6 +4,8 @@
 #include "LayerStack.h"
 #include "GBEngine/Objects/BaseObject.h"
 
+#define IMGUI_ENABLED 0
+
 int main(int argc, char** argv);
 
 namespace GB

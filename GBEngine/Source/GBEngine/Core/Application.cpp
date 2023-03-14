@@ -36,8 +36,10 @@ namespace GB
 		GB_BIND_EVENT(EEventType::WindowFocus, this, Application::OnWindowFocus);
 		GB_BIND_EVENT(EEventType::WindowLostFocus, this, Application::OnWindowLostFocus);
 
+#if IMGUI_ENABLED
 		m_pImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_pImGuiLayer);
+#endif
 	}
 
 	Application::~Application()
@@ -121,6 +123,7 @@ namespace GB
 				GBSystems::Update(m_DeltaTime);
 			}
 
+#if IMGUI_ENABLED
 			m_pImGuiLayer->Begin();
 			{
 				GB_PROFILE_SCOPE("LayerStack OnImGuiRender");
@@ -131,6 +134,7 @@ namespace GB
 				}
 			}
 			m_pImGuiLayer->End();
+#endif
 
 			// This dummy draw call is here to make sure that view 0 is cleared if no other draw calls are submitted to view 0.
 			static constexpr bgfx::ViewId kClearView = 0;

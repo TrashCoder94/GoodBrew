@@ -55,6 +55,8 @@ namespace GB
 		ImGui_ImplGlfw_Shutdown();
 		ImGui_Implbgfx_Shutdown();
 		ImGui::DestroyContext();
+
+		GB_CORE_LOG_INFO("ImGui Layer is shutting down now...");
 	}
 
 	void ImGuiLayer::Begin()

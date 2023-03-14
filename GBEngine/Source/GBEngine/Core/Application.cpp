@@ -50,11 +50,6 @@ namespace GB
 		GB_UNBIND_EVENT(EEventType::WindowResize, this);
 		GB_UNBIND_EVENT(EEventType::WindowFocus, this);
 		GB_UNBIND_EVENT(EEventType::WindowLostFocus, this);
-
-		PopOverlay(m_pImGuiLayer);
-		m_pImGuiLayer = nullptr;
-
-		m_pWindow.reset();
 	}
 
 	Window& Application::GetWindow()
@@ -98,6 +93,12 @@ namespace GB
 	void Application::Close()
 	{
 		m_Running = false;
+
+		if (m_pImGuiLayer)
+		{
+			PopOverlay(m_pImGuiLayer);
+			m_pImGuiLayer = nullptr;
+		}
 	}
 
 	void Application::Run()

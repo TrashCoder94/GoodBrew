@@ -47,7 +47,7 @@ namespace GB
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
 		ImGui_Implbgfx_Init(255);
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		ImGui_ImplGlfw_InitForOpenGL(window, false);
 	}
 
 	void ImGuiLayer::OnDetach()

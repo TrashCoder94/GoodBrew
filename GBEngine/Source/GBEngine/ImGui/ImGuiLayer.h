@@ -1,5 +1,7 @@
 #pragma once
 
+#if GB_IMGUI_ENABLED
+
 #include "GBEngine/Core/Layer.h"
 #include "GBEngine/Events/KeyEvents.h"
 #include "GBEngine/Events/MouseEvents.h"
@@ -21,3 +23,5 @@ namespace GB
 			void SetDarkThemeColours();
 	};
 }
+
+#endif

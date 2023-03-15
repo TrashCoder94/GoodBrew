@@ -5,8 +5,9 @@
 #include "GBEngine/Events/EventSystem.h"
 #include "GBEngine/Events/EventTypes.h"
 #include "GBEngine/Events/WindowEvents.h"
+#if GB_IMGUI_ENABLED
 #include "GBEngine/ImGui/ImGuiLayer.h"
-
+#endif
 #include <GLFW/glfw3.h>
 #include <bgfx/bgfx.h>
 
@@ -17,7 +18,9 @@ namespace GB
 	Application::Application(const std::string& name /*= "GB Application"*/) :
 		m_pWindow(nullptr),
 		m_LayerStack(),
+#if GB_IMGUI_ENABLED
 		m_pImGuiLayer(nullptr),
+#endif
 		m_Running(true),
 		m_Minimized(false),
 		m_IsFocused(true),
@@ -36,7 +39,7 @@ namespace GB
 		GB_BIND_EVENT(EEventType::WindowFocus, this, Application::OnWindowFocus);
 		GB_BIND_EVENT(EEventType::WindowLostFocus, this, Application::OnWindowLostFocus);
 
-#if IMGUI_ENABLED
+#if GB_IMGUI_ENABLED
 		m_pImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_pImGuiLayer);
 #endif
@@ -94,11 +97,13 @@ namespace GB
 	{
 		m_Running = false;
 
+#if GB_IMGUI_ENABLED
 		if (m_pImGuiLayer)
 		{
 			PopOverlay(m_pImGuiLayer);
 			m_pImGuiLayer = nullptr;
 		}
+#endif
 	}
 
 	void Application::Run()
@@ -141,17 +146,20 @@ namespace GB
 				GBSystems::Update(m_DeltaTime);
 			}
 
-#if IMGUI_ENABLED
-			m_pImGuiLayer->Begin();
+#if GB_IMGUI_ENABLED
+			if (m_pImGuiLayer)
 			{
-				GB_PROFILE_SCOPE("LayerStack OnImGuiRender");
-
-				for (Layer* layer : m_LayerStack)
+				m_pImGuiLayer->Begin();
 				{
-					layer->OnImGuiRender();
+					GB_PROFILE_SCOPE("LayerStack OnImGuiRender");
+
+					for (Layer* layer : m_LayerStack)
+					{
+						layer->OnImGuiRender();
+					}
 				}
+				m_pImGuiLayer->End();
 			}
-			m_pImGuiLayer->End();
 #endif
 
 			// This dummy draw call is here to make sure that view 0 is cleared if no other draw calls are submitted to view 0.

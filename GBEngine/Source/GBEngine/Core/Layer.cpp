@@ -28,7 +28,9 @@ namespace GB
 	{
 	}
 
+#if GB_IMGUI_ENABLED
 	void Layer::OnImGuiRender()
 	{
 	}
+#endif
 }

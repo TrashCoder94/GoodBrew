@@ -35,6 +35,7 @@ workspace "GB"
 		defines
 		{
 			"GB_DEBUG",
+			"GB_IMGUI_ENABLED",
 			"BX_CONFIG_DEBUG=1"
 		}
 		runtime "Debug"
@@ -44,6 +45,7 @@ workspace "GB"
 		defines
 		{
 			"GB_RELEASE",
+			"GB_IMGUI_ENABLED",
 			"BX_CONFIG_DEBUG=0"
 		}
 		runtime "Release"
@@ -53,6 +55,7 @@ workspace "GB"
 		defines
 		{
 			"GB_DISTRIBUTION",
+			"GB_IMGUI_ENABLED",
 			"BX_CONFIG_DEBUG=0"
 		}
 		runtime "Release"
@@ -133,7 +136,7 @@ function includeAndLinkGBEngineLibraryFiles()
 			"{COPY} %{wks.location}/GBEngine/Assets %{prj.location}/Assets",
 			"{COPY} %{prj.location}Assets %{cfg.targetdir}/Assets"
 		}
-	else	
+	else
 		postbuildcommands
 		{
 			"cp -R /$(PWD)/GBEngine/Assets/. /$(CURDIR)/Assets/",

@@ -15,8 +15,9 @@ namespace GB
 			virtual void OnDetach();
 			virtual void OnUpdate(const float deltaTime);
 			virtual void OnRender();
+#if GB_IMGUI_ENABLED
 			virtual void OnImGuiRender();
-
+#endif
 			inline const std::string& GetName() const { return m_DebugName; }
 		
 		protected:

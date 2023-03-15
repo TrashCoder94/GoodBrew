@@ -1,4 +1,7 @@
 #include "gbpch.h"
+
+#if GB_IMGUI_ENABLED
+
 #include "ImGuiLayer.h"
 
 #include "bgfx-imgui/imgui_impl_bgfx.h"
@@ -123,3 +126,5 @@ namespace GB
 		style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 	}
 }
+
+#endif

@@ -4,14 +4,14 @@
 #include "LayerStack.h"
 #include "GBEngine/Objects/BaseObject.h"
 
-#define IMGUI_ENABLED 1
-
 int main(int argc, char** argv);
 
 namespace GB
 {
 	class Event;
+#if GB_IMGUI_ENABLED
 	class ImGuiLayer;
+#endif
 	class Window;
 
 	class Application : public BaseObject
@@ -41,8 +41,9 @@ namespace GB
 
 		UniquePtr<Window> m_pWindow;
 		LayerStack m_LayerStack;
+#if GB_IMGUI_ENABLED
 		ImGuiLayer* m_pImGuiLayer;
-
+#endif
 		bool m_Running;
 		bool m_Minimized;
 		bool m_IsFocused;

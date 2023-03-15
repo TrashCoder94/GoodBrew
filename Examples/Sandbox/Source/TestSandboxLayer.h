@@ -8,5 +8,7 @@ public:
 	TestSandboxLayer();
 	~TestSandboxLayer();
 
+#if GB_IMGUI_ENABLED
 	virtual void OnImGuiRender() override;
+#endif
 };

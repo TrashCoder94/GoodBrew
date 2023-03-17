@@ -35,7 +35,7 @@ workspace "GB"
 		defines
 		{
 			"GB_DEBUG",
-			--"GB_IMGUI_ENABLED",
+			"GB_IMGUI_ENABLED",
 			"BX_CONFIG_DEBUG=1"
 		}
 		runtime "Debug"
@@ -45,7 +45,7 @@ workspace "GB"
 		defines
 		{
 			"GB_RELEASE",
-			--"GB_IMGUI_ENABLED",
+			"GB_IMGUI_ENABLED",
 			"BX_CONFIG_DEBUG=0"
 		}
 		runtime "Release"
@@ -55,7 +55,7 @@ workspace "GB"
 		defines
 		{
 			"GB_DISTRIBUTION",
-			--"GB_IMGUI_ENABLED",
+			"GB_IMGUI_ENABLED",
 			"BX_CONFIG_DEBUG=0"
 		}
 		runtime "Release"

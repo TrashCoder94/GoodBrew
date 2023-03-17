@@ -73,24 +73,18 @@ jobs:
           name: Linux-Binaries-Debug
           path: Binaries
 
+      - name: Setup Prerequisites
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: |
+          export DISPLAY=:99
+          sudo apt-get update
+          sudo apt install xvfb
+         
       - name: Test
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: |
           chmod +x Scripts/BuildMachine/BuildMachine-Linux-Run-Debug.sh
-          Scripts/BuildMachine/BuildMachine-Linux-Run-Debug.sh
-
-      #- name: Setup Prerequisites
-      #  working-directory: ${{env.GITHUB_WORKSPACE}}
-      #  run: |
-      #    export DISPLAY=:99
-      #    sudo apt-get update
-      #    sudo apt install xvfb
-          
-      #- name: Test
-      #  working-directory: ${{env.GITHUB_WORKSPACE}}
-      #  run: |
-      #    chmod +x Scripts/BuildMachine/BuildMachine-Linux-Run-Debug.sh
-      #    xvfb-run -a Scripts/BuildMachine/BuildMachine-Linux-Run-Debug.sh
+          xvfb-run -a Scripts/BuildMachine/BuildMachine-Linux-Run-Debug.sh
     
   Linux-x64-Release:
     runs-on: ubuntu-latest
@@ -109,24 +103,18 @@ jobs:
           name: Linux-Binaries-Release
           path: Binaries
 
+      - name: Setup Prerequisites
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: |
+          export DISPLAY=:99
+          sudo apt-get update
+          sudo apt install xvfb
+          
       - name: Test
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: |
           chmod +x Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
-          Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
-
-      #- name: Setup Prerequisites
-      #  working-directory: ${{env.GITHUB_WORKSPACE}}
-      #  run: |
-      #    export DISPLAY=:99
-      #    sudo apt-get update
-      #    sudo apt install xvfb
-      #    
-      #- name: Test
-      #  working-directory: ${{env.GITHUB_WORKSPACE}}
-      #  run: |
-      #    chmod +x Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
-      #    xvfb-run -a Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
+          xvfb-run -a Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
 
 # Commented out Mac run implementation because metal device isn't valid on GitHub runners yet.
 #  Mac-x64-Debug:

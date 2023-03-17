@@ -195,7 +195,6 @@ namespace GB
 	{
 		GB_PROFILE_FUNCTION();
 
-		glfwDestroyWindow(m_pWindow);
 		--s_GLFWWindowCount;
 
 		if (s_GLFWWindowCount == 0)

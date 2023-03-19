@@ -9,8 +9,7 @@ namespace GB
 
 	EventSystemListener::EventSystemListener() :
 		m_EventType(EEventType::None),
-		m_pOwner(nullptr),
-		m_Function()
+		m_Delegate()
 	{}
 
 	EventSystemListener::~EventSystemListener()
@@ -38,8 +37,11 @@ namespace GB
 	{
 		EventSystemListener newListener;
 		newListener.m_EventType = eventType;
-		newListener.m_pOwner = pOwner;
-		newListener.m_Function = function;
+
+		Delegate<BaseObject, bool, Event*> newDelegate;
+		newDelegate.Bind(pOwner, function);
+		newListener.m_Delegate = newDelegate;
+
 		m_EventListeners.push_back(newListener);
 	}
 
@@ -48,7 +50,7 @@ namespace GB
 		for (size_t iE = m_EventListeners.size() - 1; iE > 0; --iE)
 		{
 			EventSystemListener& eventListener = m_EventListeners.at(iE);
-			if (eventListener.m_EventType == eventType && eventListener.m_pOwner == pOwner)
+			if (eventListener.m_EventType == eventType && eventListener.m_Delegate.Unbind(pOwner))
 			{
 				m_EventListeners.erase(m_EventListeners.end() - iE);
 				break;
@@ -67,7 +69,7 @@ namespace GB
 		{
 			if (eventListener.m_EventType == event->GetEventType())
 			{
-				if (eventListener.m_Function(event))
+				if (eventListener.m_Delegate(event))
 				{
 					GB_CORE_LOG_INFO("Event {0} has been handled, so no more event listeners will receive this event!", event->ToString());
 					return;

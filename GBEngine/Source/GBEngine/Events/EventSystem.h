@@ -1,7 +1,7 @@
 #pragma once
 
-#include <functional>
 #include <vector>
+#include "GBEngine/Delegates/Delegate.h"
 
 namespace GB
 {
@@ -19,8 +19,7 @@ namespace GB
 
 	private:
 		EEventType m_EventType;
-		BaseObject* m_pOwner;
-		std::function<bool(Event*)> m_Function;
+		Delegate<BaseObject, bool, Event*> m_Delegate;
 	};
 
 	class EventSystem

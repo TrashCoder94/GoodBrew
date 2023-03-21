@@ -1,4 +1,4 @@
-project "BuildMachine"
+project "BootupAndShutdownTest"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"

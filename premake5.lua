@@ -174,6 +174,9 @@ group "Examples"
 group ""
 
 group "GB"
-	include "Tests/BuildMachine"
 	include "GBEngine"
+group ""
+
+group "GB/Tests"
+	include "Tests/BootupAndShutdown"
 group ""

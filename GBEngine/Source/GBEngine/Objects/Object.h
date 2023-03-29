@@ -1,12 +1,12 @@
 #pragma once
 
 #include "BaseObject.h"
+#include "GBEngine/Components/Component.h"
+
 #include <vector>
 
 namespace GB
 {
-	class Component;
-
 	class Object : public BaseObject
 	{
 	public:
@@ -66,7 +66,7 @@ namespace GB
 		template<class ComponentClass>
 		ComponentClass* GetComponent() const
 		{
-			ComponentClass* pComponent = nullptr;
+			ComponentClass* pComponentResult = nullptr;
 
 			GB_CORE_ASSERT(GB_DOES_CLASS_INHERIT_FROM(Component, ComponentClass), "Class passed in template parameter doesn't inherit from Component!");
 

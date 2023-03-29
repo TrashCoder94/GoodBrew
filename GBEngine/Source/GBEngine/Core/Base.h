@@ -47,6 +47,8 @@
 #define GB_SET_TIMER(obj, func, time) GB::TimerSystem::Get().AddTimer(obj, GB_BIND_FUNCTION(func), time);
 #define GB_CLEAR_TIMER(timerHandle) GB::TimerSystem::Get().ClearTimer(timerHandle);
 
+#define GB_DOES_CLASS_INHERIT_FROM(base, derived) std::is_base_of<base, derived>::value
+
 namespace GB
 {
 	template<typename T>

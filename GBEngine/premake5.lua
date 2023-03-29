@@ -22,6 +22,7 @@ project "GBEngine"
 	{
 		"Source",
 		"%{IncludeDir.bgfx}",
+		"%{IncludeDir.bimg}",
 		"%{IncludeDir.bx}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.imgui}",

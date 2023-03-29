@@ -1,6 +1,7 @@
 #include "gbpch.h"
 #include "GBSystems.h"
 #include "GBEngine/Events/EventSystem.h"
+#include "GBEngine/Renderer/RendererAPI.h"
 #include "GBEngine/Timer/TimerSystem.h"
 #include "Log.h"
 
@@ -12,6 +13,10 @@ namespace GB
 	void GBSystems::Init()
 	{
 		GB::Log::Init();
+
+		// Is this the best place for this to live?
+		RendererAPI::SetAPI(RendererAPI::EAPI::BGFX);
+
 		s_pEventSystem = std::make_unique<EventSystem>();
 		s_pTimerSystem = std::make_unique<TimerSystem>();
 	}

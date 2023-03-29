@@ -5,6 +5,7 @@
 #include "GBEngine/Events/KeyEvents.h"
 #include "GBEngine/Events/MouseEvents.h"
 #include "GBEngine/Events/WindowEvents.h"
+#include "GBEngine/Renderer/Renderer.h"
 
 #include <bgfx/bgfx.h>
 #include <GLFW/glfw3.h>
@@ -61,39 +62,9 @@ namespace GB
 			++s_GLFWWindowCount;
 		}
 
-		bgfx::renderFrame();
-
-		{
-			GB_PROFILE_SCOPE("bgfxInit");
-
-			// Initialize bgfx using the native window handle and window resolution.
-			bgfx::Init init;
-#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
-			init.platformData.ndt = glfwGetX11Display();
-			init.platformData.nwh = (void*)(uintptr_t)glfwGetX11Window(m_pWindow);
-#elif BX_PLATFORM_OSX
-			init.platformData.nwh = glfwGetCocoaWindow(m_pWindow);
-#elif BX_PLATFORM_WINDOWS
-			init.platformData.nwh = glfwGetWin32Window(m_pWindow);
-#endif
-
-			int width, height;
-			glfwGetWindowSize(m_pWindow, &width, &height);
-			init.resolution.width = (uint32_t)width;
-			init.resolution.height = (uint32_t)height;
-			init.resolution.reset = BGFX_RESET_VSYNC;
-			
-			const bool bgfxInitSuccess = bgfx::init(init);
-			GB_CORE_ASSERT(bgfxInitSuccess, "bgfx failed to init!");
-
-			// Set view 0 to the same dimensions as the window and to clear the color buffer.
-			const bgfx::ViewId kClearView = 0;
-			bgfx::setViewClear(kClearView, BGFX_CLEAR_COLOR);
-			bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);
-		}
+		Renderer::Initialize(m_pWindow);
 
 		// Callbacks
-
 		// Window Resize Event
 		glfwSetWindowSizeCallback(m_pWindow, [](GLFWwindow* window, int width, int height)
 		{
@@ -199,9 +170,7 @@ namespace GB
 
 		if (s_GLFWWindowCount == 0)
 		{
-			GB_CORE_LOG_INFO("Terminating bgfx and GLFW!");
-			bgfx::shutdown();
-			glfwTerminate();
+			Renderer::Deinitialize();
 		}
 	}
 

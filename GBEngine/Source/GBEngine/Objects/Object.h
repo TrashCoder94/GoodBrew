@@ -20,7 +20,8 @@ namespace GB
 		{
 			bool bHasComponent = false;
 
-			GB_CORE_ASSERT(GB_DOES_CLASS_INHERIT_FROM(Component, ComponentClass), "Class passed in template parameter doesn't inherit from Component!");
+			const bool bIsValidComponentClass = GB_DOES_CLASS_INHERIT_FROM(Component, ComponentClass);
+			GB_CORE_ASSERT(bIsValidComponentClass, "Class passed in template parameter doesn't inherit from Component!");
 
 			for (Component* pComponent : m_pComponents)
 			{
@@ -44,7 +45,8 @@ namespace GB
 		{
 			ComponentClass* pResult{ nullptr };
 
-			GB_CORE_ASSERT(GB_DOES_CLASS_INHERIT_FROM(Component, ComponentClass), "Class passed in template parameter doesn't inherit from Component!");
+			const bool bIsValidComponentClass = GB_DOES_CLASS_INHERIT_FROM(Component, ComponentClass);
+			GB_CORE_ASSERT(bIsValidComponentClass, "Class passed in template parameter doesn't inherit from Component!");
 
 			if (HasComponent<ComponentClass>())
 			{
@@ -68,7 +70,8 @@ namespace GB
 		{
 			ComponentClass* pComponentResult = nullptr;
 
-			GB_CORE_ASSERT(GB_DOES_CLASS_INHERIT_FROM(Component, ComponentClass), "Class passed in template parameter doesn't inherit from Component!");
+			const bool bIsValidComponentClass = GB_DOES_CLASS_INHERIT_FROM(Component, ComponentClass);
+			GB_CORE_ASSERT(bIsValidComponentClass, "Class passed in template parameter doesn't inherit from Component!");
 
 			for (Component* pComponent : m_pComponents)
 			{

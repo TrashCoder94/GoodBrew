@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GBEngine/Core/Assert.h"
+#include "GBEngine/Core/Base.h"
 
 namespace GB
 {

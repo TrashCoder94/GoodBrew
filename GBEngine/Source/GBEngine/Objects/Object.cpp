@@ -35,11 +35,6 @@ namespace GB
 	{
 		GB_CHECK_PTR(pComponent, "Trying to add a component that's a nullptr!");
 
-		if (!pComponent)
-		{
-			return;
-		}
-
 		if (HasComponent(pComponent))
 		{
 			return;

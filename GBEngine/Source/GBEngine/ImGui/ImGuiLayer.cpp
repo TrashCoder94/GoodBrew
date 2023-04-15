@@ -24,6 +24,8 @@ namespace GB
 	{
 		GB_PROFILE_FUNCTION();
 
+		GB_CORE_LOG_INFO("ImGui Layer is initializing now...");
+
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 

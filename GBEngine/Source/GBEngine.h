@@ -8,9 +8,9 @@
 
 // ----- CORE --------
 #include "GBEngine/Core/Application.h"
+#include "GBEngine/Core/Assert.h"
 #include "GBEngine/Core/Base.h"
 #include "GBEngine/Core/Log.h"
-#include "GBEngine/Core/Assert.h"
 // -------------------
 
 // ----- PROFILING --------

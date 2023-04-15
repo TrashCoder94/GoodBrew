@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "GBEngine/Core/PlatformDetection.h"
+#include "GBEngine/Core/Assert.h"
 #include "GBEngine/Events/EventSystem.h"
 #include "GBEngine/Timer/TimerSystem.h"
 
@@ -17,23 +17,6 @@
 		#define GB_API
 	#endif
 #endif	// End of DLL support.
-
-#ifdef GB_DEBUG
-	#if defined(GB_PLATFORM_WINDOWS)
-		#define GB_DEBUGBREAK() __debugbreak();
-	#elif defined(GB_PLATFORM_LINUX)
-		#include <signal.h>
-		#define GB_DEBUGBREAK() raise(SIGTRAP)
-	#elif defined(GB_PLATFORM_MACOS)
-		#include <signal.h>
-		#define GB_DEBUGBREAK() raise(SIGTRAP)
-	#else
-		#error "Platform doesn't support debugbreak yet!"
-	#endif
-	#define GB_ENABLE_ASSERTS
-#else
-	#define GB_DEBUGBREAK()
-#endif
 
 #define GB_EXPAND_MACRO(x) x
 #define GB_STRINGIFY_MACRO(x) #x

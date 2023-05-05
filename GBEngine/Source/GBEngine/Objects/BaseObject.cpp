@@ -25,8 +25,10 @@ namespace GB
 	void BaseObject::Deinitialize()
 	{}
 
+#if GB_IMGUI_ENABLED
 	void BaseObject::ImGuiRender()
 	{}
+#endif
 
 	void BaseObject::SetOwner(BaseObject* pOwner)
 	{

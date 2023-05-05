@@ -11,28 +11,106 @@ namespace GB
 	Object::~Object()
 	{}
 
+	void Object::Initialize()
+	{
+		GB_PROFILE_FUNCTION();
+
+		BaseObject::Initialize();
+
+		ForEachValidComponent([&](Component& component)
+		{
+			component.Initialize();
+		});
+	}
+
+	void Object::Begin()
+	{
+		GB_PROFILE_FUNCTION();
+
+		BaseObject::Begin();
+
+		ForEachValidComponent([&](Component& component)
+		{
+			component.Begin();
+		});
+	}
+
+	void Object::Update(const float deltaTime)
+	{
+		GB_PROFILE_FUNCTION();
+
+		BaseObject::Update(deltaTime);
+
+		ForEachValidComponent([&](Component& component)
+		{
+			component.Update(deltaTime);
+		});
+	}
+
+	void Object::End()
+	{
+		GB_PROFILE_FUNCTION();
+
+		BaseObject::End();
+
+		ForEachValidComponent([&](Component& component)
+		{
+			component.End();
+		});
+	}
+
+	void Object::Deinitialize()
+	{
+		GB_PROFILE_FUNCTION();
+
+		BaseObject::Deinitialize();
+
+		ForEachValidComponent([&](Component& component)
+		{
+			component.Deinitialize();
+		});
+
+		m_pComponents.clear();
+	}
+
+#if GB_IMGUI_ENABLED
+	void Object::ImGuiRender()
+	{
+		GB_PROFILE_FUNCTION();
+
+		BaseObject::ImGuiRender();
+
+		ForEachValidComponent([&](Component& component)
+		{
+			component.ImGuiRender();
+		});
+	}
+#endif
+
 	bool Object::HasComponent(Component* pComponentToFind) const
 	{
+		GB_PROFILE_FUNCTION();
+
 		GB_CHECK_PTR(pComponentToFind, "Trying to find a component that's a nullptr!");
 
 		bool bHasComponent = false;
 
-		auto func = [&](Component* pComponent)
+		ForEachValidComponent([&](Component& component)
 		{
-			// TODO: Test this comparison works...
-			if (pComponent == pComponentToFind)
+			if (&component == pComponentToFind)
 			{
 				bHasComponent = true;
 				return;
 			}
-		};
-		IterateComponents(func);
+		});
 
 		return bHasComponent;
 	}
 
 	void Object::AddComponent(Component* pComponent)
 	{
+		GB_PROFILE_FUNCTION();
+
 		GB_CHECK_PTR(pComponent, "Trying to add a component that's a nullptr!");
 
 		if (HasComponent(pComponent))
@@ -41,18 +119,19 @@ namespace GB
 		}
 
 		pComponent->SetOwner(this);
+		pComponent->Initialize();
 		pComponent->Begin();
 		m_pComponents.push_back(pComponent);
 	}
 
-	void Object::IterateComponents(const std::function<void(Component*)>& function) const
+	void Object::ForEachValidComponent(const std::function<void(Component&)>& function) const
 	{
 		for (Component* pComponent : m_pComponents)
 		{
 			if (!pComponent)
 				continue;
 
-			function(pComponent);
+			function(*pComponent);
 		}
 	}
 }

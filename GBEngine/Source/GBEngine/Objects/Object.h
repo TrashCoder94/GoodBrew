@@ -13,27 +13,38 @@ namespace GB
 		Object();
 		~Object();
 
+		// BaseObject
+		virtual void Initialize() override;
+		virtual void Begin() override;
+		virtual void Update(const float deltaTime) override;
+		virtual void End() override;
+		virtual void Deinitialize() override;
+#if GB_IMGUI_ENABLED
+		// For custom editor properties
+		virtual void ImGuiRender() override;
+#endif
+		// ~BaseObject
+
 		bool HasComponent(Component* pComponent) const;
 
 		template<class ComponentClass>
 		bool HasComponent()
 		{
+			GB_PROFILE_FUNCTION();
+
 			bool bHasComponent = false;
 
 			const bool bIsValidComponentClass = GB_DOES_CLASS_INHERIT_FROM(Component, ComponentClass);
 			GB_CORE_ASSERT(bIsValidComponentClass, "Class passed in template parameter doesn't inherit from Component!");
 
-			for (Component* pComponent : m_pComponents)
+			ForEachValidComponent([&](Component& component)
 			{
-				if (!pComponent)
-					continue;
-
-				if (pComponent->IsA<ComponentClass>())
+				if (component.IsA<ComponentClass>())
 				{
 					bHasComponent = true;
-					break;
+					return;
 				}
-			}
+			});
 
 			return bHasComponent;
 		}
@@ -43,6 +54,8 @@ namespace GB
 		template<class ComponentClass, typename... Args>
 		ComponentClass* AddComponent(Args&&... args)
 		{
+			GB_PROFILE_FUNCTION();
+
 			ComponentClass* pResult{ nullptr };
 
 			const bool bIsValidComponentClass = GB_DOES_CLASS_INHERIT_FROM(Component, ComponentClass);
@@ -55,7 +68,8 @@ namespace GB
 
 			ComponentClass* pNewComponent{ new ComponentClass(std::forward<Args>(args)...) };
 			pNewComponent->SetOwner(this);
-			pNewComponent->Start();
+			pNewComponent->Initialize();
+			pNewComponent->Begin();
 			if (!pNewComponent)
 				return pResult;
 
@@ -68,29 +82,28 @@ namespace GB
 		template<class ComponentClass>
 		ComponentClass* GetComponent() const
 		{
+			GB_PROFILE_FUNCTION();
+
 			ComponentClass* pComponentResult = nullptr;
 
 			const bool bIsValidComponentClass = GB_DOES_CLASS_INHERIT_FROM(Component, ComponentClass);
 			GB_CORE_ASSERT(bIsValidComponentClass, "Class passed in template parameter doesn't inherit from Component!");
 
-			for (Component* pComponent : m_pComponents)
+			ForEachValidComponent([&](Component& component)
 			{
-				if (!pComponent)
-					continue;
-
-				if (pComponent->IsA<ComponentClass>())
+				if (component->IsA<ComponentClass>())
 				{
-					pComponentResult = static_cast<ComponentClass*>(pComponent);
-					break;
+					pComponentResult = static_cast<ComponentClass*>(&component);
+					return;
 				}
-			}
+			});
 
 			return pComponentResult;
 		}
 
-		void IterateComponents(const std::function<void(Component*)>& function) const;
-
 	private:
 		std::vector<Component*> m_pComponents;
+
+		void ForEachValidComponent(const std::function<void(Component&)>& function) const;
 	};
 }

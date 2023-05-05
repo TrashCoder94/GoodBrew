@@ -91,7 +91,7 @@ namespace GB
 
 			ForEachValidComponent([&](Component& component)
 			{
-				if (component->IsA<ComponentClass>())
+				if (component.IsA<ComponentClass>())
 				{
 					pComponentResult = static_cast<ComponentClass*>(&component);
 					return;

@@ -99,6 +99,8 @@ IncludeDir["bxCompatOSX"] = "%{wks.location}/GBEngine/ThirdParty/bx/include/comp
 IncludeDir["glfw"] = "%{wks.location}/GBEngine/ThirdParty/glfw/include"
 IncludeDir["imgui"] = "%{wks.location}/GBEngine/ThirdParty/imgui"
 IncludeDir["spdlog"] = "%{wks.location}/GBEngine/ThirdParty/spdlog/include"
+IncludeDir["nanovg"] = "%{wks.location}/GBEngine/ThirdParty/nanovg"
+IncludeDir["stb_image"] = "%{wks.location}/GBEngine/ThirdParty/stb_image"
 
 IncludeDir["GBEngine"] = "%{wks.location}/GBEngine/Source"
 
@@ -123,6 +125,7 @@ function includeAndLinkGBEngineLibraryFiles()
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.nanovg}",
 		"%{IncludeDir.GBEngine}"
 	}
 
@@ -175,6 +178,7 @@ group ""
 
 group "GB"
 	include "GBEngine"
+	include "GBLauncher"
 group ""
 
 group "GB/Tests"

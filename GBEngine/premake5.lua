@@ -10,7 +10,9 @@ project "GBEngine"
 	files
 	{
 		"Source/**.h",
-		"Source/**.cpp"
+		"Source/**.cpp",
+		"ThirdParty/stb_image/**.h",
+		"ThirdParty/stb_image/**.cpp"
 	}
 
 	defines
@@ -26,11 +28,17 @@ project "GBEngine"
 		"%{IncludeDir.bx}",
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.spdlog}"
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.nanovg}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links { "bgfx", "bimg", "bx", "glfw", "ImGui" }
-		
+
+	filter "files:ThirdParty/nanovg/**.cpp"
+		flags { "NoPCH" }
+	filter ""
+
 	filter "system:windows"
 		links { "gdi32", "kernel32", "psapi" }
 		pchheader "gbpch.h"

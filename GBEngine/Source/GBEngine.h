@@ -13,6 +13,11 @@
 #include "GBEngine/Core/Log.h"
 // -------------------
 
+// ----- OBJECTS --------
+#include "GBEngine/Objects/Object.h"
+#include "GBEngine/Level/Level.h"
+// ----------------------
+
 // ----- PROFILING --------
 #include "GBEngine/Profiling/Instrumentor.h"
 // ------------------------

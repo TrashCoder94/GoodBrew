@@ -5,6 +5,7 @@
 namespace GB
 {
 	UniquePtr<GraphicsContext> Renderer::s_pGraphicsContext = nullptr;
+	uint32_t Renderer::s_RendererID = 0;
 
 	void Renderer::Initialize(void* window)
 	{
@@ -17,5 +18,15 @@ namespace GB
 	void Renderer::Deinitialize()
 	{
 		s_pGraphicsContext->Deinitialize();
+	}
+
+	uint32_t Renderer::GenerateID()
+	{
+		return ++s_RendererID;
+	}
+
+	GraphicsContext* Renderer::GetGraphicsContext()
+	{
+		return s_pGraphicsContext.get();
 	}
 }

@@ -6,10 +6,13 @@
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
+#include <nanovg.h>
+
 namespace GB
 {
 	BGFXGraphicsContext::BGFXGraphicsContext(GLFWwindow* pWindowHandle) : GraphicsContext(),
-		m_pWindow(pWindowHandle)
+		m_pWindow(pWindowHandle),
+		m_pNVGContext(nullptr)
 	{}
 
 	BGFXGraphicsContext::~BGFXGraphicsContext()
@@ -48,6 +51,8 @@ namespace GB
 			const bgfx::ViewId kClearView = 0;
 			bgfx::setViewClear(kClearView, BGFX_CLEAR_COLOR);
 			bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);
+
+			m_pNVGContext = nvgCreate(1, kClearView);
 		}
 	}
 
@@ -58,5 +63,15 @@ namespace GB
 		GB_CORE_LOG_INFO("Terminating bgfx and GLFW!");
 		bgfx::shutdown();
 		glfwTerminate();
+	}
+
+	NVGcontext* BGFXGraphicsContext::GetNVGContext()
+	{
+		return m_pNVGContext;
+	}
+
+	NVGcontext* BGFXGraphicsContext::GetNVGContext() const
+	{
+		return m_pNVGContext;
 	}
 }

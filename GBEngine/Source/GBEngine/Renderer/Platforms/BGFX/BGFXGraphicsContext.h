@@ -3,6 +3,7 @@
 #include "GBEngine/Renderer/GraphicsContext.h"
 
 struct GLFWwindow;
+struct NVGcontext;
 
 namespace GB
 {
@@ -15,7 +16,11 @@ namespace GB
 		virtual void Initialize() final override;
 		virtual void Deinitialize() final override;
 
+		NVGcontext* GetNVGContext();
+		NVGcontext* GetNVGContext() const;
+
 	private:
 		GLFWwindow* m_pWindow;
+		NVGcontext* m_pNVGContext;
 	};
 }

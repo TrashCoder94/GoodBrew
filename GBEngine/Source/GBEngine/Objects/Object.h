@@ -68,8 +68,6 @@ namespace GB
 
 			ComponentClass* pNewComponent{ new ComponentClass(std::forward<Args>(args)...) };
 			pNewComponent->SetOwner(this);
-			pNewComponent->Initialize();
-			pNewComponent->Begin();
 			if (!pNewComponent)
 				return pResult;
 

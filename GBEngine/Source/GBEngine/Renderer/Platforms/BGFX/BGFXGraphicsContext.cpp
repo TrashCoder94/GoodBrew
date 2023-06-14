@@ -52,7 +52,7 @@ namespace GB
 			bgfx::setViewClear(kClearView, BGFX_CLEAR_COLOR);
 			bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);
 
-			m_pNVGContext = nvgCreate(1, kClearView);
+			//m_pNVGContext = nvgCreate(1, kClearView);
 		}
 	}
 

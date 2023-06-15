@@ -10,9 +10,7 @@ project "GBEngine"
 	files
 	{
 		"Source/**.h",
-		"Source/**.cpp",
-		"ThirdParty/stb_image/**.h",
-		"ThirdParty/stb_image/**.cpp"
+		"Source/**.cpp"
 	}
 
 	defines
@@ -29,8 +27,7 @@ project "GBEngine"
 		"%{IncludeDir.glfw}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.nanovg}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.nanovg}"
 	}
 
 	links { "bgfx", "bimg", "bx", "glfw", "ImGui" }

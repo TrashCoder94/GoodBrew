@@ -100,7 +100,6 @@ IncludeDir["glfw"] = "%{wks.location}/GBEngine/ThirdParty/glfw/include"
 IncludeDir["imgui"] = "%{wks.location}/GBEngine/ThirdParty/imgui"
 IncludeDir["spdlog"] = "%{wks.location}/GBEngine/ThirdParty/spdlog/include"
 IncludeDir["nanovg"] = "%{wks.location}/GBEngine/ThirdParty/nanovg"
-IncludeDir["stb_image"] = "%{wks.location}/GBEngine/ThirdParty/stb_image"
 
 IncludeDir["GBEngine"] = "%{wks.location}/GBEngine/Source"
 

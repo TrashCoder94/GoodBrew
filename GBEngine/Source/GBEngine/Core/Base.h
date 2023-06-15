@@ -3,6 +3,7 @@
 #include <memory>
 #include "GBEngine/Core/Assert.h"
 #include "GBEngine/Events/EventSystem.h"
+#include "GBEngine/Profiling/Instrumentor.h"
 #include "GBEngine/Timer/TimerSystem.h"
 
 // DLL support.

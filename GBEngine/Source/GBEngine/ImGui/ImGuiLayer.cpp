@@ -4,7 +4,6 @@
 
 #include "ImGuiLayer.h"
 
-#include "bgfx-imgui/imgui_impl_bgfx.h"
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -49,7 +48,7 @@ namespace GB
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
-		ImGui_Implbgfx_Init(255);
+		//ImGui_Implbgfx_Init(255);
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 	}
 
@@ -58,7 +57,7 @@ namespace GB
 		GB_PROFILE_FUNCTION();
 
 		ImGui_ImplGlfw_Shutdown();
-		ImGui_Implbgfx_Shutdown();
+		//ImGui_Implbgfx_Shutdown();
 		ImGui::DestroyContext();
 
 		GB_CORE_LOG_INFO("ImGui Layer is shutting down now...");
@@ -68,7 +67,7 @@ namespace GB
 	{
 		GB_PROFILE_FUNCTION();
 
-		ImGui_Implbgfx_NewFrame();
+		//ImGui_Implbgfx_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 	}
@@ -83,14 +82,14 @@ namespace GB
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 		
 		ImGui::Render();
-		ImGui_Implbgfx_RenderDrawLists(ImGui::GetDrawData());
+		//ImGui_Implbgfx_RenderDrawLists(ImGui::GetDrawData());
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
-			GLFWwindow* backupCurrentContext = glfwGetCurrentContext();
+			//GLFWwindow* backupCurrentContext = glfwGetCurrentContext();
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backupCurrentContext);
+			//glfwMakeContextCurrent(backupCurrentContext);
 		}
 	}
 

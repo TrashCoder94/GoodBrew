@@ -15,7 +15,7 @@ namespace GB
 		GB::Log::Init();
 
 		// Is this the best place for this to live?
-		RendererAPI::SetAPI(RendererAPI::EAPI::BGFX);
+		RendererAPI::SetAPI(RendererAPI::EAPI::SFML);
 
 		s_pEventSystem = std::make_unique<EventSystem>();
 		s_pTimerSystem = std::make_unique<TimerSystem>();

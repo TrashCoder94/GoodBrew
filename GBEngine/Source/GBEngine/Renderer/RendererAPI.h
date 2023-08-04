@@ -8,7 +8,7 @@ namespace GB
 		enum class EAPI
 		{
 			None,
-			BGFX
+			SFML
 		};
 
 		static void SetAPI(const EAPI api)	{ s_API = api; }

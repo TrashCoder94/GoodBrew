@@ -1,8 +1,8 @@
 #pragma once
 
-#include <bgfx/bgfx.h>
-#include <bgfx/platform.h>
-#include <GLFW/glfw3.h>
+//#include <bgfx/bgfx.h>
+//#include <bgfx/platform.h>
+//#include <GLFW/glfw3.h>
 
 namespace GB
 {
@@ -43,6 +43,6 @@ namespace GB
 		static UniquePtr<Window> Create(const WindowProperties& properties = WindowProperties());
 
 	protected:
-		GLFWwindow* m_pWindow;
+		//GLFWwindow* m_pWindow;
 	};
 }

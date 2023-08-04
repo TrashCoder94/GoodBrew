@@ -356,8 +356,17 @@ MigrationBackup/
 
 # Allow
 !ThirdParty/premake/Binaries/
+!GBEngine/ThirdParty/SFML/Windows/lib/*
+!GBEngine/ThirdParty/SFML/Windows/lib/Debug/*.pdb
+!GBEngine/ThirdParty/SFML/Mac/Frameworks/*
+!GBEngine/ThirdParty/SFML/Mac/extlibs/*
+
+# No Allow
+ThirdParty/SFML-Binaries-Test/Mac/examples/*
 
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
 *.sln
+
+*html

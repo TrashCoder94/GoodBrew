@@ -1,6 +1,5 @@
 #include "gbpch.h"
 #include "Object.h"
-#include "GBEngine/Components/Component.h"
 
 namespace GB
 {

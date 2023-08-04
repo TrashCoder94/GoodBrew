@@ -8,8 +8,6 @@
 #if GB_IMGUI_ENABLED
 #include "GBEngine/ImGui/ImGuiLayer.h"
 #endif
-#include <GLFW/glfw3.h>
-#include <bgfx/bgfx.h>
 
 namespace GB
 {
@@ -161,24 +159,20 @@ namespace GB
 				m_pImGuiLayer->End();
 			}
 #endif
-
-			// This dummy draw call is here to make sure that view 0 is cleared if no other draw calls are submitted to view 0.
-			static constexpr bgfx::ViewId kClearView = 0;
-			bgfx::touch(kClearView);
-
-			bgfx::frame();
 		}
 	}
 
 	float Application::GetTime()
 	{
-		float time{ (float)glfwGetTime() };
+		/*float time{ (float)glfwGetTime() };
 		if (m_WaitForFullFocus)
 		{
 			m_LastFrameTime = time - m_LastFrameTime;
 			m_WaitForFullFocus = false;
 		}
-		return time;
+		return time;*/
+
+		return 0.0f;
 	}
 
 	bool Application::OnWindowClose(Event* e)
@@ -202,10 +196,10 @@ namespace GB
 
 		m_Minimized = false;
 		
-		const bgfx::ViewId kClearView = 0;
+		/*const bgfx::ViewId kClearView = 0;
 		bgfx::reset((uint32_t)newWidth, (uint32_t)newHeight, BGFX_RESET_VSYNC);
 		bgfx::setViewClear(kClearView, BGFX_CLEAR_COLOR);
-		bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);
+		bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);*/
 
 		return false;
 	}

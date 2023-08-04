@@ -2,7 +2,6 @@ include "./ThirdParty/premake/premake_customization/solution_items.lua"
 
 workspace "GB"
 	architecture "x86_64"
-	startproject "BGFXHelloWorldTest"
 	
 	configurations
 	{
@@ -28,150 +27,234 @@ workspace "GB"
 	
 	linkoptions 
 	{ 
-		"-IGNORE:4006"
+		"-IGNORE:4006,4099"
 	}
 	
-	filter "configurations:Debug"
+	defines
+	{
+		"SFML_STATIC"
+	}
+	
+	filter { "configurations:Debug" }
 		defines
 		{
 			"GB_DEBUG",
-			"GB_IMGUI_ENABLED",
-			"BX_CONFIG_DEBUG=1"
+			"GB_IMGUI_ENABLED"
 		}
 		runtime "Debug"
 		symbols "on"
-	filter ""
-	filter "configurations:Release"
+	filter {}
+	filter { "configurations:Release" }
 		defines
 		{
 			"GB_RELEASE",
-			"GB_IMGUI_ENABLED",
-			"BX_CONFIG_DEBUG=0"
+			"GB_IMGUI_ENABLED"
 		}
 		runtime "Release"
 		optimize "on"
-	filter ""
-	filter "configurations:Distribution"
+	filter {}
+	filter { "configurations:Distribution" }
 		defines
 		{
 			"GB_DISTRIBUTION",
-			"GB_IMGUI_ENABLED",
-			"BX_CONFIG_DEBUG=0"
+			"GB_IMGUI_ENABLED"
 		}
 		runtime "Release"
 		optimize "on"
-	filter ""
+	filter {}
 	
-	filter "platforms:x86"
+	filter { "platforms:x86" }
 		architecture "x86"
-	filter ""
-	filter "platforms:x86_64"
+	filter {}
+	filter { "platforms:x86_64" }
 		architecture "x86_64"
-	filter ""
-	filter "system:windows"
+	filter {}
+	filter { "system:windows" }
 		toolset "v143"
 		buildoptions { "/Zc:__cplusplus" }
-	filter ""
-	filter "system:macosx"
+	filter {}
+	filter { "system:macosx" }
 		xcodebuildsettings {
 			["MACOSX_DEPLOYMENT_TARGET"] = "10.9",
 			["ALWAYS_SEARCH_USER_PATHS"] = "YES",
 		};
-	filter ""
+	filter {}
 
 -- Folder to put Binaries and Intermediate files into
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories
 IncludeDir = {}
-IncludeDir["bgfx"] = "%{wks.location}/GBEngine/ThirdParty/bgfx/include"
-IncludeDir["bgfx3rdParty"] = "%{wks.location}/GBEngine/ThirdParty/bgfx/3rdparty"
-IncludeDir["bgfx3rdPartydxsdk"] = "%{wks.location}/GBEngine/ThirdParty/bgfx/3rdparty/dxsdk/include"
-IncludeDir["bgfx3rdPartyKhronos"] = "%{wks.location}/GBEngine/ThirdParty/bgfx/3rdparty/khronos"
-IncludeDir["bimg"] = "%{wks.location}/GBEngine/ThirdParty/bimg/include"
-IncludeDir["bimg3rdPartyAstcCodec"] = "%{wks.location}/GBEngine/ThirdParty/bimg/3rdparty/astc-codec"
-IncludeDir["bimg3rdPartyAstcCodecInclude"] = "%{wks.location}/GBEngine/ThirdParty/bimg/3rdparty/astc-codec/include"
-IncludeDir["bx"] = "%{wks.location}/GBEngine/ThirdParty/bx/include"
-IncludeDir["bx3rdParty"] = "%{wks.location}/GBEngine/ThirdParty/bx/3rdparty"
-IncludeDir["bxCompatMSVC"] = "%{wks.location}/GBEngine/ThirdParty/bx/include/compat/msvc"
-IncludeDir["bxCompatMingW"] = "%{wks.location}/GBEngine/ThirdParty/bx/include/compat/mingw"
-IncludeDir["bxCompatOSX"] = "%{wks.location}/GBEngine/ThirdParty/bx/include/compat/osx"
-IncludeDir["glfw"] = "%{wks.location}/GBEngine/ThirdParty/glfw/include"
+IncludeDir["SFMLWindows"] = "%{wks.location}/GBEngine/ThirdParty/SFML/Windows/include"
+IncludeDir["SFMLMac"] = "%{wks.location}/GBEngine/ThirdParty/SFML/Mac/include"
 IncludeDir["imgui"] = "%{wks.location}/GBEngine/ThirdParty/imgui"
 IncludeDir["spdlog"] = "%{wks.location}/GBEngine/ThirdParty/spdlog/include"
-IncludeDir["nanovg"] = "%{wks.location}/GBEngine/ThirdParty/nanovg"
-
 IncludeDir["GBEngine"] = "%{wks.location}/GBEngine/Source"
 
-function setBxCompat()
-	filter "action:vs*"
-		includedirs { "%{IncludeDir.bxCompatMSVC}" }
-	filter ""
-	filter { "system:windows", "action:gmake" }
-		includedirs { "%{IncludeDir.bxCompatMingW}" }
-	filter ""
+function includeAndLinkSFML ()
+	filter { "system:windows" }
+		includedirs 
+		{ 
+			"%{IncludeDir.SFMLWindows}"
+		}
+		libdirs
+		{
+			"%{wks.location}/GBEngine/ThirdParty/SFML/Windows/lib"
+		}
+	filter {}
+	
+	filter { "system:windows", "configurations:Debug" }
+		links
+		{
+			"sfml-graphics-s-d",
+			"sfml-window-s-d",
+			"sfml-audio-s-d",
+			"sfml-network-s-d",
+			"sfml-system-s-d",
+			"opengl32",
+			"freetype",
+			"winmm",
+			"gdi32",
+			"openal32",
+			"flac",
+			"vorbisenc",
+			"vorbisfile",
+			"vorbis",
+			"ogg",
+			"ws2_32"
+		}
+	filter {}
+	
+	filter { "system:windows", "not configurations:Debug" }
+		links
+		{
+			"sfml-graphics-s",
+			"sfml-window-s",
+			"sfml-audio-s",
+			"sfml-network-s",
+			"sfml-system-s",
+			"opengl32",
+			"freetype",
+			"winmm",
+			"gdi32",
+			"openal32",
+			"flac",
+			"vorbisenc",
+			"vorbisfile",
+			"vorbis",
+			"ogg",
+			"ws2_32"
+		}
+	filter {}
+	
 	filter { "system:macosx" }
-		includedirs { "%{IncludeDir.bxCompatOSX}" }
-		buildoptions { "-x objective-c++" }
-	filter ""
+		includedirs 
+		{ 
+			"%{IncludeDir.SFMLMac}"
+		}
+		libdirs
+		{
+			"/Library/Frameworks"
+		}
+		links
+		{
+			"QuartzCore.framework", 
+			"Metal.framework",
+			"Cocoa.framework",
+			"IOKit.framework",
+			"CoreVideo.framework", 
+			"CoreGraphics.framework",
+			"OpenAL.framework",
+			"FLAC.framework",
+			"vorbisenc.framework",
+			"vorbisfile.framework",
+			"vorbis.framework",
+			"ogg.framework",
+			"sfml-graphics.framework",
+			"sfml-window.framework",
+			"sfml-audio.framework",
+			"sfml-network.framework",
+			"sfml-system.framework"
+		}
+		
+		-- https://stackoverflow.com/questions/29465141/linking-mac-frameworks-using-premake-and-gnu-make
+		-- Frameworks appear to need extra options for build/linking since premake doesn't automatically add them to the command line for compiling
+		-- So you have to manually add these options in for now...
+		-- Using /Library/Frameworks since that seems to be the standard place for all non system frameworks...
+		buildoptions 
+		{
+			"-F /Library/Frameworks"
+		}
+		linkoptions 
+		{
+			"-F /Library/Frameworks"
+		}
+	filter {}
+	
+	filter { "system:linux" }
+		links
+		{
+			"sfml-graphics",
+			"sfml-window",
+			"sfml-audio",
+			"sfml-network",
+			"sfml-system",
+			"dl", 
+			"GL", 
+			"pthread", 
+			"X11"
+		}
+	filter {}
 end
 
-function includeAndLinkGBEngineLibraryFiles()
+function includeAndLinkGBEngine ()
+	includeAndLinkSFML()
+	
 	includedirs
 	{
-		"%{IncludeDir.bgfx}",
-		"%{IncludeDir.bx}",
-		"%{IncludeDir.glfw}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.spdlog}",
-		"%{IncludeDir.nanovg}",
 		"%{IncludeDir.GBEngine}"
+	}
+	links 
+	{ 
+		"GBEngine",
+		"ImGui"
 	}
 
 	postbuildmessage "Copying engine assets to project assets and binaries folder!"
 
-	if os.host() == "windows" then
-		links { "GBEngine" }
-
+	filter { "system:windows" }
 		postbuildcommands
 		{
 			"{COPY} %{wks.location}/GBEngine/Assets %{prj.location}/Assets",
 			"{COPY} %{prj.location}Assets %{cfg.targetdir}/Assets"
 		}
-	else
+	filter {}
+
+	filter { "system:macosx" }
 		postbuildcommands
 		{
 			"cp -R /$(PWD)/GBEngine/Assets/. /$(CURDIR)/Assets/",
 			"cp -R /$(CURDIR)/Assets/. /$(CURDIR)/%{cfg.targetdir}/Assets/"
 		}
-	
-		links { "GBEngine", "bgfx", "bimg", "bx", "glfw", "ImGui" }
-			
-		filter "system:windows"
-			links { "gdi32", "kernel32", "psapi" }
-		filter ""
-		
-		filter "system:linux"
-			links { "dl", "GL", "pthread", "X11" }
-		filter ""
-		
-		filter "system:macosx"
-			links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework", "CoreGraphics.framework" }
-		filter ""
-	end
+	filter {}
+
+	filter { "system:linux" }
+		postbuildcommands
+		{
+			"cp -R /$(PWD)/GBEngine/Assets/. /$(CURDIR)/Assets/",
+			"cp -R /$(CURDIR)/Assets/. /$(CURDIR)/%{cfg.targetdir}/Assets/"
+		}
+	filter {}
 end
 
 group "Dependencies"
 	include "ThirdParty/premake"
-	include "GBEngine/ThirdParty/bgfx"
-	include "GBEngine/ThirdParty/bimg"
-	include "GBEngine/ThirdParty/bx"
-	include "GBEngine/ThirdParty/glfw"
 	include "GBEngine/ThirdParty/imgui"
 group ""
 
 group "Examples"
-	include "Examples/BGFXHelloWorldTest"
 	include "Examples/Sandbox"
 group ""
 

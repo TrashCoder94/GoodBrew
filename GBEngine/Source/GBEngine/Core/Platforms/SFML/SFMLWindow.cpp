@@ -165,13 +165,17 @@ namespace GB
 	{
 		GB_PROFILE_FUNCTION();
 
+		GB_CORE_LOG_INFO("SFML Window about to call close");
 		m_pWindow->close();
+
+		GB_CORE_LOG_INFO("SFML Window ptr about to be reset");
 		m_pWindow.reset();
 
 		--s_SFMLWindowCount;
 
 		if (s_SFMLWindowCount == 0)
 		{
+			GB_CORE_LOG_INFO("Renderer::Deinitialize being called");
 			Renderer::Deinitialize();
 		}
 	}

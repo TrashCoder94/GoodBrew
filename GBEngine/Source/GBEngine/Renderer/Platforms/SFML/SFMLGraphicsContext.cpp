@@ -17,6 +17,9 @@ namespace GB
 
 	void SFMLGraphicsContext::Deinitialize()
 	{
-
+		if (m_pWindow)
+		{
+			m_pWindow = nullptr;
+		}
 	}
 }

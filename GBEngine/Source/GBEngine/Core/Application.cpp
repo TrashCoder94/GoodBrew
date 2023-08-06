@@ -44,6 +44,8 @@ namespace GB
 
 	Application::~Application()
 	{
+		GB_CORE_LOG_INFO("Application destructor being called now...");
+
 		GB_PROFILE_FUNCTION();
 
 		GB_UNBIND_EVENT(EEventType::WindowClose, this);

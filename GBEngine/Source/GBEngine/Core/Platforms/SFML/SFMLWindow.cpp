@@ -26,6 +26,8 @@ namespace GB
 
 	SFMLWindow::~SFMLWindow()
 	{
+		GB_CORE_LOG_INFO("SFML Window shutdown being called...");
+
 		GB_PROFILE_FUNCTION();
 		Shutdown();
 	}

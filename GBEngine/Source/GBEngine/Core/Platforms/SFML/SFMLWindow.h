@@ -22,6 +22,6 @@ namespace GB
 		virtual void OnEnd() override;
 		virtual void Shutdown() override;
 
-		SharedPtr<sf::RenderWindow> m_pWindow;
+		sf::RenderWindow* m_pWindow;
 	};
 }

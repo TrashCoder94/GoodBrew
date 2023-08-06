@@ -34,20 +34,20 @@ namespace GB
 
 	uint32_t SFMLWindow::GetWidth() const
 	{
-		GB_ASSERT(m_pWindow.get(), "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
+		GB_ASSERT(m_pWindow, "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
 		return m_pWindow->getSize().x;
 	}
 
 	uint32_t SFMLWindow::GetHeight() const
 	{
-		GB_ASSERT(m_pWindow.get(), "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
+		GB_ASSERT(m_pWindow, "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
 		return m_pWindow->getSize().y;
 	}
 
 	void* SFMLWindow::GetNativeWindow() const
 	{
-		GB_ASSERT(m_pWindow.get(), "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
-		return m_pWindow.get();
+		GB_ASSERT(m_pWindow, "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
+		return m_pWindow;
 	}
 
 	void SFMLWindow::Init(const WindowProperties& properties)
@@ -58,8 +58,8 @@ namespace GB
 		{
 			GB_PROFILE_SCOPE("SFML Create Window");
 		
-			m_pWindow = CreateSharedPtr<sf::RenderWindow>(sf::VideoMode(properties.m_Width, properties.m_Height), properties.m_Title);
-			GB_CORE_ASSERT(m_pWindow.get(), "Failed to create SFML window!");
+			m_pWindow = new sf::RenderWindow(sf::VideoMode(properties.m_Width, properties.m_Height), properties.m_Title);
+			GB_CORE_ASSERT(m_pWindow, "Failed to create SFML window!");
 			++s_SFMLWindowCount;
 		}
 
@@ -72,14 +72,14 @@ namespace GB
 
 	void SFMLWindow::OnBegin()
 	{
-		GB_ASSERT(m_pWindow.get(), "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
+		GB_ASSERT(m_pWindow, "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
 		m_pWindow->clear();
 	}
 
 	void SFMLWindow::OnUpdate()
 	{
 		sf::Event event;
-		while (m_pWindow->pollEvent(event))
+		while (m_pWindow->pollEvent(event) && m_pWindow->isOpen())
 		{
 #if GB_IMGUI_ENABLED
 			ImGui::SFML::ProcessEvent(*m_pWindow, event);
@@ -157,7 +157,7 @@ namespace GB
 
 	void SFMLWindow::OnEnd()
 	{
-		GB_ASSERT(m_pWindow.get(), "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
+		GB_ASSERT(m_pWindow, "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
 		m_pWindow->display();
 	}
 
@@ -168,8 +168,12 @@ namespace GB
 		GB_CORE_LOG_INFO("SFML Window about to call close");
 		m_pWindow->close();
 
-		GB_CORE_LOG_INFO("SFML Window ptr about to be reset");
-		m_pWindow.reset();
+		GB_CORE_LOG_INFO("SFML Window ptr about to be cleaned up");
+		if (m_pWindow)
+		{
+			delete m_pWindow;
+			m_pWindow = nullptr;
+		}
 
 		--s_SFMLWindowCount;
 

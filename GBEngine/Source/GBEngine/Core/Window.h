@@ -1,9 +1,5 @@
 #pragma once
 
-//#include <bgfx/bgfx.h>
-//#include <bgfx/platform.h>
-//#include <GLFW/glfw3.h>
-
 namespace GB
 {
 	struct WindowProperties
@@ -24,25 +20,24 @@ namespace GB
 	class Window
 	{
 	public:
-		//using EventCallbackFn = std::function<void(Event&)>;
+		static UniquePtr<Window> Create(const WindowProperties& properties = WindowProperties());
+		
 		Window(const WindowProperties& properties);
 		~Window();
 
-	private:
-		void Init(const WindowProperties& properties);
-		void Shutdown();
-
-	public:
-		void OnUpdate();
-
-		uint32_t GetWidth() const;
-		uint32_t GetHeight() const;
-
-		void* GetNativeWindow() const;
-
-		static UniquePtr<Window> Create(const WindowProperties& properties = WindowProperties());
+		void Begin();
+		void Update();
+		void End();
+		
+		virtual uint32_t GetWidth() const = 0;
+		virtual uint32_t GetHeight() const = 0;
+		virtual void* GetNativeWindow() const = 0;
 
 	protected:
-		//GLFWwindow* m_pWindow;
+		virtual void Init(const WindowProperties& properties) = 0;
+		virtual void OnBegin() = 0;
+		virtual void OnUpdate() = 0;
+		virtual void OnEnd() = 0;
+		virtual void Shutdown() = 0;
 	};
 }

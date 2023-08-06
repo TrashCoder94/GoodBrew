@@ -32,7 +32,6 @@ namespace GB
 
 	private:
 		void Run();
-		float GetTime();
 
 		bool OnWindowClose(Event* e);
 		bool OnWindowResized(Event* e);
@@ -47,8 +46,6 @@ namespace GB
 		bool m_Running;
 		bool m_Minimized;
 		bool m_IsFocused;
-		float m_DeltaTime;
-		float m_LastFrameTime;
 		bool m_WaitForFullFocus;
 
 		static Application* s_pInstance;

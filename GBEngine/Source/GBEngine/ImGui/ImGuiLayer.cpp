@@ -5,15 +5,16 @@
 #include "ImGuiLayer.h"
 
 #include <imgui.h>
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
+#include <imgui-SFML.h>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 #include "GBEngine/Core/Application.h"
 #include "GBEngine/Core/Window.h"
 
 namespace GB
 {
-	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer")
+	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer"),
+		m_pWindow(nullptr)
 	{}
 
 	ImGuiLayer::~ImGuiLayer()
@@ -46,19 +47,26 @@ namespace GB
 		SetDarkThemeColours();
 
 		Application& app = Application::Get();
-		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+		m_pWindow = static_cast<sf::RenderWindow*>(app.GetWindow().GetNativeWindow());
+		GB_ASSERT(m_pWindow, "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
 
-		//ImGui_Implbgfx_Init(255);
-		//ImGui_ImplGlfw_InitForOpenGL(window, true);
+		const bool kImguiSFMLInitialized = ImGui::SFML::Init(*m_pWindow);
+		GB_ASSERT(kImguiSFMLInitialized, "ImGui SFML failed to initialize!");
+	}
+
+	void ImGuiLayer::Update(const sf::Time& sfDeltaTime)
+	{
+		GB_PROFILE_FUNCTION();
+
+		GB_ASSERT(m_pWindow, "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
+		ImGui::SFML::Update(*m_pWindow, sfDeltaTime);
 	}
 
 	void ImGuiLayer::OnDetach()
 	{
 		GB_PROFILE_FUNCTION();
 
-		//ImGui_ImplGlfw_Shutdown();
-		//ImGui_Implbgfx_Shutdown();
-		ImGui::DestroyContext();
+		ImGui::SFML::Shutdown();
 
 		GB_CORE_LOG_INFO("ImGui Layer is shutting down now...");
 	}
@@ -67,9 +75,8 @@ namespace GB
 	{
 		GB_PROFILE_FUNCTION();
 
-		//ImGui_Implbgfx_NewFrame();
-		//ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+		// No need to do this any longer since ImGuiLayer::Update calls ImGui::SFML::Update which calls ImGui::NewFrame at the end of the update function...
+		//ImGui::NewFrame();
 	}
 
 	void ImGuiLayer::End()
@@ -81,15 +88,12 @@ namespace GB
 
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 		
-		ImGui::Render();
-		//ImGui_Implbgfx_RenderDrawLists(ImGui::GetDrawData());
+		ImGui::SFML::Render(*m_pWindow);
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
-			//GLFWwindow* backupCurrentContext = glfwGetCurrentContext();
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
-			//glfwMakeContextCurrent(backupCurrentContext);
 		}
 	}
 

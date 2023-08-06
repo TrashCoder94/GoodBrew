@@ -5,6 +5,7 @@
 #include "GBEngine/Events/EventSystem.h"
 #include "GBEngine/Events/EventTypes.h"
 #include "GBEngine/Events/WindowEvents.h"
+#include <SFML/Window.hpp>
 #if GB_IMGUI_ENABLED
 #include "GBEngine/ImGui/ImGuiLayer.h"
 #endif
@@ -22,8 +23,6 @@ namespace GB
 		m_Running(true),
 		m_Minimized(false),
 		m_IsFocused(true),
-		m_DeltaTime(0.0f),
-		m_LastFrameTime(0.0f),
 		m_WaitForFullFocus(false)
 	{
 		GB_PROFILE_FUNCTION();
@@ -108,71 +107,68 @@ namespace GB
 	{
 		GB_PROFILE_FUNCTION();
 
+		// TODO: Think of a neat way to abstract this logic out
+		// Needed for SFML+ImGui...
+		sf::Clock deltaClock;
+
 		while (m_Running)
 		{
 			GB_PROFILE_SCOPE("RunLoop");
-
-			m_pWindow->OnUpdate();
-
-			if (m_IsFocused)
-			{
-				float time = GetTime();
-				m_DeltaTime = time - m_LastFrameTime;
-				m_LastFrameTime = time;
-				
-				if (!m_Minimized)
-				{
-					{
-						GB_PROFILE_SCOPE("LayerStack OnUpdate");
-
-						for (Layer* layer : m_LayerStack)
-						{
-							layer->OnUpdate(m_DeltaTime);
-						}
-					}
-
-					{
-						GB_PROFILE_SCOPE("LayerStack OnRender");
-
-						for (Layer* layer : m_LayerStack)
-						{
-							layer->OnRender();
-						}
-					}
-				}
 			
-				GBSystems::Update(m_DeltaTime);
-			}
+			m_pWindow->Update();
+
+			m_pWindow->Begin();
+			{
+				const sf::Time& sfDeltaTime = deltaClock.restart();
+				const float deltaTime = sfDeltaTime.asSeconds();
+
+				if (m_IsFocused)
+				{
+					if (!m_Minimized)
+					{
+						{
+							GB_PROFILE_SCOPE("LayerStack OnUpdate");
+
+							for (Layer* layer : m_LayerStack)
+							{
+								layer->OnUpdate(deltaTime);
+							}
+						}
+
+						{
+							GB_PROFILE_SCOPE("LayerStack OnRender");
+
+							for (Layer* layer : m_LayerStack)
+							{
+								layer->OnRender();
+							}
+						}
+					}
+
+					GBSystems::Update(deltaTime);
+				}
 
 #if GB_IMGUI_ENABLED
-			if (m_pImGuiLayer)
-			{
-				m_pImGuiLayer->Begin();
+				if (m_pImGuiLayer)
 				{
-					GB_PROFILE_SCOPE("LayerStack OnImGuiRender");
-
-					for (Layer* layer : m_LayerStack)
+					// Specific ImGui Layer update function to pass along sf::Time for ImGui SFML implementation
+					m_pImGuiLayer->Update(sfDeltaTime);
+					
+					m_pImGuiLayer->Begin();
 					{
-						layer->OnImGuiRender();
+						GB_PROFILE_SCOPE("LayerStack OnImGuiRender");
+
+						for (Layer* layer : m_LayerStack)
+						{
+							layer->OnImGuiRender();
+						}
 					}
+					m_pImGuiLayer->End();
 				}
-				m_pImGuiLayer->End();
-			}
 #endif
+			}
+			m_pWindow->End();
 		}
-	}
-
-	float Application::GetTime()
-	{
-		/*float time{ (float)glfwGetTime() };
-		if (m_WaitForFullFocus)
-		{
-			m_LastFrameTime = time - m_LastFrameTime;
-			m_WaitForFullFocus = false;
-		}
-		return time;*/
-
-		return 0.0f;
 	}
 
 	bool Application::OnWindowClose(Event* e)
@@ -195,11 +191,6 @@ namespace GB
 		}
 
 		m_Minimized = false;
-		
-		/*const bgfx::ViewId kClearView = 0;
-		bgfx::reset((uint32_t)newWidth, (uint32_t)newHeight, BGFX_RESET_VSYNC);
-		bgfx::setViewClear(kClearView, BGFX_CLEAR_COLOR);
-		bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);*/
 
 		return false;
 	}

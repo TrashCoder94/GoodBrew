@@ -84,7 +84,7 @@ jobs:
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: |
           chmod +x Scripts/BuildMachine/BuildMachine-Linux-Run-Debug.sh
-          xvfb-run -a Scripts/BuildMachine/BuildMachine-Linux-Run-Debug.sh
+          Scripts/BuildMachine/BuildMachine-Linux-Run-Debug.sh
     
   Linux-x64-Release:
     runs-on: ubuntu-latest
@@ -114,7 +114,7 @@ jobs:
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: |
           chmod +x Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
-          xvfb-run -a Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
+          Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
 
   Mac-x64-Debug:
     runs-on: macos-latest

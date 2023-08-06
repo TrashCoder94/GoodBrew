@@ -100,6 +100,8 @@ namespace GB
 		if (m_pImGuiLayer)
 		{
 			PopOverlay(m_pImGuiLayer);
+
+			delete m_pImGuiLayer;
 			m_pImGuiLayer = nullptr;
 		}
 #endif

@@ -114,7 +114,7 @@ jobs:
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: |
           chmod +x Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
-          xvfb-run --server-args="-nocursor -screen 0 1600x900x24" Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
+          xvfb-run -a --server-args="-ac -screen 0 1600x900x24" Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
 
 #  Mac-x64-Debug:
 #    runs-on: macos-latest

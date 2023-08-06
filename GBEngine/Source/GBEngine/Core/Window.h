@@ -23,7 +23,7 @@ namespace GB
 		static UniquePtr<Window> Create(const WindowProperties& properties = WindowProperties());
 		
 		Window(const WindowProperties& properties);
-		~Window();
+		virtual ~Window();
 
 		void Begin();
 		void Update();

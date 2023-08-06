@@ -106,7 +106,7 @@ jobs:
       - name: Setup and Install Prerequisites
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: |
-          export DISPLAY=:0.0
+          export DISPLAY=:99
           sudo apt-get update && sudo apt-get install xorg-dev libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libdrm-dev libgbm-dev xvfb fluxbox
           sudo apt-get install libsfml-dev xvfb
           
@@ -114,7 +114,7 @@ jobs:
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: |
           chmod +x Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
-          xvfb-run -s "-screen 0 1600x900x16" -a Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
+          xvfb-run --server-args="-screen 0 1600x900x24" Scripts/BuildMachine/BuildMachine-Linux-Run-Release.sh
 
 #  Mac-x64-Debug:
 #    runs-on: macos-latest

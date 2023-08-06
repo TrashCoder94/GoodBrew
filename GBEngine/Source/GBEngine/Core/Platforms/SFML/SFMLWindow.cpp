@@ -143,6 +143,11 @@ namespace GB
 				{
 					WindowLostFocusEvent e;
 					EventSystem::Get().Broadcast(&e);
+					break;
+				}
+				default:
+				{
+					break;
 				}
 			}
 		}
@@ -157,6 +162,9 @@ namespace GB
 	void SFMLWindow::Shutdown()
 	{
 		GB_PROFILE_FUNCTION();
+
+		m_pWindow->close();
+		m_pWindow.reset();
 
 		--s_SFMLWindowCount;
 

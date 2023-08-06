@@ -117,57 +117,60 @@ namespace GB
 			
 			m_pWindow->Update();
 
-			m_pWindow->Begin();
+			if (m_pWindow)
 			{
-				const sf::Time& sfDeltaTime = deltaClock.restart();
-				const float deltaTime = sfDeltaTime.asSeconds();
-
-				if (m_IsFocused)
+				m_pWindow->Begin();
 				{
-					if (!m_Minimized)
+					const sf::Time& sfDeltaTime = deltaClock.restart();
+					const float deltaTime = sfDeltaTime.asSeconds();
+
+					if (m_IsFocused)
 					{
+						if (!m_Minimized)
 						{
-							GB_PROFILE_SCOPE("LayerStack OnUpdate");
-
-							for (Layer* layer : m_LayerStack)
 							{
-								layer->OnUpdate(deltaTime);
+								GB_PROFILE_SCOPE("LayerStack OnUpdate");
+
+								for (Layer* layer : m_LayerStack)
+								{
+									layer->OnUpdate(deltaTime);
+								}
+							}
+
+							{
+								GB_PROFILE_SCOPE("LayerStack OnRender");
+
+								for (Layer* layer : m_LayerStack)
+								{
+									layer->OnRender();
+								}
 							}
 						}
 
-						{
-							GB_PROFILE_SCOPE("LayerStack OnRender");
-
-							for (Layer* layer : m_LayerStack)
-							{
-								layer->OnRender();
-							}
-						}
+						GBSystems::Update(deltaTime);
 					}
-
-					GBSystems::Update(deltaTime);
-				}
 
 #if GB_IMGUI_ENABLED
-				if (m_pImGuiLayer)
-				{
-					// Specific ImGui Layer update function to pass along sf::Time for ImGui SFML implementation
-					m_pImGuiLayer->Update(sfDeltaTime);
-					
-					m_pImGuiLayer->Begin();
+					if (m_pImGuiLayer)
 					{
-						GB_PROFILE_SCOPE("LayerStack OnImGuiRender");
+						// Specific ImGui Layer update function to pass along sf::Time for ImGui SFML implementation
+						m_pImGuiLayer->Update(sfDeltaTime);
 
-						for (Layer* layer : m_LayerStack)
+						m_pImGuiLayer->Begin();
 						{
-							layer->OnImGuiRender();
+							GB_PROFILE_SCOPE("LayerStack OnImGuiRender");
+
+							for (Layer* layer : m_LayerStack)
+							{
+								layer->OnImGuiRender();
+							}
 						}
+						m_pImGuiLayer->End();
 					}
-					m_pImGuiLayer->End();
-				}
 #endif
+				}
+				m_pWindow->End();
 			}
-			m_pWindow->End();
 		}
 	}
 

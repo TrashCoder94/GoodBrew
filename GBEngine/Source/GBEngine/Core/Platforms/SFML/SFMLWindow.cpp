@@ -66,7 +66,7 @@ namespace GB
 		// First window has just been created, initialize the Renderer since we need to start work now
 		if (s_SFMLWindowCount == 1)
 		{
-			Renderer::Initialize(GetNativeWindow());
+			Renderer::Initialize(m_pWindow);
 		}
 	}
 

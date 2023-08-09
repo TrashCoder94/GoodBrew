@@ -5,10 +5,10 @@
 
 namespace GB
 {
-	class GBEditor : public GB::Application
+	class GBEditor : public Application
 	{
 	public:
-		GBEditor() : GB::Application("GB Editor"),
+		GBEditor() : Application("GB Editor"),
 			m_pEditorLayer(CreateSharedPtr<GBEditorLayer>())
 		{
 			PushLayer(m_pEditorLayer.get());
@@ -23,7 +23,7 @@ namespace GB
 		SharedPtr<GBEditorLayer> m_pEditorLayer;
 	};
 
-	GB::Application* GB::CreateApplication()
+	Application* CreateApplication()
 	{
 		return new GBEditor();
 	}

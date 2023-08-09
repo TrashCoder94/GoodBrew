@@ -79,7 +79,7 @@ namespace GB
 	void SFMLWindow::OnUpdate()
 	{
 		sf::Event event;
-		while (m_pWindow->pollEvent(event) && m_pWindow->isOpen())
+		while (m_pWindow->pollEvent(event))
 		{
 #if GB_IMGUI_ENABLED
 			ImGui::SFML::ProcessEvent(*m_pWindow, event);

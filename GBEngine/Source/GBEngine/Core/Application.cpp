@@ -48,6 +48,16 @@ namespace GB
 
 		GB_PROFILE_FUNCTION();
 
+#if GB_IMGUI_ENABLED
+		if (m_pImGuiLayer)
+		{
+			PopOverlay(m_pImGuiLayer);
+
+			delete m_pImGuiLayer;
+			m_pImGuiLayer = nullptr;
+		}
+#endif
+
 		GB_UNBIND_EVENT(EEventType::WindowClose, this);
 		GB_UNBIND_EVENT(EEventType::WindowResize, this);
 		GB_UNBIND_EVENT(EEventType::WindowFocus, this);
@@ -95,16 +105,6 @@ namespace GB
 	void Application::Close()
 	{
 		m_Running = false;
-
-#if GB_IMGUI_ENABLED
-		if (m_pImGuiLayer)
-		{
-			PopOverlay(m_pImGuiLayer);
-
-			delete m_pImGuiLayer;
-			m_pImGuiLayer = nullptr;
-		}
-#endif
 	}
 
 	void Application::Run()

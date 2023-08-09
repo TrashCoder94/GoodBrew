@@ -44,8 +44,6 @@ namespace GB
 
 	Application::~Application()
 	{
-		GB_CORE_LOG_INFO("Application destructor being called now...");
-
 		GB_PROFILE_FUNCTION();
 
 		if (m_pWindow)

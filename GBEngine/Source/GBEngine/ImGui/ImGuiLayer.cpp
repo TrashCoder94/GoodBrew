@@ -27,7 +27,15 @@ namespace GB
 		GB_CORE_LOG_INFO("ImGui Layer is initializing now...");
 
 		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
+
+		Application& app = Application::Get();
+		m_pWindow = static_cast<sf::RenderWindow*>(app.GetWindow().GetNativeWindow());
+		GB_ASSERT(m_pWindow, "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
+
+		const bool kImguiSFMLInitialized = ImGui::SFML::Init(*m_pWindow);
+		GB_ASSERT(kImguiSFMLInitialized, "ImGui SFML failed to initialize!");
+		
+		//ImGui::CreateContext();
 
 		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
@@ -45,13 +53,6 @@ namespace GB
 		}
 
 		SetDarkThemeColours();
-
-		Application& app = Application::Get();
-		m_pWindow = static_cast<sf::RenderWindow*>(app.GetWindow().GetNativeWindow());
-		GB_ASSERT(m_pWindow, "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
-
-		const bool kImguiSFMLInitialized = ImGui::SFML::Init(*m_pWindow);
-		GB_ASSERT(kImguiSFMLInitialized, "ImGui SFML failed to initialize!");
 	}
 
 	void ImGuiLayer::Update(const sf::Time& sfDeltaTime)
@@ -88,6 +89,7 @@ namespace GB
 
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 		
+		//ImGui::Render();
 		ImGui::SFML::Render(*m_pWindow);
 
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

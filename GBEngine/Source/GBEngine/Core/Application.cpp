@@ -48,6 +48,11 @@ namespace GB
 
 		GB_PROFILE_FUNCTION();
 
+		if (m_pWindow)
+		{
+			m_pWindow.reset();
+		}
+
 #if GB_IMGUI_ENABLED
 		if (m_pImGuiLayer)
 		{

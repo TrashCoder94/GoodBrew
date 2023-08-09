@@ -260,6 +260,7 @@ group ""
 
 group "GB"
 	include "GBEngine"
+	include "GBEditor"
 	include "GBLauncher"
 group ""
 

@@ -24,6 +24,7 @@ namespace GB
 			void Begin();
 			void End();
 
+			void SetDefaultThemeColours();
 			void SetDarkThemeColours();
 
 		private:

@@ -67,6 +67,11 @@ namespace GB
 		GB_UNBIND_EVENT(EEventType::WindowLostFocus, this);
 	}
 
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	Window& Application::GetWindow()
 	{
 		return *m_pWindow;
@@ -103,11 +108,6 @@ namespace GB
 		GB_PROFILE_FUNCTION();
 
 		m_LayerStack.PopOverlay(overlay);
-	}
-
-	void Application::Close()
-	{
-		m_Running = false;
 	}
 
 	void Application::Run()

@@ -20,6 +20,8 @@ namespace GB
 		Application(const std::string& name = "GB Application");
 		virtual ~Application();
 
+		void Close();
+
 		Window& GetWindow();
 		static Application& Get();
 
@@ -28,7 +30,6 @@ namespace GB
 		void PushOverlay(Layer* overlay);
 		void PopLayer(Layer* layer);
 		void PopOverlay(Layer* overlay);
-		void Close();
 
 	private:
 		void Run();

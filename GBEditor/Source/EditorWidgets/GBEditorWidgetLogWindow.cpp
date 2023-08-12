@@ -25,7 +25,8 @@ namespace GB
 				ImGui::EndPopup();
 			}
 
-			ImGui::Text(Log::GetString().c_str());
+			const std::string& logAsString = Log::GetString();
+			ImGui::Text(logAsString.c_str());
 		}
 		ImGui::End();
 #endif

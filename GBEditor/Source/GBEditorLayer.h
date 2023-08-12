@@ -11,16 +11,16 @@ namespace GB
 	class EditorWidget;
 	class Level;
 
-	class EditorLayer : public GB::Layer
+	class EditorLayer : public Layer
 	{
 	public:
 		EditorLayer();
 		~EditorLayer();
 
 		virtual void OnAttach() override;
-		virtual void OnDetach();
-		virtual void OnUpdate(const float deltaTime);
-		virtual void OnRender();
+		virtual void OnDetach() override;
+		virtual void OnUpdate(const float deltaTime) override;
+		virtual void OnRender() override;
 #if GB_IMGUI_ENABLED
 		virtual void OnImGuiRender() override;
 #endif

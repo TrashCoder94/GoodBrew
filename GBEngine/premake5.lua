@@ -34,6 +34,5 @@ project "GBEngine"
 	filter { "system:linux" }
 		pchheader "gbpch.h"
 		pchsource "Source/gbpch.cpp"
-		excludes "Source/gbpch.h"
 	filter {}
 	

@@ -1,5 +1,3 @@
-#pragma once
-
 extern GB::Application* GB::CreateApplication();
 
 int main(int argc, char** argv)

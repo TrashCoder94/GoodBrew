@@ -1,6 +1,6 @@
 #include "gbpch.h"
 #include "Application.h"
-#include "GBEngine/Core/GBSystems.h"
+#include "GBEngine/Core/Systems.h"
 #include "GBEngine/Core/Window.h"
 #include "GBEngine/Events/EventSystem.h"
 #include "GBEngine/Events/EventTypes.h"
@@ -154,7 +154,7 @@ namespace GB
 							}
 						}
 
-						GBSystems::Update(deltaTime);
+						Systems::Update(deltaTime);
 					}
 
 #if GB_IMGUI_ENABLED

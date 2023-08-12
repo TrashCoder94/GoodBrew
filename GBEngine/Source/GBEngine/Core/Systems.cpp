@@ -1,5 +1,5 @@
 #include "gbpch.h"
-#include "GBSystems.h"
+#include "Systems.h"
 #include "GBEngine/Events/EventSystem.h"
 #include "GBEngine/Renderer/RendererAPI.h"
 #include "GBEngine/Timer/TimerSystem.h"
@@ -7,10 +7,10 @@
 
 namespace GB
 {
-	std::unique_ptr<EventSystem> GBSystems::s_pEventSystem = nullptr;
-	std::unique_ptr<TimerSystem> GBSystems::s_pTimerSystem = nullptr;
+	std::unique_ptr<EventSystem> Systems::s_pEventSystem = nullptr;
+	std::unique_ptr<TimerSystem> Systems::s_pTimerSystem = nullptr;
 
-	void GBSystems::Init()
+	void Systems::Init()
 	{
 		GB::Log::Init();
 
@@ -21,12 +21,12 @@ namespace GB
 		s_pTimerSystem = std::make_unique<TimerSystem>();
 	}
 
-	void GBSystems::Update(const float deltaTime)
+	void Systems::Update(const float deltaTime)
 	{
 		s_pTimerSystem->Update(deltaTime);
 	}
 
-	void GBSystems::Shutdown()
+	void Systems::Shutdown()
 	{
 		s_pTimerSystem->Shutdown();
 	}

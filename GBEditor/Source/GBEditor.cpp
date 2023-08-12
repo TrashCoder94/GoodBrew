@@ -5,26 +5,26 @@
 
 namespace GB
 {
-	class GBEditor : public Application
+	class Editor : public Application
 	{
 	public:
-		GBEditor() : Application("GB Editor"),
-			m_pEditorLayer(CreateSharedPtr<GBEditorLayer>())
+		Editor() : Application("GB Editor"),
+			m_pEditorLayer(CreateSharedPtr<EditorLayer>())
 		{
 			PushLayer(m_pEditorLayer.get());
 		}
 
-		~GBEditor()
+		~Editor()
 		{
 			PopLayer(m_pEditorLayer.get());
 		}
 
 	private:
-		SharedPtr<GBEditorLayer> m_pEditorLayer;
+		SharedPtr<EditorLayer> m_pEditorLayer;
 	};
 
 	Application* CreateApplication()
 	{
-		return new GBEditor();
+		return new Editor();
 	}
 }

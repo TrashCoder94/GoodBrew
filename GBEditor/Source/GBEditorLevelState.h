@@ -1,8 +1,11 @@
 #pragma once
 
-enum class EGBEditorLevelState
+namespace GB
 {
-	Edit,
-	Play,
-	Pause
-};
+	enum class EEditorLevelState
+	{
+		Edit,
+		Play,
+		Pause
+	};
+}

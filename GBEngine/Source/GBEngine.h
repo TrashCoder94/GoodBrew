@@ -1,7 +1,7 @@
 #pragma once
 
 // ----- SYSTEMS --------
-#include "GBEngine/Core/GBSystems.h"
+#include "GBEngine/Core/Systems.h"
 #include "GBEngine/Events/EventSystem.h"
 #include "GBEngine/Timer/TimerSystem.h"
 // ----- SYSTEMS --------

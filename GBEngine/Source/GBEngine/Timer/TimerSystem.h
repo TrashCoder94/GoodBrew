@@ -9,7 +9,7 @@ namespace GB
 
 	class TimerSystem
 	{
-		friend class GBSystems;
+		friend class Systems;
 
 	public:
 		TimerSystem();

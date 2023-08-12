@@ -9,7 +9,7 @@ namespace GB
 	class EventSystem;
 	class TimerSystem;
 
-	class GBSystems
+	class Systems
 	{
 		friend int ::main(int argc, char** argv);
 		friend class Application;

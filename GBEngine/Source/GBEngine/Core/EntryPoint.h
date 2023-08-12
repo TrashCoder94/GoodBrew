@@ -5,7 +5,7 @@ extern GB::Application* GB::CreateApplication();
 int main(int argc, char** argv)
 {
 	GB_PROFILE_BEGIN_SESSION("Startup", "GBProfile-Startup.json");
-	GB::GBSystems::Init();
+	GB::Systems::Init();
 	GB::Application* application = GB::CreateApplication();
 	GB_PROFILE_END_SESSION();
 
@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 	GB_PROFILE_BEGIN_SESSION("Shutdown", "GBProfile-Shutdown.json");
 	delete application;
 	application = nullptr;
-	GB::GBSystems::Shutdown();
+	GB::Systems::Shutdown();
 	GB_PROFILE_END_SESSION();
 
 	return 0;

@@ -1,31 +1,35 @@
 #pragma once
 
+#include <functional>
+
+#include <GBEngine/Core/Base.h>
 #include <GBEngine/Core/Layer.h>
 #include "GBEditorLevelState.h"
 
 namespace GB
 {
-	class GBEditorLayer : public GB::Layer
+	class EditorWidget;
+	class Level;
+
+	class EditorLayer : public GB::Layer
 	{
 	public:
-		GBEditorLayer();
-		~GBEditorLayer();
+		EditorLayer();
+		~EditorLayer();
 
+		virtual void OnAttach() override;
+		virtual void OnDetach();
+		virtual void OnUpdate(const float deltaTime);
+		virtual void OnRender();
 #if GB_IMGUI_ENABLED
 		virtual void OnImGuiRender() override;
 #endif
 
 	private:
-#if GB_IMGUI_ENABLED
-		void DrawMenuBar();
-		void DrawToolBar();
-		void DrawViewportWindow();
-		void DrawLevelHierarchyWindow();
-		void DrawAssetWindow();
-		void DrawLogWindow();
-		void DrawDetailsWindow();
-#endif
+		void ForEachValidEditorWidget(const std::function<void(EditorWidget&)>& function);
 
-		EGBEditorLevelState m_EditorLevelState;
+		std::vector<UniquePtr<EditorWidget>> m_pEditorWidgets;
+		SharedPtr<Level> m_pEditorLevel;
+		EEditorLevelState m_EditorLevelState;
 	};
 }

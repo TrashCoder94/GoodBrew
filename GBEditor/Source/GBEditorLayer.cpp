@@ -1,20 +1,107 @@
 #include "GBEditorLayer.h"
-#include <imgui.h>
+
 #include <GBEngine/Core/Application.h>
+#include <GBEngine/Level/Level.h>
+#include <imgui.h>
+#include <vector>
+
+#include "EditorWidgets/GBEditorWidgetAssetWindow.h"
+#include "EditorWidgets/GBEditorWidgetDetailsWindow.h"
+#include "EditorWidgets/GBEditorWidgetLevelHierarchyWindow.h"
+#include "EditorWidgets/GBEditorWidgetLogWindow.h"
+#include "EditorWidgets/GBEditorWidgetMenuBar.h"
+#include "EditorWidgets/GBEditorWidgetToolBar.h"
+#include "EditorWidgets/GBEditorWidgetViewportWindow.h"
 
 namespace GB
 {
-	GBEditorLayer::GBEditorLayer() : GB::Layer("GBLauncherLayer"),
-		m_EditorLevelState(EGBEditorLevelState::Edit)
+	EditorLayer::EditorLayer() : GB::Layer("GBEditorLayer"),
+		m_pEditorWidgets(),
+		m_pEditorLevel(nullptr),
+		m_EditorLevelState(EEditorLevelState::Edit)
+	{}
+
+	EditorLayer::~EditorLayer()
+	{}
+
+	void EditorLayer::OnAttach()
 	{
+		m_pEditorLevel = CreateSharedPtr<Level>();
+
+		constexpr size_t kNumberOfEditorWidgets = 7;
+		m_pEditorWidgets.reserve(kNumberOfEditorWidgets);
+		m_pEditorWidgets.push_back(CreateUniquePtr<EditorWidgetMenuBar>(this));
+		m_pEditorWidgets.push_back(CreateUniquePtr<EditorWidgetToolBar>(this));
+		m_pEditorWidgets.push_back(CreateUniquePtr<EditorWidgetLevelHierarchyWindow>(this));
+		m_pEditorWidgets.push_back(CreateUniquePtr<EditorWidgetDetailsWindow>(this));
+		m_pEditorWidgets.push_back(CreateUniquePtr<EditorWidgetAssetWindow>(this));
+		m_pEditorWidgets.push_back(CreateUniquePtr<EditorWidgetLogWindow>(this));
+		m_pEditorWidgets.push_back(CreateUniquePtr<EditorWidgetViewportWindow>(this));
 	}
 
-	GBEditorLayer::~GBEditorLayer()
+	void EditorLayer::OnDetach()
 	{
+		if (m_pEditorLevel)
+		{
+			m_pEditorLevel->End();
+			m_pEditorLevel->Deinitialize();
+			m_pEditorLevel.reset();
+		}
+
+		// TODO: Call any editor widget clean up functions here...
+		m_pEditorWidgets.clear();
+	}
+
+	void EditorLayer::OnUpdate(const float deltaTime)
+	{
+		switch (m_EditorLevelState)
+		{
+			case EEditorLevelState::Edit:
+			{
+				if (m_pEditorLevel)
+				{
+					m_pEditorLevel->Update(deltaTime);
+				}
+				break;
+			}
+			case EEditorLevelState::Play:
+			{
+				//m_pRuntimeLevel->Update(deltaTime);
+				break;
+			}
+			case EEditorLevelState::Pause:
+			{
+				break;
+			}
+		}
+	}
+
+	void EditorLayer::OnRender()
+	{
+		//switch (m_EditorLevelState)
+		//{
+		//	case EEditorLevelState::Edit:
+		//	{
+		//		if (m_pEditorLevel)
+		//		{
+		//			m_pEditorLevel->Render();
+		//		}
+		//		break;
+		//	}
+		//	case EEditorLevelState::Play:
+		//	{
+		//		//m_pRuntimeLevel->Render(deltaTime);
+		//		break;
+		//	}
+		//	case EEditorLevelState::Pause:
+		//	{
+		//		break;
+		//	}
+		//}
 	}
 
 #if GB_IMGUI_ENABLED
-	void GBEditorLayer::OnImGuiRender()
+	void EditorLayer::OnImGuiRender()
 	{
 		static bool dockspaceOpen = true;
 		static bool opt_fullscreen = true;
@@ -73,112 +160,23 @@ namespace GB
 			}
 			style.WindowMinSize.x = minWindowSizeX;
 
-			DrawMenuBar();
-			DrawToolBar();
-			DrawViewportWindow();
-			DrawLevelHierarchyWindow();
-			DrawAssetWindow();
-			DrawLogWindow();
-			DrawDetailsWindow();
-		}
-		ImGui::End();
-	}
-
-	void GBEditorLayer::DrawMenuBar()
-	{
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
+			ForEachValidEditorWidget([&](EditorWidget& widget)
 			{
-				if (ImGui::MenuItem("New", "Ctrl+N"))
-				{
-					//NewScene();
-				}
-
-				if (ImGui::MenuItem("Open...", "Ctrl+O"))
-				{
-					//OpenScene();
-				}
-
-				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
-				{
-					//SaveSceneAs();
-				}
-
-				if (ImGui::MenuItem("Exit"))
-				{
-					GB::Application::Get().Close();
-				}
-
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMenuBar();
-		}
-	}
-	
-	void GBEditorLayer::DrawToolBar()
-	{
-		ImGui::Begin("Toolbar");
-		{
-
-		}
-		ImGui::End();
-	}
-
-	void GBEditorLayer::DrawViewportWindow()
-	{
-		ImGui::Begin("Viewport");
-		{
-
-		}
-		ImGui::End();
-	}
-	
-	void GBEditorLayer::DrawLevelHierarchyWindow()
-	{
-		ImGui::Begin("LeveHierarchy");
-		{
-
-		}
-		ImGui::End();
-	}
-
-	void GBEditorLayer::DrawAssetWindow()
-	{
-		ImGui::Begin("Assets");
-		{
-
-		}
-		ImGui::End();
-	}
-	
-	void GBEditorLayer::DrawLogWindow()
-	{
-		ImGui::Begin("Log");
-		{
-			if (ImGui::BeginPopupContextWindow(0, 1))
-			{
-				if (ImGui::MenuItem("Clear Log"))
-				{
-					Log::Clear();
-				}
-
-				ImGui::EndPopup();
-			}
-
-			ImGui::Text(Log::GetString().c_str());
-		}
-		ImGui::End();
-	}
-	
-	void GBEditorLayer::DrawDetailsWindow()
-	{
-		ImGui::Begin("Details");
-		{
-
+				widget.Draw();
+			});
 		}
 		ImGui::End();
 	}
 #endif
+
+	void EditorLayer::ForEachValidEditorWidget(const std::function<void(EditorWidget&)>& function)
+	{
+		for (const UniquePtr<EditorWidget>& editorWidget : m_pEditorWidgets)
+		{
+			if (editorWidget.get())
+			{
+				function(*editorWidget.get());
+			}
+		}
+	}
 }

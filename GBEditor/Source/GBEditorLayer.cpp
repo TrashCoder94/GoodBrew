@@ -18,6 +18,7 @@ namespace GB
 	EditorLayer::EditorLayer() : GB::Layer("GBEditorLayer"),
 		m_pEditorWidgets(),
 		m_pEditorLevel(nullptr),
+		m_pSelectedObject(nullptr),
 		m_EditorLevelState(EEditorLevelState::Edit)
 	{}
 
@@ -168,6 +169,46 @@ namespace GB
 		ImGui::End();
 	}
 #endif
+
+	void EditorLayer::SetSelectedObject(Object* pObject)
+	{
+		if (m_pSelectedObject)
+		{
+			m_pSelectedObject = nullptr;
+		}
+
+		m_pSelectedObject = pObject;
+	}
+
+	const SharedPtr<Level>& EditorLayer::GetEditorLevel()
+	{
+		return m_pEditorLevel;
+	}
+
+	const SharedPtr<Level>& EditorLayer::GetEditorLevel() const
+	{
+		return m_pEditorLevel;
+	}
+
+	const EEditorLevelState EditorLayer::GetEditorLevelState()
+	{
+		return m_EditorLevelState;
+	}
+
+	const EEditorLevelState EditorLayer::GetEditorLevelState() const
+	{
+		return m_EditorLevelState;
+	}
+
+	Object* EditorLayer::GetSelectedObject()
+	{
+		return m_pSelectedObject;
+	}
+
+	Object* EditorLayer::GetSelectedObject() const
+	{
+		return m_pSelectedObject;
+	}
 
 	void EditorLayer::ForEachValidEditorWidget(const std::function<void(EditorWidget&)>& function)
 	{

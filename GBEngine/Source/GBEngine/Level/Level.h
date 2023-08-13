@@ -29,6 +29,9 @@ namespace GB
 		void AddObject(Object* pObject);
 		void RemoveObject(Object* pObject);
 
+		const std::vector<Object*>& GetObjects();
+		const std::vector<Object*>& GetObjects() const;
+
 	private:
 		std::vector<Object*> m_pObjects;
 

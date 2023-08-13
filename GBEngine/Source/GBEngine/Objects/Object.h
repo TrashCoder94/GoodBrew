@@ -3,6 +3,7 @@
 #include "BaseObject.h"
 #include "GBEngine/Components/Component.h"
 
+#include <string>
 #include <vector>
 
 namespace GB
@@ -24,6 +25,9 @@ namespace GB
 		virtual void ImGuiRender() override;
 #endif
 		// ~BaseObject
+
+		const std::string& GetName();
+		const std::string& GetName() const;
 
 		bool HasComponent(Component* pComponent) const;
 
@@ -100,7 +104,10 @@ namespace GB
 		}
 
 	private:
+		static int s_ObjectID;
+
 		std::vector<Component*> m_pComponents;
+		std::string m_Name; 
 
 		void ForEachValidComponent(const std::function<void(Component&)>& function) const;
 	};

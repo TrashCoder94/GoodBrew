@@ -89,15 +89,39 @@ namespace GB
 
 	Object* Level::SpawnObject()
 	{
-		return nullptr;
+		Object* pObject = new Object();
+		m_pObjects.push_back(pObject);
+		return pObject;
 	}
 
 	void Level::AddObject(Object* pObject)
 	{
+		GB_CHECK_PTR(pObject, "Cannot add a nullptr object to the level!");
+		m_pObjects.push_back(pObject);
 	}
 
 	void Level::RemoveObject(Object* pObject)
 	{
+		if (pObject)
+		{
+			pObject->End();
+			pObject->Deinitialize();
+		}
+
+		m_pObjects.erase(std::remove_if(begin(m_pObjects), end(m_pObjects), [&](Object* pLevelObject) 
+		{
+			return pLevelObject == pObject; 
+		}), end(m_pObjects));
+	}
+
+	const std::vector<Object*>& Level::GetObjects()
+	{
+		return m_pObjects;
+	}
+
+	const std::vector<Object*>& Level::GetObjects() const
+	{
+		return m_pObjects;
 	}
 
 	void Level::ForEachValidObject(const std::function<void(Object&)>& function)

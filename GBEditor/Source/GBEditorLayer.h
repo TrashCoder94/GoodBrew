@@ -10,6 +10,7 @@ namespace GB
 {
 	class EditorWidget;
 	class Level;
+	class Object;
 
 	class EditorLayer : public Layer
 	{
@@ -24,12 +25,23 @@ namespace GB
 #if GB_IMGUI_ENABLED
 		virtual void OnImGuiRender() override;
 #endif
+		void SetSelectedObject(Object* pObject);
+
+		const SharedPtr<Level>& GetEditorLevel();
+		const SharedPtr<Level>& GetEditorLevel() const;
+
+		const EEditorLevelState GetEditorLevelState();
+		const EEditorLevelState GetEditorLevelState() const;
+	
+		Object* GetSelectedObject();
+		Object* GetSelectedObject() const;
 
 	private:
 		void ForEachValidEditorWidget(const std::function<void(EditorWidget&)>& function);
 
 		std::vector<UniquePtr<EditorWidget>> m_pEditorWidgets;
 		SharedPtr<Level> m_pEditorLevel;
+		Object* m_pSelectedObject;
 		EEditorLevelState m_EditorLevelState;
 	};
 }

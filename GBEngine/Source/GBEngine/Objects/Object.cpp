@@ -3,8 +3,11 @@
 
 namespace GB
 {
+	int Object::s_ObjectID = 0;
+
 	Object::Object() : BaseObject(),
-		m_pComponents()
+		m_pComponents(),
+		m_Name("Object" + std::to_string(++s_ObjectID))
 	{}
 
 	Object::~Object()
@@ -85,6 +88,16 @@ namespace GB
 		});
 	}
 #endif
+
+	const std::string& Object::GetName()
+	{
+		return m_Name;
+	}
+
+	const std::string& Object::GetName() const
+	{
+		return m_Name;
+	}
 
 	bool Object::HasComponent(Component* pComponentToFind) const
 	{

@@ -25,6 +25,10 @@ namespace GB
 #endif
 		// ~BaseObject
 
+		Object* SpawnObject();
+		void AddObject(Object* pObject);
+		void RemoveObject(Object* pObject);
+
 	private:
 		std::vector<Object*> m_pObjects;
 

@@ -7,7 +7,7 @@ workspace "GB"
 	{
 		"Debug",
 		"Release",
-		"Distribution"
+		"Shipping"
 	}
 
 	if os.is64bit() and not os.host() == "windows" then
@@ -53,10 +53,10 @@ workspace "GB"
 		runtime "Release"
 		optimize "on"
 	filter {}
-	filter { "configurations:Distribution" }
+	filter { "configurations:Shipping" }
 		defines
 		{
-			"GB_DISTRIBUTION",
+			"GB_SHIPPING",
 			"GB_IMGUI_ENABLED"
 		}
 		runtime "Release"

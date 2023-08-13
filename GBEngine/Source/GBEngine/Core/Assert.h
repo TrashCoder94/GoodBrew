@@ -30,5 +30,5 @@
 	#define GB_CORE_ASSERT(...)
 #endif
 
-#define GB_CHECK_PTR(x, msg) if(x == nullptr) GB_ASSERT(x, msg);
+#define GB_CHECK_PTR(x, msg) if(x == nullptr) GB_ASSERT(x, msg)
 #define GB_CHECK_PTR_SAFE(x) if(x == nullptr) return

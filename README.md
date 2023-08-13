@@ -6,11 +6,13 @@
 
 ## Prerequisites
 
+Currently using SFML v2.5.1
+Windows and Mac will use the manually downloaded binaries from: https://www.sfml-dev.org/download/sfml/2.5.1/ inside of `/GoodBrew/GBEngine/ThirdParty/SFML/`
+
 ### Linux
 ```
-sudo apt-get update
-sudo apt install libgl-dev
-sudo apt install xorg-dev
+sudo apt-get update && sudo apt-get install xorg-dev libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libdrm-dev libgbm-dev xvfb fluxbox
+sudo apt-get install libsfml-dev
 ```
 
 ## How To Setup

@@ -87,6 +87,19 @@ namespace GB
 	}
 #endif
 
+	Object* Level::SpawnObject()
+	{
+		return nullptr;
+	}
+
+	void Level::AddObject(Object* pObject)
+	{
+	}
+
+	void Level::RemoveObject(Object* pObject)
+	{
+	}
+
 	void Level::ForEachValidObject(const std::function<void(Object&)>& function)
 	{
 		for (Object* pObject : m_pObjects)

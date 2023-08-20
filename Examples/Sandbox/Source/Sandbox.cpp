@@ -8,13 +8,23 @@ class Sandbox : public GB::Application
 public:
 	Sandbox() : GB::Application("GB Sandbox")
 	{
-		PushLayer(new TestSandboxLayer());
+		m_pSandboxLayer = new TestSandboxLayer();
+		PushLayer(m_pSandboxLayer);
 	}
 
 	~Sandbox()
 	{
+		PopLayer(m_pSandboxLayer);
 
+		if (m_pSandboxLayer)
+		{
+			delete m_pSandboxLayer;
+			m_pSandboxLayer = nullptr;
+		}
 	}
+
+private:
+	TestSandboxLayer* m_pSandboxLayer = nullptr;
 };
 
 GB::Application* GB::CreateApplication()

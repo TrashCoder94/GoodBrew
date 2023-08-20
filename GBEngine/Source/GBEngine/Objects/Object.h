@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseObject.h"
-#include "GBEngine/Components/Component.h"
+#include "GBEngine/Components/TransformComponent.h"
 
 #include <string>
 #include <vector>
@@ -28,6 +28,9 @@ namespace GB
 
 		const std::string& GetName();
 		const std::string& GetName() const;
+
+		TransformComponent* GetTransformComponent();
+		const TransformComponent* GetTransformComponent() const;
 
 		bool HasComponent(Component* pComponent) const;
 
@@ -71,10 +74,10 @@ namespace GB
 			}
 
 			ComponentClass* pNewComponent{ new ComponentClass(std::forward<Args>(args)...) };
-			pNewComponent->SetOwner(this);
 			if (!pNewComponent)
 				return pResult;
 
+			pNewComponent->SetBaseObjectOwner(this);
 			pResult = pNewComponent;
 			m_pComponents.push_back(pResult);
 
@@ -107,6 +110,7 @@ namespace GB
 		static int s_ObjectID;
 
 		std::vector<Component*> m_pComponents;
+		TransformComponent* m_pTransformComponent;
 		std::string m_Name; 
 
 		void ForEachValidComponent(const std::function<void(Component&)>& function) const;

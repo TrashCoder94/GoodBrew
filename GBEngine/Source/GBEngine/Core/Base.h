@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "GBEngine/Core/Assert.h"
+#include "GBEngine/Core/Macros.h"
 #include "GBEngine/Events/EventSystem.h"
 #include "GBEngine/Profiling/Instrumentor.h"
 #include "GBEngine/Timer/TimerSystem.h"

@@ -1,6 +1,8 @@
 #include "gbpch.h"
 #include "Level.h"
 #include "GBEngine/Objects/Object.h"
+#include "GBEngine/Components/SpriteComponent.h"
+#include "GBEngine/Renderer/Renderer.h"
 
 namespace GB
 {
@@ -45,6 +47,21 @@ namespace GB
 		{
 			object.Update(deltaTime);
 		});
+	}
+
+	void Level::Render()
+	{
+		GB_PROFILE_FUNCTION();
+
+		Renderer::Begin();
+		{
+			ForEachValidObject([&](Object& object)
+			{
+				GB_PTR_SAFE(pSpriteComponent, object.GetComponent<SpriteComponent>());
+				Renderer::DrawTexture(pSpriteComponent->GetTexture());
+			});
+		}
+		Renderer::End();
 	}
 
 	void Level::End()

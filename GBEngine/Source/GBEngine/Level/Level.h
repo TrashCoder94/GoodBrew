@@ -17,6 +17,7 @@ namespace GB
 		virtual void Initialize() final override;
 		virtual void Begin() final override;
 		virtual void Update(const float deltaTime) final override;
+		void Render();
 		virtual void End() final override;
 		virtual void Deinitialize() final override;
 #if GB_IMGUI_ENABLED

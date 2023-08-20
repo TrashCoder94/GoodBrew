@@ -7,6 +7,7 @@ namespace GB
 
 	Object::Object() : BaseObject(),
 		m_pComponents(),
+		m_pTransformComponent(nullptr),
 		m_Name("Object" + std::to_string(++s_ObjectID))
 	{}
 
@@ -18,6 +19,8 @@ namespace GB
 		GB_PROFILE_FUNCTION();
 
 		BaseObject::Initialize();
+
+		m_pTransformComponent = GetComponent<TransformComponent>();
 
 		ForEachValidComponent([&](Component& component)
 		{
@@ -66,6 +69,8 @@ namespace GB
 		GB_PROFILE_FUNCTION();
 
 		BaseObject::Deinitialize();
+		
+		m_pTransformComponent = nullptr;
 
 		ForEachValidComponent([&](Component& component)
 		{
@@ -99,6 +104,16 @@ namespace GB
 		return m_Name;
 	}
 
+	TransformComponent* Object::GetTransformComponent()
+	{
+		return m_pTransformComponent;
+	}
+
+	const TransformComponent* Object::GetTransformComponent() const
+	{
+		return m_pTransformComponent;
+	}
+
 	bool Object::HasComponent(Component* pComponentToFind) const
 	{
 		GB_PROFILE_FUNCTION();
@@ -130,9 +145,7 @@ namespace GB
 			return;
 		}
 
-		pComponent->SetOwner(this);
-		pComponent->Initialize();
-		pComponent->Begin();
+		pComponent->SetBaseObjectOwner(this);
 		m_pComponents.push_back(pComponent);
 	}
 

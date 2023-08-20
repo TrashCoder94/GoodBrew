@@ -21,6 +21,7 @@ project "GBEngine"
 	{
 		"Source",
 		"%{IncludeDir.imgui}",
+		"%{IncludeDir.linalg}",
 		"%{IncludeDir.spdlog}"
 	}
 

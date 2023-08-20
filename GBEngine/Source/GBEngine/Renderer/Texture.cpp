@@ -1,6 +1,7 @@
 #include "gbpch.h"
 #include "RendererAPI.h"
 #include "Texture.h"
+#include "Platforms/SFML/SFMLTexture.h"
 
 namespace GB
 {
@@ -15,7 +16,7 @@ namespace GB
 			}
 			case RendererAPI::EAPI::SFML:
 			{
-				return nullptr;
+				return CreateSharedPtr<SFMLTexture>(width, height);
 			}
 		}
 
@@ -34,7 +35,7 @@ namespace GB
 			}
 			case RendererAPI::EAPI::SFML:
 			{
-				return nullptr;
+				return CreateSharedPtr<SFMLTexture>(filepath);
 			}
 		}
 

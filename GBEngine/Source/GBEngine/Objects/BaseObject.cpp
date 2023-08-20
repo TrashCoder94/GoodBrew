@@ -30,18 +30,18 @@ namespace GB
 	{}
 #endif
 
-	void BaseObject::SetOwner(BaseObject* pOwner)
+	void BaseObject::SetBaseObjectOwner(BaseObject* pOwner)
 	{
 		GB_CHECK_PTR(pOwner, "Cannot set owner to nullptr.");
 		m_pOwner = pOwner;
 	}
 
-	BaseObject* BaseObject::GetOwner()
+	BaseObject* BaseObject::GetBaseObjectOwner()
 	{
 		return m_pOwner;
 	}
 
-	const BaseObject* BaseObject::GetOwner() const
+	const BaseObject* BaseObject::GetBaseObjectOwner() const
 	{
 		return m_pOwner;
 	}

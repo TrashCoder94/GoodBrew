@@ -34,9 +34,9 @@ namespace GB
 			return bIsSame;
 		}
 
-		void SetOwner(BaseObject* pOwner);
-		BaseObject* GetOwner();
-		const BaseObject* GetOwner() const;
+		void SetBaseObjectOwner(BaseObject* pOwner);
+		BaseObject* GetBaseObjectOwner();
+		const BaseObject* GetBaseObjectOwner() const;
 
 	private:
 		BaseObject* m_pOwner;

@@ -79,26 +79,26 @@ namespace GB
 
 	void EditorLayer::OnRender()
 	{
-		//switch (m_EditorLevelState)
-		//{
-		//	case EEditorLevelState::Edit:
-		//	{
-		//		if (m_pEditorLevel)
-		//		{
-		//			m_pEditorLevel->Render();
-		//		}
-		//		break;
-		//	}
-		//	case EEditorLevelState::Play:
-		//	{
-		//		//m_pRuntimeLevel->Render(deltaTime);
-		//		break;
-		//	}
-		//	case EEditorLevelState::Pause:
-		//	{
-		//		break;
-		//	}
-		//}
+		switch (m_EditorLevelState)
+		{
+			case EEditorLevelState::Edit:
+			{
+				if (m_pEditorLevel)
+				{
+					m_pEditorLevel->Render();
+				}
+				break;
+			}
+			case EEditorLevelState::Play:
+			{
+				//m_pRuntimeLevel->Render(deltaTime);
+				break;
+			}
+			case EEditorLevelState::Pause:
+			{
+				break;
+			}
+		}
 	}
 
 #if GB_IMGUI_ENABLED

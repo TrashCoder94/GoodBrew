@@ -23,7 +23,9 @@ void TestSandboxLayer::OnAttach()
 	// Sorting out what the object should look like!
 	{
 		GB::TransformComponent* pTransformComponent = m_pTestObject->AddComponent<GB::TransformComponent>();
-		GB::SpriteComponent* pSpriteComponent = m_pTestObject->AddComponent<GB::SpriteComponent>();
+		pTransformComponent->SetPosition({ 300.0f, 300.0f, 0.0f });
+		
+		m_pTestObject->AddComponent<GB::SpriteComponent>();
 	}
 
 	// Add the object to the level

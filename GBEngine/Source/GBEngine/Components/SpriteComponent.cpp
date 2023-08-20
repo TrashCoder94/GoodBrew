@@ -22,7 +22,6 @@ namespace GB
 		m_pTransformComponent = GetOwner()->GetTransformComponent();
 
 		// TEMP, remove when reflection/level serializer has been implemented
-		m_pTransformComponent->SetPosition({ 300.0f, 300.0f, 0.0f });
 		m_pTexture = Texture2D::Create("Assets/Textures/Checkerboard.png");
 	}
 

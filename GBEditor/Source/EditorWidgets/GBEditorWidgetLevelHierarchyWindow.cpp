@@ -80,7 +80,7 @@ namespace GB
 
 		ImGuiTreeNodeFlags flags = ((m_pEditorLayer->GetSelectedObject() == pObject) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
-		const bool opened = ImGui::TreeNodeEx(static_cast<void*>(pObject), flags, name.c_str());
+		const bool opened = ImGui::TreeNodeEx(static_cast<void*>(pObject), flags, "%s", name.c_str());
 
 		if (ImGui::IsItemClicked())
 		{

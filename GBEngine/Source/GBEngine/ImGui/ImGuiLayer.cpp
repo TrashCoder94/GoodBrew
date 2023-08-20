@@ -41,6 +41,14 @@ namespace GB
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		
+		constexpr float kFontSize = 24.0f;
+		io.Fonts->Clear();
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/KenyanCoffee/kenyancoffee-rg.ttf", kFontSize);
+		io.Fonts->AddFontFromFileTTF("Assets/Fonts/KenyanCoffee/kenyancoffee-bd.ttf", kFontSize);
+		
+		const bool fontsUpdated = ImGui::SFML::UpdateFontTexture();
+		GB_CORE_ASSERT(fontsUpdated, "ImGui::SFML::UpdateFontTexture failed!");
+
 		ImGui::StyleColorsDark();
 
 		ImGuiStyle& style = ImGui::GetStyle();

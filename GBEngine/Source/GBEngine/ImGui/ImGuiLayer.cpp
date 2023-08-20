@@ -12,10 +12,10 @@
 #include "GBEngine/Core/Window.h"
 
 // TEMP
-#if GB_PLATFORM_LINUX
-#include <unistd.h>
-#else GB_PLATFORM_WINDOWS
+#if defined(GB_PLATFORM_WINDOWS)
 #include <direct.h>
+#elif defined(GB_PLATFORM_LINUX)
+#include <unistd.h>
 #endif
 #include <stdio.h>
 #include <limits.h>
@@ -53,10 +53,10 @@ namespace GB
 		// TEMP
 		constexpr size_t kPathMax = 256;
 		char cwd[kPathMax];
-#if GB_PLATFORM_LINUX
-		if (getcwd(cwd, sizeof(cwd)) != NULL)
-#else GB_PLATFORM_WINDOWS
+#if defined(GB_PLATFORM_WINDOWS)
 		if (_getcwd(cwd, sizeof(cwd)) != NULL) 
+#elif defined(GB_PLATFORM_LINUX)
+		if (getcwd(cwd, sizeof(cwd)) != NULL)
 #endif
 		{
 			printf("Current working dir: %s\n", cwd);

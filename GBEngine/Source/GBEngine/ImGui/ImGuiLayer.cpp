@@ -47,10 +47,11 @@ namespace GB
 		io.Fonts->Clear();
 		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/KenyanCoffee/kenyancoffee-rg.ttf", kFontSize);
 		io.Fonts->AddFontFromFileTTF("Assets/Fonts/KenyanCoffee/kenyancoffee-bd.ttf", kFontSize);
-#endif
-
+		
 		const bool fontsUpdated = ImGui::SFML::UpdateFontTexture();
 		GB_CORE_ASSERT(fontsUpdated, "ImGui::SFML::UpdateFontTexture failed!");
+#endif
+
 
 		ImGui::StyleColorsDark();
 

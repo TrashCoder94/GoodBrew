@@ -11,6 +11,15 @@
 #include "GBEngine/Core/Application.h"
 #include "GBEngine/Core/Window.h"
 
+// TEMP
+#if GB_PLATFORM_LINUX
+#include <unistd.h>
+#else GB_PLATFORM_WINDOWS
+#include <direct.h>
+#endif
+#include <stdio.h>
+#include <limits.h>
+
 namespace GB
 {
 	ImGuiLayer::ImGuiLayer() : Layer("ImGuiLayer"),
@@ -41,17 +50,25 @@ namespace GB
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		
-#if !GB_AUTO_TEST
-		// TODO: Work out how to get the correct filepath for the build machine/external projects...
+		// TEMP
+		constexpr size_t kPathMax = 256;
+		char cwd[kPathMax];
+#if GB_PLATFORM_LINUX
+		if (getcwd(cwd, sizeof(cwd)) != NULL)
+#else GB_PLATFORM_WINDOWS
+		if (_getcwd(cwd, sizeof(cwd)) != NULL) 
+#endif
+		{
+			printf("Current working dir: %s\n", cwd);
+		}
+
 		constexpr float kFontSize = 24.0f;
 		io.Fonts->Clear();
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/KenyanCoffee/kenyancoffee-rg.ttf", kFontSize);
-		io.Fonts->AddFontFromFileTTF("Assets/Fonts/KenyanCoffee/kenyancoffee-bd.ttf", kFontSize);
-		
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\KenyanCoffee\\kenyancoffee-rg.ttf", kFontSize);
+		io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\KenyanCoffee\\kenyancoffee-bd.ttf", kFontSize);
+
 		const bool fontsUpdated = ImGui::SFML::UpdateFontTexture();
 		GB_CORE_ASSERT(fontsUpdated, "ImGui::SFML::UpdateFontTexture failed!");
-#endif
-
 
 		ImGui::StyleColorsDark();
 

@@ -14,8 +14,7 @@ project "BootupAndShutdownTest"
 
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS",
-		"GB_AUTO_TEST"
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs

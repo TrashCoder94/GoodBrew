@@ -51,9 +51,9 @@ namespace GB
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		
 		// TEMP
-		constexpr size_t kPathMax = 256;
+		constexpr size_t kPathMax = 1024;
 		char cwd[kPathMax];
-#if defined(GB_PLATFORM_WINDOWS)
+#ifdef GB_PLATFORM_WINDOWS
 		if (_getcwd(cwd, sizeof(cwd)) != NULL) 
 #elif defined(GB_PLATFORM_LINUX)
 		if (getcwd(cwd, sizeof(cwd)) != NULL)
@@ -61,11 +61,15 @@ namespace GB
 		{
 			printf("Current working dir: %s\n", cwd);
 		}
+		else
+		{
+			perror("getcwd() error");
+		}
 
-		constexpr float kFontSize = 24.0f;
+		constexpr float kFontSize = 15.0f;
 		io.Fonts->Clear();
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\KenyanCoffee\\kenyancoffee-rg.ttf", kFontSize);
-		io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\KenyanCoffee\\kenyancoffee-bd.ttf", kFontSize);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\LowballNeue\\LowballNeueRegular-rglJB.ttf", kFontSize);
+		io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\LowballNeue\\LowballNeueBold-w18A6.ttf", kFontSize);
 
 		const bool fontsUpdated = ImGui::SFML::UpdateFontTexture();
 		GB_CORE_ASSERT(fontsUpdated, "ImGui::SFML::UpdateFontTexture failed!");

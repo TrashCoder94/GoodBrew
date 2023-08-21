@@ -78,7 +78,11 @@ void TestSandboxLayer::OnImGuiRender()
 	ImGui::Begin("Renderer Stats");
 	{
 		ImGui::Text("Texture Count: %d", GB::Renderer::GetStats().m_TextureCount);
+	}
+	ImGui::End();
 
+	ImGui::Begin("Font Test");
+	{
 		ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[0]);
 		ImGui::TextUnformatted("Should be REGULAR font!");
 		ImGui::PopFont();

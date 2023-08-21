@@ -51,6 +51,7 @@ namespace GB
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		
 		// TEMP
+		printf("BEGIN PRINT WORKING DIRECTORY\n");
 		constexpr size_t kPathMax = 1024;
 		char cwd[kPathMax];
 #ifdef GB_PLATFORM_WINDOWS
@@ -65,14 +66,15 @@ namespace GB
 		{
 			perror("getcwd() error");
 		}
+		printf("END PRINT WORKING DIRECTORY\n");
 
-		constexpr float kFontSize = 15.0f;
+		/*constexpr float kFontSize = 15.0f;
 		io.Fonts->Clear();
 		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\LowballNeue\\LowballNeueRegular-rglJB.ttf", kFontSize);
 		io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\LowballNeue\\LowballNeueBold-w18A6.ttf", kFontSize);
 
 		const bool fontsUpdated = ImGui::SFML::UpdateFontTexture();
-		GB_CORE_ASSERT(fontsUpdated, "ImGui::SFML::UpdateFontTexture failed!");
+		GB_CORE_ASSERT(fontsUpdated, "ImGui::SFML::UpdateFontTexture failed!");*/
 
 		ImGui::StyleColorsDark();
 

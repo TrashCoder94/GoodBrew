@@ -37,6 +37,7 @@ jobs:
 #        uses: actions/upload-artifact@v3
 #        with:
 #          name: Windows-Binaries-Debug
+#          retention-days: 2
 #          path: |
 #            Binaries/**
 #
@@ -60,6 +61,7 @@ jobs:
 #        uses: actions/upload-artifact@v3
 #        with:
 #          name: Windows-Binaries-Release
+#          retention-days: 2
 #          path: |
 #            Binaries/**
 #
@@ -88,6 +90,7 @@ jobs:
 #        uses: actions/upload-artifact@v3
 #        with:
 #          name: Linux-Binaries-Debug
+#          retention-days: 2
 #          path: |
 #            Binaries/**
 #            
@@ -116,6 +119,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Linux-Binaries-Release
+          retention-days: 2
           path: |
             Binaries/**
 
@@ -144,6 +148,7 @@ jobs:
 #        uses: actions/upload-artifact@v3
 #        with:
 #          name: Mac-Binaries-Debug
+#          retention-days: 2
 #          path: |
 #            Binaries/**
 #  

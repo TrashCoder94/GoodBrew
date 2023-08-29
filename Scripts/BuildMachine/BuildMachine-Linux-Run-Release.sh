@@ -5,6 +5,7 @@ chmod o+rx Binaries/Release-linux-x86_64/BootupAndShutdownTest/Assets
 chmod +x Binaries/Release-linux-x86_64/BootupAndShutdownTest/BootupAndShutdownTest
 pwd
 sudo cd Binaries/Release-linux-x86_64/BootupAndShutdownTest
+find . -type f
 pwd
 BootupAndShutdownTest
 if [ $? -ne 0 ] 

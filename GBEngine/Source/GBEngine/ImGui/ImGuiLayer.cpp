@@ -49,24 +49,6 @@ namespace GB
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-		
-		// TEMP
-		printf("BEGIN PRINT WORKING DIRECTORY\n");
-		constexpr size_t kPathMax = 1024;
-		char cwd[kPathMax];
-#ifdef GB_PLATFORM_WINDOWS
-		if (_getcwd(cwd, sizeof(cwd)) != NULL) 
-#elif defined(GB_PLATFORM_LINUX)
-		if (getcwd(cwd, sizeof(cwd)) != NULL)
-#endif
-		{
-			printf("Current working dir: %s\n", cwd);
-		}
-		else
-		{
-			perror("getcwd() error");
-		}
-		printf("END PRINT WORKING DIRECTORY\n");
 
 		constexpr float kFontSize = 15.0f;
 		io.Fonts->Clear();

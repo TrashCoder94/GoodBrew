@@ -70,8 +70,8 @@ namespace GB
 
 		constexpr float kFontSize = 15.0f;
 		io.Fonts->Clear();
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\LowballNeue\\LowballNeueRegular-rglJB.ttf", kFontSize);
-		io.Fonts->AddFontFromFileTTF("Assets\\Fonts\\LowballNeue\\LowballNeueBold-w18A6.ttf", kFontSize);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/LowballNeue/LowballNeueRegular-rglJB.ttf", kFontSize);
+		io.Fonts->AddFontFromFileTTF("Assets/Fonts/LowballNeue/LowballNeueBold-w18A6.ttf", kFontSize);
 
 		const bool fontsUpdated = ImGui::SFML::UpdateFontTexture();
 		GB_CORE_ASSERT(fontsUpdated, "ImGui::SFML::UpdateFontTexture failed!");

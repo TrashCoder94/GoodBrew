@@ -3,9 +3,7 @@
 echo "Running Release BootupAndShutdownTest executable!"
 chmod o+rx Binaries/Release-linux-x86_64/BootupAndShutdownTest/Assets
 chmod +x Binaries/Release-linux-x86_64/BootupAndShutdownTest/BootupAndShutdownTest
-pwd
 cd Binaries/Release-linux-x86_64/BootupAndShutdownTest
-pwd
 ./BootupAndShutdownTest
 if [ $? -ne 0 ] 
 then

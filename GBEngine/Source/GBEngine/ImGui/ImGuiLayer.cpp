@@ -50,10 +50,12 @@ namespace GB
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-		constexpr float kFontSize = 15.0f;
+		constexpr const char* kDefaultFontFilepath = "Assets/Fonts/Metropolis/Metropolis-Medium.ttf";
+		constexpr const char* kBoldFontFilepath = "Assets/Fonts/Metropolis/Metropolis-Bold.ttf";
+		constexpr float kFontSize = 18.0f;
 		io.Fonts->Clear();
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/LowballNeue/LowballNeueRegular-rglJB.ttf", kFontSize);
-		io.Fonts->AddFontFromFileTTF("Assets/Fonts/LowballNeue/LowballNeueBold-w18A6.ttf", kFontSize);
+		io.FontDefault = io.Fonts->AddFontFromFileTTF(kDefaultFontFilepath, kFontSize);
+		io.Fonts->AddFontFromFileTTF(kBoldFontFilepath, kFontSize);
 
 		const bool fontsUpdated = ImGui::SFML::UpdateFontTexture();
 		GB_CORE_ASSERT(fontsUpdated, "ImGui::SFML::UpdateFontTexture failed!");

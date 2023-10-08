@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GBReflect.h>
 #include "GBEngine/Core/Base.h"
 
 namespace GB
@@ -33,6 +34,8 @@ namespace GB
 			const bool bIsSame = (dynamic_cast<ObjectClass*>(this));
 			return bIsSame;
 		}
+
+		virtual const reflect::TypeDescriptor_Struct& GetTypeDescription() const = 0;
 
 		void SetBaseObjectOwner(BaseObject* pOwner);
 		BaseObject* GetBaseObjectOwner();

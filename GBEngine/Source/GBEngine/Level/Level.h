@@ -9,6 +9,8 @@ namespace GB
 
 	class Level : public BaseObject
 	{
+		GB_REFLECT()
+
 	public:
 		Level();
 		~Level();

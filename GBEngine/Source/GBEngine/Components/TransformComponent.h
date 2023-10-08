@@ -9,6 +9,8 @@ namespace GB
 {
 	class TransformComponent : public Component
 	{
+		GB_REFLECT()
+
 	public:
 		TransformComponent();
 		~TransformComponent();
@@ -25,8 +27,11 @@ namespace GB
 		const float3& GetScale() const;
 
 	private:
+		GBVARIABLE(Edit)
 		float3 m_Position;
+		GBVARIABLE(Edit)
 		float3 m_Rotation;
+		GBVARIABLE(Edit)
 		float3 m_Scale;
 	};
 }

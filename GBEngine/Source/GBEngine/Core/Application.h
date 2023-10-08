@@ -16,6 +16,12 @@ namespace GB
 
 	class Application : public BaseObject
 	{
+		// TODO: Get this outta here...
+		// Should find a way to not inherit from BaseObject?
+		// Think I'm only doing that at the moment so that I can use the TimerSystem with applications
+		// Could maybe setup interfaces for using these sorts of systems? E.g. ITimerObject, IEventObject?
+		GB_REFLECT()
+
 	public:
 		Application(const std::string& name = "GB Application");
 		virtual ~Application();

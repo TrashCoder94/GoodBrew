@@ -78,7 +78,7 @@ jobs:
         run: |
           export DISPLAY=:0.0
           sudo apt-get update && sudo apt-get install xorg-dev libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libdrm-dev libgbm-dev xvfb fluxbox
-          sudo apt-get install libsfml-dev xvfb
+          sudo apt-get install libsfml-dev
          
       - name: Test
         working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -106,9 +106,9 @@ jobs:
       - name: Setup and Install Prerequisites
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: |
-          export DISPLAY=:99
+          export DISPLAY=:0.0
           sudo apt-get update && sudo apt-get install xorg-dev libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libdrm-dev libgbm-dev xvfb fluxbox
-          sudo apt-get install libsfml-dev xvfb
+          sudo apt-get install libsfml-dev
           
       - name: Test
         working-directory: ${{env.GITHUB_WORKSPACE}}

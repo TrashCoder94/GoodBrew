@@ -363,6 +363,7 @@ MigrationBackup/
 
 # No Allow
 ThirdParty/SFML-Binaries-Test/Mac/examples/*
+**/GeneratedCode/
 
 **.vcxproj
 **.vcxproj.filters

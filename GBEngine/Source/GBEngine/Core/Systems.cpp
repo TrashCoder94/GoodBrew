@@ -5,6 +5,10 @@
 #include "GBEngine/Timer/TimerSystem.h"
 #include "Log.h"
 
+#include <GBReflect.h>
+
+//extern void reflect::InitReflectionSystem();
+
 namespace GB
 {
 	std::unique_ptr<EventSystem> Systems::s_pEventSystem = nullptr;
@@ -19,6 +23,8 @@ namespace GB
 
 		s_pEventSystem = std::make_unique<EventSystem>();
 		s_pTimerSystem = std::make_unique<TimerSystem>();
+
+		//reflect::InitReflectionSystem();
 	}
 
 	void Systems::Update(const float deltaTime)

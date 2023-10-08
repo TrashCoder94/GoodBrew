@@ -90,6 +90,7 @@ IncludeDir["SFMLMac"] = "%{wks.location}/GBEngine/ThirdParty/SFML/Mac/include"
 IncludeDir["imgui"] = "%{wks.location}/GBEngine/ThirdParty/imgui"
 IncludeDir["linalg"] = "%{wks.location}/GBEngine/ThirdParty/linalg"
 IncludeDir["spdlog"] = "%{wks.location}/GBEngine/ThirdParty/spdlog/include"
+IncludeDir["GBReflection"] = "%{wks.location}/GBEngine/ThirdParty/GBReflection"
 IncludeDir["GBEngine"] = "%{wks.location}/GBEngine/Source"
 
 function includeAndLinkSFML ()
@@ -216,8 +217,10 @@ function includeAndLinkGBEngine ()
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.linalg}",
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.GBReflection}",
 		"%{IncludeDir.GBEngine}"
 	}
+	
 	links 
 	{ 
 		"GBEngine",
@@ -234,15 +237,7 @@ function includeAndLinkGBEngine ()
 		}
 	filter {}
 
-	filter { "system:macosx" }
-		postbuildcommands
-		{
-			"cp -R /$(PWD)/GBEngine/Assets/. /$(CURDIR)/Assets/",
-			"cp -R /$(CURDIR)/Assets/. /$(CURDIR)/%{cfg.targetdir}/Assets/"
-		}
-	filter {}
-
-	filter { "system:linux" }
+	filter { "system:not windows" }
 		postbuildcommands
 		{
 			"cp -R /$(PWD)/GBEngine/Assets/. /$(CURDIR)/Assets/",

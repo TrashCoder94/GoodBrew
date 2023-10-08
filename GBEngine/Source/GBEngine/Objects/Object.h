@@ -10,6 +10,8 @@ namespace GB
 {
 	class Object : public BaseObject
 	{
+		GB_REFLECT()
+
 	public:
 		Object();
 		~Object();

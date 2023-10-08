@@ -9,6 +9,8 @@ namespace GB
 
 	class SpriteComponent : public Component
 	{
+		GB_REFLECT()
+
 	public:
 		SpriteComponent();
 		~SpriteComponent();

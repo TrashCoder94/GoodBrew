@@ -8,6 +8,8 @@ namespace GB
 
 	class Component : public BaseObject
 	{
+		GB_REFLECT()
+
 	public:
 		Component();
 		~Component();

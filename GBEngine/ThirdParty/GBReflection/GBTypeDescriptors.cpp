@@ -1,5 +1,3 @@
-#pragma once
-
 #include <linalg.h>
 #include <iostream>
 

@@ -9,6 +9,12 @@
 Currently using SFML v2.5.1
 Windows and Mac will use the manually downloaded binaries from: https://www.sfml-dev.org/download/sfml/2.5.1/ inside of `/GoodBrew/GBEngine/ThirdParty/SFML/`
 
+### Windows
+This is for the CommitChecker, on Windows, this uses the WSL to compile local changes in a Linux environment.
+1. Download the Windows Subsystem for Linux from the Microsoft Store: https://www.microsoft.com/store/productid/9P9TQF7MRM4R?ocid=pdpshare
+2. Follow the instructions here to install the system and a distribution: https://learn.microsoft.com/en-us/windows/wsl/installs
+3. Place the CommitChecker binaries inside `Tools/CommitChecker` inside of your main repository folder.
+
 ### Linux
 ```
 sudo apt-get update && sudo apt-get install xorg-dev libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libdrm-dev libgbm-dev xvfb fluxbox
@@ -19,4 +25,4 @@ sudo apt-get install libsfml-dev
 
 1.	Clone using your source control provider (I use GitHub Desktop for example :octocat:).
 2.	Go to `/GoodBrew/Scripts/` and run the `GenerateProjectFiles` script for your os.
-3.	Premake should have generated `GB.sln` (or platform equivalent) in your root folder. Open that and you should have code access now!
+3.	Premake should have generated `GB.sln` (or platform equivalent) in your root folder. You should have code access now!

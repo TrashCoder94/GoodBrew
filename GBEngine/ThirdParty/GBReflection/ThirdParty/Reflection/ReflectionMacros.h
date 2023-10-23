@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Macros.h"
 #include "TypeDescriptorStruct.h"
 
 #define REFLECTION_MACRO_STRINGIFY(x) #x

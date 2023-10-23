@@ -2,6 +2,8 @@
 
 #if GB_IMGUI_ENABLED
 
+#include <imgui.h>
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 
@@ -24,10 +26,13 @@ namespace GB
 			void Begin();
 			void End();
 
+		private:
 			void SetDefaultThemeColours();
 			void SetDarkThemeColours();
+			void SetDarkBlueThemeColours();
+			void SetDarkPurpleThemeColours();
+			void SetTheme(const ImVec4& mainColour);
 
-		private:
 			sf::RenderWindow* m_pWindow;
 	};
 }

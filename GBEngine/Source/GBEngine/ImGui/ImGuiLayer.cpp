@@ -4,7 +4,6 @@
 
 #include "ImGuiLayer.h"
 
-#include <imgui.h>
 #include <imgui-SFML.h>
 #include <SFML/Graphics/RenderWindow.hpp>
 
@@ -117,73 +116,59 @@ namespace GB
 
 	void ImGuiLayer::SetDefaultThemeColours()
 	{
-		ImGuiStyle& style = ImGui::GetStyle();
-
-		style.Colors[ImGuiCol_WindowBg]				= ImVec4{ 0.12f, 0.03f, 0.14f, 1.0f };
-
-		// Headers
-		style.Colors[ImGuiCol_Header]				= ImVec4{ 0.24f, 0.13f, 0.24f, 1.0f };
-		style.Colors[ImGuiCol_HeaderHovered]		= ImVec4{ 0.34f, 0.23f, 0.34f, 1.0f };
-		style.Colors[ImGuiCol_HeaderActive]			= ImVec4{ 0.17f, 0.115f, 0.17f, 1.0f };
-
-		// Buttons
-		style.Colors[ImGuiCol_Button]				= ImVec4{ 0.24f, 0.13f, 0.24f, 1.0f };
-		style.Colors[ImGuiCol_ButtonHovered]		= ImVec4{ 0.34f, 0.23f, 0.34f, 1.0f };
-		style.Colors[ImGuiCol_ButtonActive]			= ImVec4{ 0.17f, 0.115f, 0.17f, 1.0f };
-
-		// Frame BG
-		style.Colors[ImGuiCol_FrameBg]				= ImVec4{ 0.24f, 0.13f, 0.24f, 1.0f };
-		style.Colors[ImGuiCol_FrameBgHovered]		= ImVec4{ 0.34f, 0.23f, 0.34f, 1.0f };
-		style.Colors[ImGuiCol_FrameBgActive]		= ImVec4{ 0.17f, 0.115f, 0.17f, 1.0f };
-
-		// Menubar BG
-		style.Colors[ImGuiCol_MenuBarBg]			= ImVec4{ 0.17f, 0.115f, 0.17f, 1.0f };
-
-		// Tabs
-		style.Colors[ImGuiCol_Tab]					= ImVec4{ 0.17f, 0.115f, 0.17f, 1.0f };
-		style.Colors[ImGuiCol_TabHovered]			= ImVec4{ 0.4f, 0.315f, 0.4f, 1.0f };
-		style.Colors[ImGuiCol_TabActive]			= ImVec4{ 0.3f, 0.315f, 0.3f, 1.0f };
-		style.Colors[ImGuiCol_TabUnfocused]			= ImVec4{ 0.17f, 0.115f, 0.17f, 1.0f };
-		style.Colors[ImGuiCol_TabUnfocusedActive]	= ImVec4{ 0.22f, 0.171f, 0.23f, 1.0f };
-
-		// Title
-		style.Colors[ImGuiCol_TitleBg]				= ImVec4{ 0.17f, 0.115f, 0.17f, 1.0f };
-		style.Colors[ImGuiCol_TitleBgActive]		= ImVec4{ 0.17f, 0.115f, 0.17f, 1.0f };
-		style.Colors[ImGuiCol_TitleBgCollapsed]		= ImVec4{ 0.17f, 0.115f, 0.17f, 1.0f };
+		SetDarkBlueThemeColours();
 	}
 
 	void ImGuiLayer::SetDarkThemeColours()
 	{
+		SetTheme(ImVec4{ 0.38f, 0.3805f, 0.381f, 1.0f });
+	}
+
+	void ImGuiLayer::SetDarkBlueThemeColours()
+	{
+		SetTheme(ImVec4{ 0.2f, 0.2f, 0.4f, 1.0f });
+	}
+
+	void ImGuiLayer::SetDarkPurpleThemeColours()
+	{
+		SetTheme(ImVec4{ 0.4f, 0.315f, 0.4f, 1.0f });
+	}
+
+	void ImGuiLayer::SetTheme(const ImVec4& mainColour)
+	{
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		style.Colors[ImGuiCol_WindowBg]				= ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f };
-
+		// General BG
+		style.Colors[ImGuiCol_WindowBg] = ImVec4{ mainColour.x - 0.28f, mainColour.y - 0.2755f, mainColour.z - 0.271f, 1.0f };
+		style.Colors[ImGuiCol_MenuBarBg] = ImVec4{ mainColour.x - 0.23f, mainColour.y - 0.23f, mainColour.z - 0.23f, 1.0f };
+		style.Colors[ImGuiCol_PopupBg] = ImVec4{ mainColour.x - 0.28f, mainColour.y - 0.2755f, mainColour.z - 0.271f, 1.0f };
+		
 		// Headers
-		style.Colors[ImGuiCol_Header]				= ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
-		style.Colors[ImGuiCol_HeaderHovered]		= ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
-		style.Colors[ImGuiCol_HeaderActive]			= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		style.Colors[ImGuiCol_Header] = ImVec4{ mainColour.x - 0.18f, mainColour.y - 0.1755f, mainColour.z - 0.171f, 1.0f };
+		style.Colors[ImGuiCol_HeaderHovered] = ImVec4{ mainColour.x - 0.08f, mainColour.y - 0.0755f, mainColour.z - 0.071f, 1.0f };
+		style.Colors[ImGuiCol_HeaderActive] = ImVec4{ mainColour.x - 0.23f, mainColour.y - 0.23f, mainColour.z - 0.23f, 1.0f };
 
 		// Buttons
-		style.Colors[ImGuiCol_Button]				= ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
-		style.Colors[ImGuiCol_ButtonHovered]		= ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
-		style.Colors[ImGuiCol_ButtonActive]			= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		style.Colors[ImGuiCol_Button] = ImVec4{ mainColour.x - 0.18f, mainColour.y - 0.1755f, mainColour.z - 0.171f, 1.0f };
+		style.Colors[ImGuiCol_ButtonHovered] = ImVec4{ mainColour.x - 0.08f, mainColour.y - 0.0755f, mainColour.z - 0.071f, 1.0f };
+		style.Colors[ImGuiCol_ButtonActive] = ImVec4{ mainColour.x - 0.23f, mainColour.y - 0.23f, mainColour.z - 0.23f, 1.0f };
 
 		// Frame BG
-		style.Colors[ImGuiCol_FrameBg]				= ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
-		style.Colors[ImGuiCol_FrameBgHovered]		= ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
-		style.Colors[ImGuiCol_FrameBgActive]		= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		style.Colors[ImGuiCol_FrameBg] = ImVec4{ mainColour.x - 0.18f, mainColour.y - 0.1755f, mainColour.z - 0.171f, 1.0f };
+		style.Colors[ImGuiCol_FrameBgHovered] = ImVec4{ mainColour.x - 0.08f, mainColour.y - 0.0755f, mainColour.z - 0.071f, 1.0f };
+		style.Colors[ImGuiCol_FrameBgActive] = ImVec4{ mainColour.x - 0.23f, mainColour.y - 0.23f, mainColour.z - 0.23f, 1.0f };
 
 		// Tabs
-		style.Colors[ImGuiCol_Tab]					= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-		style.Colors[ImGuiCol_TabHovered]			= ImVec4{ 0.38f, 0.3805f, 0.381f, 1.0f };
-		style.Colors[ImGuiCol_TabActive]			= ImVec4{ 0.28f, 0.2805f, 0.281f, 1.0f };
-		style.Colors[ImGuiCol_TabUnfocused]			= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-		style.Colors[ImGuiCol_TabUnfocusedActive]	= ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+		style.Colors[ImGuiCol_Tab] = ImVec4{ mainColour.x - 0.23f, mainColour.y - 0.23f, mainColour.z - 0.23f, 1.0f };
+		style.Colors[ImGuiCol_TabHovered] = ImVec4{ mainColour.x, mainColour.y, mainColour.z, 1.0f };
+		style.Colors[ImGuiCol_TabActive] = ImVec4{ mainColour.x - 0.1f, mainColour.y - 0.1f, mainColour.z - 0.1f, 1.0f };
+		style.Colors[ImGuiCol_TabUnfocused] = ImVec4{ mainColour.x - 0.23f, mainColour.y - 0.23f, mainColour.z - 0.23f, 1.0f };
+		style.Colors[ImGuiCol_TabUnfocusedActive] = ImVec4{ mainColour.x - 0.18f, mainColour.y - 0.1755f, mainColour.z - 0.171f, 1.0f };
 
 		// Title
-		style.Colors[ImGuiCol_TitleBg]				= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-		style.Colors[ImGuiCol_TitleBgActive]		= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-		style.Colors[ImGuiCol_TitleBgCollapsed]		= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+		style.Colors[ImGuiCol_TitleBg] = ImVec4{ mainColour.x - 0.23f, mainColour.y - 0.23f, mainColour.z - 0.23f, 1.0f };
+		style.Colors[ImGuiCol_TitleBgActive] = ImVec4{ mainColour.x - 0.23f, mainColour.y - 0.23f, mainColour.z - 0.23f, 1.0f };
+		style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ mainColour.x - 0.23f, mainColour.y - 0.23f, mainColour.z - 0.23f, 1.0f };
 	}
 }
 

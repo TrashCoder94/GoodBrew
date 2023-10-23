@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GBPCH_H
+#define GBPCH_H
 
 #include "GBEngine/Core/PlatformDetection.h"
 
@@ -33,5 +34,7 @@
 // Platform Specific
 #ifdef GB_PLATFORM_WINDOWS
 	#include <Windows.h>
-#endif
+#endif // GB_PLATFORM_WINDOWS
 // ===============================================
+
+#endif // GBPCH_H

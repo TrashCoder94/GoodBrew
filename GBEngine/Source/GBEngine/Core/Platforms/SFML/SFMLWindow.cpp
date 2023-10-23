@@ -165,13 +165,11 @@ namespace GB
 	{
 		GB_PROFILE_FUNCTION();
 
-		m_pWindow->close();
+		GB_CHECK_PTR(m_pWindow, "SFML Window hasn't been initialized yet! Make sure SFMLWindow::Init has been called first");
 
-		if (m_pWindow)
-		{
-			delete m_pWindow;
-			m_pWindow = nullptr;
-		}
+		m_pWindow->close();
+		delete m_pWindow;
+		m_pWindow = nullptr;
 
 		--s_SFMLWindowCount;
 

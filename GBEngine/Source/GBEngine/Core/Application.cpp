@@ -194,7 +194,7 @@ namespace GB
 		WindowResizeEvent* pWindowResizeEvent = static_cast<WindowResizeEvent*>(e);
 		const int newWidth = pWindowResizeEvent->GetWidth();
 		const int newHeight = pWindowResizeEvent->GetHeight();
-		if (pWindowResizeEvent->GetWidth() == 0 || pWindowResizeEvent->GetHeight() == 0)
+		if (newWidth == 0 || newHeight == 0)
 		{
 			m_Minimized = true;
 			return false;

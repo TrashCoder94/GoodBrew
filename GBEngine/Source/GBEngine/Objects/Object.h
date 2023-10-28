@@ -80,6 +80,8 @@ namespace GB
 				return pResult;
 
 			pNewComponent->SetBaseObjectOwner(this);
+			pNewComponent->Initialize();
+			// TODO: See if you need to call Begin() here as well?
 			pResult = pNewComponent;
 			m_pComponents.push_back(pResult);
 

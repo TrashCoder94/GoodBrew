@@ -6,14 +6,10 @@
 
 ## Prerequisites
 
-Currently using SFML v2.5.1
-Windows and Mac will use the manually downloaded binaries from: https://www.sfml-dev.org/download/sfml/2.5.1/ inside of `/GoodBrew/GBEngine/ThirdParty/SFML/`
-
 ### Windows
 This is for the CommitChecker, on Windows, this uses the WSL to compile local changes in a Linux environment.
 1. Download the Windows Subsystem for Linux from the Microsoft Store: https://www.microsoft.com/store/productid/9P9TQF7MRM4R?ocid=pdpshare
 2. Follow the instructions here to install the system and a distribution: https://learn.microsoft.com/en-us/windows/wsl/installs
-3. Place the CommitChecker binaries inside `Tools/CommitChecker` inside of your main repository folder.
 
 ### Linux
 ```

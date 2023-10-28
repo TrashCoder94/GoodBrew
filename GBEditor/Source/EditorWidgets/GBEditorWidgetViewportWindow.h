@@ -10,5 +10,8 @@ namespace GB
 		EditorWidgetViewportWindow(EditorLayer* pEditorLayer);
 		~EditorWidgetViewportWindow();
 		virtual void Draw() override;
+
+	private:
+		float2 m_ViewportSize;
 	};
 }

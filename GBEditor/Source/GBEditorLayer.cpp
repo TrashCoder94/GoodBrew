@@ -1,6 +1,10 @@
 #include "GBEditorLayer.h"
 
 #include <GBEngine/Core/Application.h>
+#include <GBEngine/Objects/Object.h>
+#include <GBEngine/Components/SpriteComponent.h>
+#include <GBEngine/Renderer/RenderTexture.h>
+#include <GBEngine/Renderer/Texture.h>
 #include <GBEngine/Level/Level.h>
 #include <imgui.h>
 #include <vector>
@@ -17,6 +21,7 @@ namespace GB
 {
 	EditorLayer::EditorLayer() : GB::Layer("GBEditorLayer"),
 		m_pEditorWidgets(),
+		m_pRenderTexture(nullptr),
 		m_pEditorLevel(nullptr),
 		m_pSelectedObject(nullptr),
 		m_EditorLevelState(EEditorLevelState::Edit)
@@ -28,6 +33,7 @@ namespace GB
 	void EditorLayer::OnAttach()
 	{
 		m_pEditorLevel = CreateSharedPtr<Level>();
+		m_pRenderTexture = RenderTexture::Create(1280, 720);
 
 		constexpr size_t kNumberOfEditorWidgets = 7;
 		m_pEditorWidgets.reserve(kNumberOfEditorWidgets);
@@ -79,13 +85,28 @@ namespace GB
 
 	void EditorLayer::OnRender()
 	{
+		m_pRenderTexture->Begin();
+
 		switch (m_EditorLevelState)
 		{
 			case EEditorLevelState::Edit:
 			{
 				if (m_pEditorLevel)
 				{
-					m_pEditorLevel->Render();
+					const std::vector<Object*>& pObjects = m_pEditorLevel->GetObjects();
+					
+					for (Object* pObject : pObjects)
+					{
+						if (pObject)
+						{
+							if (pObject->HasComponent<SpriteComponent>())
+							{
+								GB_PTR(pSpriteComponent, pObject->GetComponent<SpriteComponent>(), "");
+								GB_PTR(pTexture2D, pSpriteComponent->GetTexture(), "");
+								m_pRenderTexture->AddTextureToDraw(pTexture2D);
+							}
+						}
+					}
 				}
 				break;
 			}
@@ -99,6 +120,8 @@ namespace GB
 				break;
 			}
 		}
+
+		m_pRenderTexture->End();
 	}
 
 #if GB_IMGUI_ENABLED
@@ -208,6 +231,16 @@ namespace GB
 	Object* EditorLayer::GetSelectedObject() const
 	{
 		return m_pSelectedObject;
+	}
+
+	RenderTexture* EditorLayer::GetRenderTexture()
+	{
+		return m_pRenderTexture.get();
+	}
+
+	RenderTexture* EditorLayer::GetRenderTexture() const
+	{
+		return m_pRenderTexture.get();
 	}
 
 	void EditorLayer::ForEachValidEditorWidget(const std::function<void(EditorWidget&)>& function)

@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Component.h"
-#include <linalg.h>
-
-using namespace linalg::aliases;
 
 namespace GB
 {

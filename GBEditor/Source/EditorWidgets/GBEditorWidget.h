@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GBEngine/Core/Base.h>
+#include "GBEditorStyle.h"
 
 namespace GB
 {

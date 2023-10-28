@@ -11,6 +11,7 @@ namespace GB
 	class EditorWidget;
 	class Level;
 	class Object;
+	class RenderTexture;
 
 	class EditorLayer : public Layer
 	{
@@ -36,11 +37,14 @@ namespace GB
 		Object* GetSelectedObject();
 		Object* GetSelectedObject() const;
 
+		RenderTexture* GetRenderTexture();
+		RenderTexture* GetRenderTexture() const;
 	private:
 		void ForEachValidEditorWidget(const std::function<void(EditorWidget&)>& function);
 
 		std::vector<UniquePtr<EditorWidget>> m_pEditorWidgets;
 		SharedPtr<Level> m_pEditorLevel;
+		SharedPtr<RenderTexture> m_pRenderTexture;
 		Object* m_pSelectedObject;
 		EEditorLevelState m_EditorLevelState;
 	};

@@ -82,10 +82,16 @@ namespace GB
 
 		BaseObject::Deinitialize();
 
-		ForEachValidObject([&](Object& object)
+		for (Object* pObject : m_pObjects)
 		{
-			object.Deinitialize();
-		});
+			if (pObject)
+			{
+				pObject->Deinitialize();
+
+				delete pObject;
+				pObject = nullptr;
+			}
+		}
 
 		m_pObjects.clear();
 	}
@@ -107,6 +113,13 @@ namespace GB
 	Object* Level::SpawnObject()
 	{
 		Object* pObject = new Object();
+
+		// Initialize this object now
+		// TODO: Check if this should call Begin as well
+		// Not really clear when setting up editor functionality.
+		pObject->Initialize();
+
+		// Add this new object to the list of level objects
 		m_pObjects.push_back(pObject);
 		return pObject;
 	}
@@ -129,6 +142,10 @@ namespace GB
 		{
 			return pLevelObject == pObject; 
 		}), end(m_pObjects));
+
+		// Free up the memory since objects are newly allocated
+		delete pObject;
+		pObject = nullptr;
 	}
 
 	const std::vector<Object*>& Level::GetObjects()

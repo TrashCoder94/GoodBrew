@@ -25,13 +25,17 @@ namespace GB
 			{
 				case EEditorLevelState::Edit:
 				{
-					if (ImGui::Button("Add Object"))
+					GB::BeginButtonStyle();
 					{
-						if (Object* pObject = m_pEditorLayer->GetEditorLevel()->SpawnObject())
+						if (ImGui::Button("Add Object"))
 						{
-							m_pEditorLayer->SetSelectedObject(pObject);
+							if (Object* pObject = m_pEditorLayer->GetEditorLevel()->SpawnObject())
+							{
+								m_pEditorLayer->SetSelectedObject(pObject);
+							}
 						}
 					}
+					GB::EndButtonStyle();
 
 					if (ImGui::BeginPopupContextWindow(0, 1))
 					{

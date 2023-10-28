@@ -20,7 +20,9 @@ namespace GB
 
 		BaseObject::Initialize();
 
-		m_pTransformComponent = GetComponent<TransformComponent>();
+		// Objects should _always_ have a transform component
+		// These can be moved around in editor/runtime
+		m_pTransformComponent = AddComponent<TransformComponent>();
 
 		ForEachValidComponent([&](Component& component)
 		{
@@ -70,12 +72,18 @@ namespace GB
 
 		BaseObject::Deinitialize();
 		
+		// No need to clean up this pointer since it will be cleaned up just below here
 		m_pTransformComponent = nullptr;
 
-		ForEachValidComponent([&](Component& component)
+		for (Component* pComponent : m_pComponents)
 		{
-			component.Deinitialize();
-		});
+			if (pComponent)
+			{
+				pComponent->Deinitialize();
+				delete pComponent;
+				pComponent = nullptr;
+			}
+		}
 
 		m_pComponents.clear();
 	}
@@ -124,10 +132,16 @@ namespace GB
 
 		ForEachValidComponent([&](Component& component)
 		{
-			if (&component == pComponentToFind)
+			// Only have to do these checks if we haven't found the component yet
+			if (!bHasComponent)
 			{
-				bHasComponent = true;
-				return;
+				const reflect::TypeDescriptor_Struct& componentReflectedData = component.GetTypeDescription();
+				const reflect::TypeDescriptor_Struct& componentToFindReflectedData = pComponentToFind->GetTypeDescription();
+
+				if (componentReflectedData.getFullName() == componentToFindReflectedData.getFullName())
+				{
+					bHasComponent = true;
+				}
 			}
 		});
 
@@ -146,6 +160,8 @@ namespace GB
 		}
 
 		pComponent->SetBaseObjectOwner(this);
+		pComponent->Initialize();
+		// TODO: See if you need to call Begin() here?
 		m_pComponents.push_back(pComponent);
 	}
 

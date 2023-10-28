@@ -1,10 +1,13 @@
 #pragma once
 
+#include <linalg.h>
 #include <memory>
 #include "GBEngine/Core/Macros.h"
 #include "GBEngine/Events/EventSystem.h"
 #include "GBEngine/Profiling/Instrumentor.h"
 #include "GBEngine/Timer/TimerSystem.h"
+
+using namespace linalg::aliases;
 
 // DLL support.
 #ifdef GB_PLATFORM_WINDOWS

@@ -246,6 +246,22 @@ function includeAndLinkGBEngine ()
 	filter {}
 end
 
+function copyEditorLayoutToBinaryFolder ()
+	filter { "system:windows" }
+		postbuildcommands
+		{
+			"{COPYFILE} %{prj.location}imgui.ini %{cfg.targetdir}/imgui.ini"
+		}
+	filter {}
+
+	filter { "system:not windows" }
+		postbuildcommands
+		{
+			"cp -R /$(CURDIR)/imgui.ini /$(CURDIR)/%{cfg.targetdir}/imgui.ini"
+		}
+	filter {}
+end
+
 group "Dependencies"
 	include "ThirdParty/premake"
 	include "GBEngine/ThirdParty/imgui"

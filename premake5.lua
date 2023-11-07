@@ -88,6 +88,7 @@ IncludeDir = {}
 IncludeDir["SFMLWindows"] = "%{wks.location}/GBEngine/ThirdParty/SFML/Windows/include"
 IncludeDir["SFMLMac"] = "%{wks.location}/GBEngine/ThirdParty/SFML/Mac/include"
 IncludeDir["imgui"] = "%{wks.location}/GBEngine/ThirdParty/imgui"
+IncludeDir["imguiStdLib"] = "%{wks.location}/GBEngine/ThirdParty/imgui/misc/cpp"
 IncludeDir["linalg"] = "%{wks.location}/GBEngine/ThirdParty/linalg"
 IncludeDir["spdlog"] = "%{wks.location}/GBEngine/ThirdParty/spdlog/include"
 IncludeDir["GBReflection"] = "%{wks.location}/GBEngine/ThirdParty/GBReflection"

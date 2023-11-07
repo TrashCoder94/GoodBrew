@@ -165,6 +165,11 @@ namespace GB
 		m_pComponents.push_back(pComponent);
 	}
 
+	const std::vector<Component*>& Object::GetComponents() const
+	{
+		return m_pComponents;
+	}
+
 	void Object::ForEachValidComponent(const std::function<void(Component&)>& function) const
 	{
 		for (Component* pComponent : m_pComponents)

@@ -110,6 +110,8 @@ namespace GB
 			return pComponentResult;
 		}
 
+		const std::vector<Component*>& GetComponents() const;
+
 	private:
 		static int s_ObjectID;
 

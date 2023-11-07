@@ -3,6 +3,7 @@
 #include <GBEngine/Level/Level.h>
 #include <GBEngine/Objects/Object.h>
 #include <imgui.h>
+#include <imgui_internal.h>
 
 namespace GB
 {
@@ -17,9 +18,9 @@ namespace GB
 
 	void EditorWidgetDetailsWindow::Draw()
 	{
-		GB_CHECK_PTR(m_pEditorLayer, "Editor layer is nullptr, make sure a valid editor layer was passed in the constructor!");
-
 #if GB_IMGUI_ENABLED
+		GB_CHECK_PTR(m_pEditorLayer, "Editor layer is nullptr, make sure a valid editor layer was passed in the constructor!");
+		
 		ImGui::Begin("Details");
 		{
 			if (Object* pObject = m_pEditorLayer->GetSelectedObject())
@@ -35,6 +36,21 @@ namespace GB
 	void EditorWidgetDetailsWindow::DrawComponents(Object* pObject)
 	{
 #if GB_IMGUI_ENABLED
+		GB_CHECK_PTR(pObject, "Cannot draw components for an object that is nullptr");
+		
+		// This is where the user can add new components to the object
+		DrawAddNewComponentDetails(pObject);
+
+		// This is where the details window will draw the component information
+		DrawComponentDetails(pObject);
+#endif // GB_IMGUI_ENABLED
+	}
+
+	void EditorWidgetDetailsWindow::DrawAddNewComponentDetails(Object* pObject)
+	{
+#if GB_IMGUI_ENABLED
+		GB_CHECK_PTR(pObject, "Cannot add new components to an object that is nullptr");
+
 		// Add Component Button
 		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 150.0f);
 
@@ -63,7 +79,7 @@ namespace GB
 					{
 						continue;
 					}
-					
+
 					if (ImGui::MenuItem(className.c_str()))
 					{
 						// Be mindful, this causes a "new" allocation, make sure an appropriate "delete" is called later
@@ -75,7 +91,7 @@ namespace GB
 							if (pObject->HasComponent(pNewComponent))
 							{
 								GB_CORE_LOG_WARN("Object '{0}' already has a {1} so this component won't be added", pObject->GetName().c_str(), className);
-								
+
 								// Since this object already has this component and there was a new allocation
 								// Clean this up here since it won't be used any more
 								delete pNewComponent;
@@ -95,7 +111,25 @@ namespace GB
 		}
 
 		ImGui::Separator();
-#endif
+#endif // GB_IMGUI_ENABLED
+	}
+
+	void EditorWidgetDetailsWindow::DrawComponentDetails(Object* pObject)
+	{
+#if GB_IMGUI_ENABLED
+		GB_CHECK_PTR(pObject, "Cannot draw component details for an object that is nullptr");
+		
+		for (Component* pComponent : pObject->GetComponents())
+		{
+			GB::DrawClass(pComponent);
+		}
+
+		//// TEMP TESTING
+		//TransformComponent* pTransformComponent = pObject->GetTransformComponent();
+		//GB_CHECK_PTR(pTransformComponent, "Cannot draw component details for an object that is nullptr");
+
+		//GB::DrawClass(pTransformComponent);
+#endif // GB_IMGUI_ENABLED
 	}
 
 	bool EditorWidgetDetailsWindow::ShouldHideComponent(const std::string& componentClassName)

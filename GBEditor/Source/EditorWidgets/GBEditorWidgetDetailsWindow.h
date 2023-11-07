@@ -15,6 +15,8 @@ namespace GB
 
 	private:
 		void DrawComponents(Object* pObject);
+		void DrawAddNewComponentDetails(Object* pObject);
+		void DrawComponentDetails(Object* pObject);
 
 		bool ShouldHideComponent(const std::string& componentClassName);
 

@@ -23,6 +23,7 @@ project "GBEngine"
 	{
 		"Source",
 		"%{IncludeDir.imgui}",
+		"%{IncludeDir.imguiStdLib}",
 		"%{IncludeDir.linalg}",
 		"%{IncludeDir.spdlog}",
 		"%{IncludeDir.GBReflection}"

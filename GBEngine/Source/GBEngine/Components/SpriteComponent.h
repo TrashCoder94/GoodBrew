@@ -21,7 +21,9 @@ namespace GB
 		Texture2D* GetTexture();
 
 	private:
+		GBVARIABLE(Edit)
 		SharedPtr<Texture2D> m_pTexture;
+
 		TransformComponent* m_pTransformComponent;
 	};
 }

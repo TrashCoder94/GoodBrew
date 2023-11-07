@@ -26,6 +26,6 @@
 	#define GB_ASSERT(check, message) GB_INTERNAL_ASSERT_IMPLEMENTATION(_, check, message)
 	#define GB_CORE_ASSERT(check, message) GB_INTERNAL_ASSERT_IMPLEMENTATION(_CORE_, check, message)
 #else
-	#define GB_ASSERT(...)
-	#define GB_CORE_ASSERT(...)
+	#define GB_ASSERT(...) { }
+	#define GB_CORE_ASSERT(...) { }
 #endif

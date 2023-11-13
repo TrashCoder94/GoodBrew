@@ -14,6 +14,9 @@ namespace reflect
 
 	struct TypeDescriptor_StdVector : TypeDescriptor {
 		TypeDescriptor* itemType;
+		void(*addNewItem)(const void*);
+		void(*removeItem)(const void*, size_t);
+		void(*clearAllItems)(const void*);
 		size_t(*getSize)(const void*);
 		const void* (*getItem)(const void*, size_t);
 
@@ -21,6 +24,18 @@ namespace reflect
 		TypeDescriptor_StdVector(ItemType*, FieldType vectorFieldType = FieldType::Vector)
 			: TypeDescriptor{ "std::vector<>", sizeof(std::vector<ItemType>), vectorFieldType },
 			itemType{ TypeResolver<ItemType>::get() } {
+			addNewItem = [](const void* vecPtr) {
+				auto& vec = *(std::vector<ItemType>*) vecPtr;
+				vec.emplace_back();
+				};
+			removeItem = [](const void* vecPtr, size_t index) {
+				auto& vec = *(std::vector<ItemType>*) vecPtr;
+				vec.erase(vec.begin() + index);
+				};
+			clearAllItems = [](const void* vecPtr) {
+				auto& vec = *(std::vector<ItemType>*) vecPtr;
+				vec.clear();
+				};
 			getSize = [](const void* vecPtr) -> size_t {
 				const auto& vec = *(const std::vector<ItemType>*) vecPtr;
 				return vec.size();
@@ -53,7 +68,7 @@ namespace reflect
 
 	// Partially specialize TypeResolver<> for std::vectors:
 	template <typename T>
-	class TypeResolver<std::vector<T>> {
+	struct TypeResolver<std::vector<T>> {
 	public:
 		static TypeDescriptor* get() {
 			static TypeDescriptor_StdVector typeDesc{ (T*) nullptr };

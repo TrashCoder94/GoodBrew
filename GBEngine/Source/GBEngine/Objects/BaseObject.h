@@ -5,13 +5,14 @@
 
 namespace GB
 {
-	class BaseObject
+	class BaseObject : public reflect::IReflectableClass
 	{
-	protected:
+		GB_REFLECT()
+
+	public:
 		BaseObject();
 		virtual ~BaseObject();
 	
-	public:
 		// When this BaseObject is first loaded up
 		virtual void Initialize();
 
@@ -33,9 +34,7 @@ namespace GB
 		{
 			const bool bIsSame = (dynamic_cast<ObjectClass*>(this));
 			return bIsSame;
-		}
-
-		virtual const reflect::TypeDescriptor_Struct& GetTypeDescription() const = 0;
+		}	
 
 		void SetBaseObjectOwner(BaseObject* pOwner);
 		BaseObject* GetBaseObjectOwner();

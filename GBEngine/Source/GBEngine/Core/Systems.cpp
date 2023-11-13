@@ -24,7 +24,7 @@ namespace GB
 		s_pEventSystem = std::make_unique<EventSystem>();
 		s_pTimerSystem = std::make_unique<TimerSystem>();
 
-		//reflect::InitReflectionSystem();
+		reflect::InitReflectionSystem();
 	}
 
 	void Systems::Update(const float deltaTime)

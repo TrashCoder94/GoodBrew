@@ -12,7 +12,11 @@ namespace reflect
 		String,
 		Colour,
 		Texture,
-		Class,
-		Vector
+		Class, // Anything inheriting from IReflectableClass or IReflectableStruct
+		ClassPtr,
+		Vector,
+		UniquePtr,
+		SharedPtr,
+		WeakPtr
 	};
 }

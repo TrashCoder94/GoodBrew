@@ -26,6 +26,7 @@ project "GBEngine"
 		"%{IncludeDir.imguiStdLib}",
 		"%{IncludeDir.linalg}",
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.Reflection}",
 		"%{IncludeDir.GBReflection}"
 	}
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include "FieldType.h"
 
@@ -39,7 +40,11 @@ namespace reflect
 				case FieldType::Colour:					fieldTypeString = "Colour";					break;
 				case FieldType::Texture:				fieldTypeString = "Texture";				break;
 				case FieldType::Class:					fieldTypeString = "Class";					break;
+				case FieldType::ClassPtr:				fieldTypeString = "ClassPtr";				break;
 				case FieldType::Vector:					fieldTypeString = "Vector";					break;
+				case FieldType::UniquePtr:				fieldTypeString = "UniquePtr";				break;
+				case FieldType::SharedPtr:				fieldTypeString = "SharedPtr";				break;
+				case FieldType::WeakPtr:				fieldTypeString = "WeakPtr";				break;
 				default: break;
 			}
 
@@ -84,6 +89,166 @@ namespace reflect
 	struct TypeResolver {
 		static TypeDescriptor* get() {
 			return DefaultResolver::get<T>();
+		}
+	};
+
+	//--------------------------------------------------------
+	// Type descriptor for UniquePtr
+	//--------------------------------------------------------
+	struct TypeDescriptor_StdUniquePtr : TypeDescriptor {
+		TypeDescriptor* targetType;
+		const void* (*getTargetConst)(const void*);
+		void* (*getTarget)(const void*);
+
+		// Template constructor:
+		template <typename TargetType>
+		TypeDescriptor_StdUniquePtr(TargetType* /* dummy argument */)
+			: TypeDescriptor{ "std::unique_ptr<>", sizeof(std::unique_ptr<TargetType>), FieldType::UniquePtr },
+			targetType{ TypeResolver<TargetType>::get() } {
+			getTargetConst = [](const void* uniquePtrPtr) -> const void* {
+				const auto& uniquePtr = *(const std::unique_ptr<TargetType>*) uniquePtrPtr;
+				return uniquePtr.get();
+				};
+			getTarget = [](const void* uniquePtrPtr) -> void* {
+				const auto& uniquePtr = *(const std::unique_ptr<TargetType>*) uniquePtrPtr;
+				return uniquePtr.get();
+				};
+		}
+		virtual std::string getFullName() const override {
+			return std::string("std::unique_ptr<") + targetType->getFullName() + ">";
+		}
+		virtual void dump(const void* obj, int indentLevel) const override {
+			std::cout << getFullName() << "{";
+			const void* targetObj = getTarget(obj);
+			if (targetObj == nullptr) {
+				std::cout << "nullptr";
+			}
+			else {
+				std::cout << std::endl;
+				std::cout << std::string(4 * (indentLevel + 1), ' ');
+				targetType->dump(targetObj, indentLevel + 1);
+				std::cout << std::endl;
+				std::cout << std::string(4 * indentLevel, ' ');
+			}
+			std::cout << "}";
+		}
+	};
+
+	// Partially specialize TypeResolver<> for std::unique_ptr<>:
+	template <typename T>
+	struct TypeResolver<std::unique_ptr<T>> {
+	public:
+		static TypeDescriptor* get() {
+			static TypeDescriptor_StdUniquePtr typeDesc{ (T*) nullptr };
+			return &typeDesc;
+		}
+	};
+
+	//--------------------------------------------------------
+	// Type descriptor for SharedPtr
+	//--------------------------------------------------------
+	struct TypeDescriptor_StdSharedPtr : TypeDescriptor {
+		TypeDescriptor* targetType;
+		const void* (*getTargetConst)(const void*);
+		void* (*getTarget)(const void*);
+
+		// Template constructor:
+		template <typename TargetType>
+		TypeDescriptor_StdSharedPtr(TargetType* /* dummy argument */)
+			: TypeDescriptor{ "std::shared_ptr<>", sizeof(std::shared_ptr<TargetType>), FieldType::SharedPtr },
+			targetType{ TypeResolver<TargetType>::get() } {
+			getTargetConst = [](const void* sharedPtrPtr) -> const void* {
+				const auto& sharedPtr = *(const std::shared_ptr<TargetType>*) sharedPtrPtr;
+				return sharedPtr.get();
+				};
+			getTarget = [](const void* sharedPtrPtr) -> void* {
+				const auto& sharedPtr = *(const std::shared_ptr<TargetType>*) sharedPtrPtr;
+				return sharedPtr.get();
+				};
+		}
+		virtual std::string getFullName() const override {
+			return std::string("std::shared_ptr<") + targetType->getFullName() + ">";
+		}
+		virtual void dump(const void* obj, int indentLevel) const override {
+			std::cout << getFullName() << "{";
+			const void* targetObj = getTarget(obj);
+			if (targetObj == nullptr) {
+				std::cout << "nullptr";
+			}
+			else {
+				std::cout << std::endl;
+				std::cout << std::string(4 * (indentLevel + 1), ' ');
+				targetType->dump(targetObj, indentLevel + 1);
+				std::cout << std::endl;
+				std::cout << std::string(4 * indentLevel, ' ');
+			}
+			std::cout << "}";
+		}
+	};
+
+	// Partially specialize TypeResolver<> for std::shared_ptr<>:
+	template <typename T>
+	struct TypeResolver<std::shared_ptr<T>> {
+	public:
+		static TypeDescriptor* get() {
+			static TypeDescriptor_StdSharedPtr typeDesc{ (T*) nullptr };
+			return &typeDesc;
+		}
+	};
+
+	//--------------------------------------------------------
+	// Type descriptor for WeakPtr
+	//--------------------------------------------------------
+	struct TypeDescriptor_StdWeakPtr : TypeDescriptor {
+		TypeDescriptor* targetType;
+		const void* (*getTargetConst)(const void*);
+		void* (*getTarget)(const void*);
+
+		// Template constructor:
+		template <typename TargetType>
+		TypeDescriptor_StdWeakPtr(TargetType* /* dummy argument */)
+			: TypeDescriptor{ "std::weak_ptr<>", sizeof(std::weak_ptr<TargetType>), FieldType::WeakPtr },
+			targetType{ TypeResolver<TargetType>::get() } {
+			getTargetConst = [](const void* weakPtrPtr) -> const void* {
+				const auto& weakPtr = *(const std::weak_ptr<TargetType>*) weakPtrPtr;
+				if (std::shared_ptr<TargetType> pShared = weakPtr.lock())
+					return pShared.get();
+				return nullptr;
+				};
+			getTarget = [](const void* weakPtrPtr) -> void* {
+				const auto& weakPtr = *(const std::weak_ptr<TargetType>*) weakPtrPtr;
+				if (std::shared_ptr<TargetType> pShared = weakPtr.lock())
+					return pShared.get();
+				return nullptr;
+				};
+		}
+		virtual std::string getFullName() const override {
+			return std::string("std::weak_ptr<") + targetType->getFullName() + ">";
+		}
+		virtual void dump(const void* obj, int indentLevel) const override {
+			std::cout << getFullName() << "{";
+			const void* targetObj = getTarget(obj);
+			if (targetObj == nullptr) {
+				std::cout << "nullptr";
+			}
+			else {
+				std::cout << std::endl;
+				std::cout << std::string(4 * (indentLevel + 1), ' ');
+				targetType->dump(targetObj, indentLevel + 1);
+				std::cout << std::endl;
+				std::cout << std::string(4 * indentLevel, ' ');
+			}
+			std::cout << "}";
+		}
+	};
+
+	// Partially specialize TypeResolver<> for std::weak_ptr<>:
+	template <typename T>
+	struct TypeResolver<std::weak_ptr<T>> {
+	public:
+		static TypeDescriptor* get() {
+			static TypeDescriptor_StdWeakPtr typeDesc{ (T*) nullptr };
+			return &typeDesc;
 		}
 	};
 }

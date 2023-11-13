@@ -1,7 +1,8 @@
 #pragma once
 
 #include <imgui.h>
-#include "ThirdParty/Reflection/FieldType.h"
+#include "FieldType.h"
+#include "TypeDescriptorStruct.h"
 
 namespace GB
 {
@@ -11,22 +12,30 @@ namespace GB
 	// ImGui helper functions for consistency across different editor variable widgets
 	ImFont* GetEditorVariableButtonImGuiFont();
 	ImVec2 GetEditorVariableButtonSize();
+	float GetEditorVariableLineHeight();
 
 	// ===================================
 	// SHARED - Used for all variable displays in the editor.
 	
 	// Used for formatting variables in the editor:
 	// VariableName | VariableValue
-	void BeginEditorVariableTable(const char* tableName);
+	void BeginEditorVariableTable(const char* tableName, const float spaceAfterVariableName = 100.0f);
 	void EndEditorVariableTable();
 
 	// This will draw the variable name before 
 	void DrawMemberName(const char* name);
 
-	void BeginEditorVariable(const char* name);
+	void BeginEditorVariable(const char* name, const float spaceAfterVariableName = 100.0f);
 	void EndEditorVariable();
 
-	void DrawMember(const reflect::FieldType type, const char* name, void* memberPtr);
+	void BeginAddElementButtonStyle();
+	void EndAddElementButtonStyle();
+
+	void BeginRemoveElementButtonStyle();
+	void EndRemoveElementButtonStyle();
+
+	void DrawMember(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr);
+	void DrawMember(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr);
 
 	// ===================================
 	// FLOATS
@@ -37,10 +46,10 @@ namespace GB
 	void DrawWFloatValue(float& value);
 
 	// Float variable display in editor
-	void DrawFloat(const char* name, void* memberPtr);
-	void DrawFloat2(const char* name, void* memberPtr);
-	void DrawFloat3(const char* name, void* memberPtr);
-	void DrawFloat4(const char* name, void* memberPtr);
+	void DrawFloat(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
+	void DrawFloat2(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
+	void DrawFloat3(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
+	void DrawFloat4(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
 
 	// ===================================
 	// INTS
@@ -52,26 +61,26 @@ namespace GB
 
 	// These functions are the ones that will display the int variable name and value in the editor
 	// This will be same convention/setup for the other variable types as well...
-	void DrawInt(const char* name, void* memberPtr);
-	void DrawInt2(const char* name, void* memberPtr);
-	void DrawInt3(const char* name, void* memberPtr);
-	void DrawInt4(const char* name, void* memberPtr);
+	void DrawInt(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
+	void DrawInt2(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
+	void DrawInt3(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
+	void DrawInt4(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
 
 	// ===================================
 	// BOOLS
-	void DrawBool(const char* name, void* memberPtr);
+	void DrawBool(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
 
 	// ===================================
 	// STRINGS
-	void DrawString(const char* name, void* memberPtr);
+	void DrawString(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
 
 	// ===================================
 	// COLOURS
-	void DrawColours(const char* name, void* memberPtr);
+	void DrawColours(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
 
 	// ===================================
 	// TEXTURES
-	void DrawTexture(const char* name, void* memberPtr);
+	void DrawTexture(const char* name, void* memberPtr, const float spacingAfterVariableName = 100.0f);
 
 	// ===================================
 	// CLASSES
@@ -80,5 +89,16 @@ namespace GB
 
 	// ===================================
 	// VECTORS
-	void DrawVector(const char* name, void* memberPtr);
+	void DrawVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const reflect::FieldType type, const char* name, void* memberPtr, bool& removeElement, const float spacingAfterVariableName = 100.0f);
+	void DrawVector(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr);
+
+	// ===================================
+	// SMART PTRS
+	void DrawUniquePtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr);
+	void DrawSharedPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr);
+	void DrawWeakPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr);
+
+	void DrawUniquePtr(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr);
+	void DrawSharedPtr(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr);
+	void DrawWeakPtr(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr);
 }

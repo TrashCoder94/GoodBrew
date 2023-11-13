@@ -91,6 +91,7 @@ IncludeDir["imgui"] = "%{wks.location}/GBEngine/ThirdParty/imgui"
 IncludeDir["imguiStdLib"] = "%{wks.location}/GBEngine/ThirdParty/imgui/misc/cpp"
 IncludeDir["linalg"] = "%{wks.location}/GBEngine/ThirdParty/linalg"
 IncludeDir["spdlog"] = "%{wks.location}/GBEngine/ThirdParty/spdlog/include"
+IncludeDir["Reflection"] = "%{wks.location}/GBEngine/ThirdParty/GBReflection/ThirdParty/Reflection"
 IncludeDir["GBReflection"] = "%{wks.location}/GBEngine/ThirdParty/GBReflection"
 IncludeDir["GBEngine"] = "%{wks.location}/GBEngine/Source"
 
@@ -218,6 +219,7 @@ function includeAndLinkGBEngine ()
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.linalg}",
 		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.Reflection}",
 		"%{IncludeDir.GBReflection}",
 		"%{IncludeDir.GBEngine}"
 	}

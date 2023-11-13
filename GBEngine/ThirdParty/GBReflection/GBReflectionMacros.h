@@ -2,7 +2,7 @@
 
 #include "GBClassRegistry.h"
 #include "GBVariableFlags.h"
-#include "ThirdParty/Reflection/ReflectionMacros.h"
+#include "ReflectionMacros.h"
 
 // Label variables inside classes with this macro (and either Edit or Hidden)
 #define GBVARIABLE(...)
@@ -23,7 +23,6 @@
 		GB::ClassRegistry::Get().Register<type>(#type);\
         typeDesc->name = #type; \
         typeDesc->size = sizeof(T); \
-		typeDesc->fieldType = reflect::FieldType::Class;\
         typeDesc->members = {
 
 #define GB_REFLECT_CLASS_MEMBER(name) \

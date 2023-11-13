@@ -1,9 +1,13 @@
 #include "GBEditorWidgetDetailsWindow.h"
-#include "GBEditorLayer.h"
-#include <GBEngine/Level/Level.h>
-#include <GBEngine/Objects/Object.h>
+
 #include <imgui.h>
 #include <imgui_internal.h>
+
+#include <GBEngine/Level/Level.h>
+#include <GBEngine/Objects/Object.h>
+#include <GBReflectVisualizer.h>
+
+#include "GBEditorLayer.h"
 
 namespace GB
 {
@@ -124,11 +128,6 @@ namespace GB
 			GB::DrawClass(pComponent);
 		}
 
-		//// TEMP TESTING
-		//TransformComponent* pTransformComponent = pObject->GetTransformComponent();
-		//GB_CHECK_PTR(pTransformComponent, "Cannot draw component details for an object that is nullptr");
-
-		//GB::DrawClass(pTransformComponent);
 #endif // GB_IMGUI_ENABLED
 	}
 
@@ -138,7 +137,7 @@ namespace GB
 
 		for (const std::string& componentClassNameToHide : m_ComponentClassesToHide)
 		{
-			if (componentClassNameToHide.find(componentClassName) != std::string::npos)
+			if (componentClassNameToHide == componentClassName)
 			{
 				shouldHide = true;
 				break;

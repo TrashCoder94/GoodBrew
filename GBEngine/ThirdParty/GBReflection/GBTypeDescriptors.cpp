@@ -1,8 +1,11 @@
 #include <linalg.h>
 #include <iostream>
 
-#include "ThirdParty/Reflection/TypeDescriptor.h"
+#include "TypeDescriptor.h"
+#include "GBEngine/Core/Colour.h"
 #include "GBEngine/Renderer/Texture.h"
+
+#include "GBEngine/Components/TestComponent.h"
 
 using namespace linalg::aliases;
 
@@ -11,7 +14,6 @@ namespace reflect
 	//--------------------------------------------------------
 	// Type descriptor for Ints
 	//--------------------------------------------------------
-
 	struct TypeDescriptor_Int2 : TypeDescriptor {
 		TypeDescriptor_Int2() : TypeDescriptor{ "Int2", sizeof(int2), FieldType::Int2 } {
 		}
@@ -56,11 +58,10 @@ namespace reflect
 		static TypeDescriptor_Int4 typeDesc;
 		return &typeDesc;
 	}
-
+	
 	//--------------------------------------------------------
 	// Type descriptor for Floats
 	//--------------------------------------------------------
-
 	struct TypeDescriptor_Float2 : TypeDescriptor {
 		TypeDescriptor_Float2() : TypeDescriptor{ "Float2", sizeof(float2), FieldType::Float2 } {
 		}
@@ -107,22 +108,38 @@ namespace reflect
 	}
 
 	//--------------------------------------------------------
-	// Type descriptor for Textures
+	// Type descriptor for Colours
 	//--------------------------------------------------------
-
-	struct TypeDescriptor_Texture : TypeDescriptor {
-		TypeDescriptor_Texture() : TypeDescriptor{ "Texture", sizeof(GB::Texture2D), FieldType::Texture } {
+	struct TypeDescriptor_Colour : TypeDescriptor {
+		TypeDescriptor_Colour() : TypeDescriptor{ "Colour", sizeof(GB::Colour), FieldType::Colour } {
 		}
 		virtual void dump(const void* obj, int /* unused */) const override {
-			const GB::SharedPtr<GB::Texture2D>* pTexture = (const GB::SharedPtr<GB::Texture2D>*)obj;
-			std::cout << "Texture{" << (*pTexture)->GetRendererID() << "}";
+			const GB::Colour* value = (const GB::Colour*)obj;
+			std::cout << "Colour{" << value->r() << ", " << value->g() << ", " << value->b() << ", " << value->a() << "}";
 		}
 	};
 
 	template <>
-	TypeDescriptor* getPrimitiveDescriptor<GB::SharedPtr<GB::Texture2D>>() {
-		static TypeDescriptor_Texture typeDesc;
+	TypeDescriptor* getPrimitiveDescriptor<GB::Colour>() {
+		static TypeDescriptor_Colour typeDesc;
 		return &typeDesc;
 	}
 
+	//--------------------------------------------------------
+	// Type descriptor for Textures
+	//--------------------------------------------------------
+	struct TypeDescriptor_Texture : TypeDescriptor {
+		TypeDescriptor_Texture() : TypeDescriptor{ "Texture", sizeof(GB::Texture2D), FieldType::Texture } {
+		}
+		virtual void dump(const void* obj, int /* unused */) const override {
+			const GB::Texture2D* pTexture = (const GB::Texture2D*)obj;
+			std::cout << "Texture{" << pTexture->GetRendererID() << "}";
+		}
+	};
+
+	template <>
+	TypeDescriptor* getPrimitiveDescriptor<GB::Texture2D>() {
+		static TypeDescriptor_Texture typeDesc;
+		return &typeDesc;
+	}
 }

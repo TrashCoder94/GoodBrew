@@ -227,7 +227,7 @@ namespace GB
 			}
 			case reflect::FieldType::Vector:
 			{
-				GB::DrawVector(reflectedMemberData, memberPtr);
+				GB::DrawVector(reflectedMemberData.type, reflectedMemberData.name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::UniquePtr:
@@ -919,17 +919,17 @@ namespace GB
 		GB::EndRemoveElementButtonStyle();
 	}
 	
-	void DrawVector(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr)
+	void DrawVector(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr)
 	{
-		reflect::TypeDescriptor_StdVector* vectorType = (reflect::TypeDescriptor_StdVector*)reflectedMemberData.type;
-		reflect::TypeDescriptor* vectorItemTypeDescriptor = vectorType->itemType;
+		GB_PTR(vectorType, static_cast<reflect::TypeDescriptor_StdVector*>(pTypeDescriptor), "");
+		GB_PTR(vectorItemTypeDescriptor, vectorType->itemType, "");
 		const reflect::FieldType vectorItemFieldType = vectorType->itemType->getFieldType();
 
 		// Not const because there are Add Element and Remove Element buttons here which can alter the size of the vector.
 		size_t vectorSize = vectorType->getSize(memberPtr);
 
 		std::string vectorName = "";
-		vectorName.append(reflectedMemberData.name);
+		vectorName.append(name);
 		vectorName.append(" " + std::to_string(vectorSize) + " Elements");
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;

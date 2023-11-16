@@ -90,7 +90,7 @@ namespace GB
 	// ===================================
 	// VECTORS
 	void DrawVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const reflect::FieldType type, const char* name, void* memberPtr, bool& removeElement, const float spacingAfterVariableName = 100.0f);
-	void DrawVector(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr);
+	void DrawVector(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr);
 
 	// ===================================
 	// SMART PTRS

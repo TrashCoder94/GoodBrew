@@ -19,7 +19,6 @@ namespace GB
 
 	public:
 		TestData();
-		~TestData();
 
 		// FLOATS
 		GBVARIABLE(Edit)
@@ -149,6 +148,20 @@ namespace GB
 		GBVARIABLE(Edit)
 		SharedPtr<TestData> m_pSharedPtrClass;
 
+	private:
+		// So this is needed in order for the WeakPtr below to remain valid
+		// Because it's a std::weak_ptr it will expire if a local SharedPtr is created
+		// Can't initialise m_pWeakPtrClass from m_pSharedPtrClass because then they will work as one class in the editor UI
+		// (E.g. clicking on the drop down menu will open both m_pSharedPtrClass AND m_pWeakPtrClass at the same time)
+		// So need to track a separate SharedPtr in order to preserve the "lifetime" of the below WeakPtr
+		// Which works with the std implementation anyway, but something to be aware of when attempting to reflect the WeakPtr
+		// Think in most cases it would make more sense to use anything other than a WeakPtr for this kind of variable
+		SharedPtr<TestData> m_pSharedPtrClassForWeakPtrClass;
+
+	public:
+		GBVARIABLE(Edit)
+		WeakPtr<TestData> m_pWeakPtrClass;
+
 		// VECTORS
 
 		// OF FLOATS
@@ -195,8 +208,5 @@ namespace GB
 
 		GBVARIABLE(Edit)
 		std::vector<SharedPtr<TestData>> m_pVectorOfSharedPtrClasses;
-
-		GBVARIABLE(Edit)
-		std::vector<WeakPtr<TestData>> m_pVectorOfWeakPtrClasses;
 	};
 }

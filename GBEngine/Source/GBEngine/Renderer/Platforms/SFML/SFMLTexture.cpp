@@ -5,10 +5,9 @@
 
 namespace GB
 {
-	SFMLTexture::SFMLTexture(uint32_t width, uint32_t height) : m_Sprite(),
-		m_Texture(),
-		m_Filepath(),
-		m_Dimensions(width, height)
+	SFMLTexture::SFMLTexture(uint32_t width, uint32_t height) : Texture2D(width, height),
+		m_Sprite(),
+		m_Texture()
 	{
 		if (!LoadSprite())
 		{
@@ -16,38 +15,14 @@ namespace GB
 		}
 	}
 
-	SFMLTexture::SFMLTexture(const std::string& filepath) : m_Sprite(),
-		m_Texture(),
-		m_Filepath(filepath),
-		m_Dimensions()
+	SFMLTexture::SFMLTexture(const std::string& filepath) : Texture2D(filepath),
+		m_Sprite(),
+		m_Texture()
 	{
 		if (!LoadSprite())
 		{
 			GB_CORE_LOG_ERROR("Couldn't load sprite from filepath %s", m_Filepath.c_str());
 		}
-	}
-
-	SFMLTexture::~SFMLTexture()
-	{}
-
-	uint32_t SFMLTexture::GetWidth() const
-	{
-		return m_Dimensions.x;
-	}
-
-	uint32_t SFMLTexture::GetHeight() const
-	{
-		return m_Dimensions.y;
-	}
-
-	uint32_t SFMLTexture::GetRendererID() const
-	{
-		return 0;
-	}
-
-	const std::string& SFMLTexture::GetFilepath() const
-	{
-		return m_Filepath;
 	}
 
 	sf::Sprite& SFMLTexture::GetSFMLSprite()

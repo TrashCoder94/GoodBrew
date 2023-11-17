@@ -29,9 +29,6 @@ namespace GB
 		m_VectorOfTextures()
 	{}
 
-	TestData::~TestData()
-	{}
-
 	TestComponent::TestComponent() : Component(),
 		m_Float(0.0f),
 		m_Float2(0.0f),
@@ -49,6 +46,8 @@ namespace GB
 		m_pClass(new TestData()),
 		m_pUniquePtrClass(new TestData()),
 		m_pSharedPtrClass(new TestData()),
+		m_pSharedPtrClassForWeakPtrClass(new TestData()),
+		m_pWeakPtrClass(m_pSharedPtrClassForWeakPtrClass),
 		m_VectorOfFloats(),
 		m_VectorOfFloat2s(),
 		m_VectorOfFloat3s(),
@@ -63,8 +62,7 @@ namespace GB
 		m_VectorOfClasses(),
 		m_pVectorOfClasses(),
 		m_pVectorOfUniquePtrClasses(),
-		m_pVectorOfSharedPtrClasses(),
-		m_pVectorOfWeakPtrClasses()
+		m_pVectorOfSharedPtrClasses()
 	{}
 
 	TestComponent::~TestComponent()
@@ -90,6 +88,5 @@ namespace GB
 		m_pVectorOfClasses.clear();
 		m_pVectorOfUniquePtrClasses.clear();
 		m_pVectorOfSharedPtrClasses.clear();
-		m_pVectorOfWeakPtrClasses.clear();
 	}
 }

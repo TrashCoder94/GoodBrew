@@ -5,3 +5,4 @@
 [submodule "GBEngine/ThirdParty/spdlog"]
 	path = GBEngine/ThirdParty/spdlog
 	url = https://github.com/gabime/spdlog.git
+	branch = v2.x

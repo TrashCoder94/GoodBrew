@@ -24,6 +24,7 @@ namespace GB
 		m_VectorOfInt2s(),
 		m_VectorOfInt3s(),
 		m_VectorOfInt4s(),
+		m_VectorOfBools(),
 		m_VectorOfStrings(),
 		m_VectorOfColours(),
 		m_VectorOfTextures()
@@ -56,6 +57,7 @@ namespace GB
 		m_VectorOfInt2s(),
 		m_VectorOfInt3s(),
 		m_VectorOfInt4s(),
+		m_VectorOfBools(),
 		m_VectorOfStrings(),
 		m_VectorOfColours(),
 		m_VectorOfTextures(),
@@ -63,10 +65,12 @@ namespace GB
 		m_pVectorOfClasses(),
 		m_pVectorOfUniquePtrClasses(),
 		m_pVectorOfSharedPtrClasses()
+		//m_pVectorOfWeakPtrClasses()
 	{}
 
 	TestComponent::~TestComponent()
 	{
+		// NORMAL VARIABLES
 		if (m_pClass)
 		{
 			m_pClass->Deinitialize();
@@ -74,6 +78,7 @@ namespace GB
 			m_pClass = nullptr;
 		}
 
+		// VECTOR VARIABLES
 		for (size_t iC = 0; iC < m_pVectorOfClasses.size(); ++iC)
 		{
 			if (TestData* pClass = m_pVectorOfClasses[iC])
@@ -84,9 +89,22 @@ namespace GB
 			}
 		}
 
+		m_VectorOfFloats.clear();
+		m_VectorOfFloat2s.clear();
+		m_VectorOfFloat3s.clear();
+		m_VectorOfFloat4s.clear();
+		m_VectorOfInts.clear();
+		m_VectorOfInt2s.clear();
+		m_VectorOfInt3s.clear();
+		m_VectorOfInt4s.clear();
+		m_VectorOfBools.clear();
+		m_VectorOfStrings.clear();
+		m_VectorOfColours.clear();
+		m_VectorOfTextures.clear();
 		m_VectorOfClasses.clear();
 		m_pVectorOfClasses.clear();
 		m_pVectorOfUniquePtrClasses.clear();
 		m_pVectorOfSharedPtrClasses.clear();
+		//m_pVectorOfWeakPtrClasses.clear();
 	}
 }

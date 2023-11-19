@@ -10,6 +10,7 @@ project "GBEngine"
 	{
 		"Source/**.h",
 		"Source/**.cpp",
+		"%{wks.location}/GBEngine/ThirdParty/spdlog/src/**",
 		"%{wks.location}/GBEngine/ThirdParty/GBReflection/**.h",
 		"%{wks.location}/GBEngine/ThirdParty/GBReflection/**.cpp"
 	}
@@ -33,6 +34,10 @@ project "GBEngine"
 	includeAndLinkSFML()
 
 	filter "files:ThirdParty/GBReflection/**.cpp"
+		flags { "NoPCH" }
+	filter {}
+
+	filter "files:ThirdParty/spdlog/src/**.cpp"
 		flags { "NoPCH" }
 	filter {}
 

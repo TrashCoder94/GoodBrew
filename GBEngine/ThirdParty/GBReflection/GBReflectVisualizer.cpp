@@ -144,116 +144,7 @@ namespace GB
 		ImGui::PopStyleColor(3);
 	}
 
-	void DrawMember(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr)
-	{
-		switch (reflectedMemberData.type->getFieldType())
-		{
-			case reflect::FieldType::None:
-			{
-				GB_CORE_ASSERT(false, "TypeDescriptor not implemented in ThirdParty/GBReflection/GBTypeDescriptors.cpp");
-				break;
-			}
-			case reflect::FieldType::Float:
-			{
-				GB::DrawFloat(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Float2:
-			{
-				GB::DrawFloat2(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Float3:
-			{
-				GB::DrawFloat3(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Float4:
-			{
-				GB::DrawFloat4(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Int:
-			{
-				GB::DrawInt(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Int2:
-			{
-				GB::DrawInt2(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Int3:
-			{
-				GB::DrawInt3(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Int4:
-			{
-				GB::DrawInt4(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Bool:
-			{
-				GB::DrawBool(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::String:
-			{
-				GB::DrawString(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Colour:
-			{
-				GB::DrawColours(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Texture:
-			{
-				GB::DrawTexture(reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::Class:
-			{
-				GB_PTR(pClass, static_cast<BaseObject*>(memberPtr), "");
-				GB::DrawClass(pClass);
-				break;
-			}
-			case reflect::FieldType::ClassPtr:
-			{
-				GB_PTR(pClass, *(BaseObject**)memberPtr, "");
-				GB::DrawClass(pClass);
-				break;
-			}
-			case reflect::FieldType::Vector:
-			{
-				GB::DrawVector(reflectedMemberData.type, reflectedMemberData.name, memberPtr);
-				break;
-			}
-			case reflect::FieldType::UniquePtr:
-			{
-				GB::DrawUniquePtr(reflectedMemberData.type, memberPtr);
-				break;
-			}
-			case reflect::FieldType::SharedPtr:
-			{
-				GB::DrawSharedPtr(reflectedMemberData.type, memberPtr);
-				break;
-			}
-			case reflect::FieldType::WeakPtr:
-			{
-				GB::DrawWeakPtr(reflectedMemberData.type, memberPtr);
-				break;
-			}
-			default:
-			{
-				GB_CORE_ASSERT(false, "TypeDescriptor not implemented in ThirdParty/GBReflection/GBTypeDescriptors.cpp");
-				break;
-			}
-		}
-	}
-
-	void DrawMember(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr)
+	void DrawMember(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr)
 	{
 		switch (pTypeDescriptor->getFieldType())
 		{
@@ -264,68 +155,84 @@ namespace GB
 			}
 			case reflect::FieldType::Float:
 			{
-				GB::DrawFloat(pTypeDescriptor->name, memberPtr);
+				GB::DrawFloat(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Float2:
 			{
-				GB::DrawFloat2(pTypeDescriptor->name, memberPtr);
+				GB::DrawFloat2(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Float3:
 			{
-				GB::DrawFloat3(pTypeDescriptor->name, memberPtr);
+				GB::DrawFloat3(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Float4:
 			{
-				GB::DrawFloat4(pTypeDescriptor->name, memberPtr);
+				GB::DrawFloat4(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Int:
 			{
-				GB::DrawInt(pTypeDescriptor->name, memberPtr);
+				GB::DrawInt(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Int2:
 			{
-				GB::DrawInt2(pTypeDescriptor->name, memberPtr);
+				GB::DrawInt2(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Int3:
 			{
-				GB::DrawInt3(pTypeDescriptor->name, memberPtr);
+				GB::DrawInt3(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Int4:
 			{
-				GB::DrawInt4(pTypeDescriptor->name, memberPtr);
+				GB::DrawInt4(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Bool:
 			{
-				GB::DrawBool(pTypeDescriptor->name, memberPtr);
+				GB::DrawBool(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::String:
 			{
-				GB::DrawString(pTypeDescriptor->name, memberPtr);
+				GB::DrawString(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Colour:
 			{
-				GB::DrawColours(pTypeDescriptor->name, memberPtr);
+				GB::DrawColours(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Texture:
 			{
-				GB::DrawTexture(pTypeDescriptor->name, memberPtr);
+				GB::DrawTexture(name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::Class:
 			{
-				GB_PTR(pClass, static_cast<BaseObject*>(memberPtr), "");
-				GB::DrawClass(pClass);
+				const std::string& typeDescriptorName = pTypeDescriptor->name;
+
+				// Bool workaround for bools within std::vector, just using a custom struct instead as a bool wrapper
+				if (typeDescriptorName == "GBBool")
+				{
+					GB_PTR(pGBBoolTypeDescriptor, static_cast<reflect::TypeDescriptor_Struct*>(pTypeDescriptor), "");
+					GB_PTR(pGBBoolStruct, static_cast<GBBool*>(memberPtr), "");
+					auto& reflectedBoolMember = pGBBoolTypeDescriptor->members[0];
+					void* pBoolMemberPtr = (void*)((char*)pGBBoolStruct + reflectedBoolMember.offset);
+
+					// Just want to draw the bool directly since this "class" is just a wrapper.
+					GB::DrawBool(typeDescriptorName.c_str(), pBoolMemberPtr);
+				}
+				else
+				{
+					GB_PTR(pClass, static_cast<BaseObject*>(memberPtr), "");
+					GB::DrawClass(pClass);
+				}
 				break;
 			}
 			case reflect::FieldType::ClassPtr:
@@ -336,23 +243,22 @@ namespace GB
 			}
 			case reflect::FieldType::Vector:
 			{
-				// TODO: Implement void DrawVector(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr);
-				GB_CORE_ASSERT(false, "Drawing std::vector based on TypeDescriptor alone is not supported");
+				GB::DrawVector(pTypeDescriptor, name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::UniquePtr:
 			{
-				GB::DrawUniquePtr(pTypeDescriptor, memberPtr);
+				GB::DrawUniquePtr(pTypeDescriptor, name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::SharedPtr:
 			{
-				GB::DrawSharedPtr(pTypeDescriptor, memberPtr);
+				GB::DrawSharedPtr(pTypeDescriptor, name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::WeakPtr:
 			{
-				GB::DrawWeakPtr(pTypeDescriptor, memberPtr);
+				GB::DrawWeakPtr(pTypeDescriptor, name, memberPtr);
 				break;
 			}
 			default:
@@ -361,6 +267,11 @@ namespace GB
 				break;
 			}
 		}
+	}
+
+	void DrawMember(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr)
+	{
+		DrawMember(reflectedMemberData.type, reflectedMemberData.name, memberPtr);
 	}
 
 	// ===================================
@@ -765,8 +676,8 @@ namespace GB
 	// CLASSES
 	void DrawClassMembers(BaseObject* pClass)
 	{
-		const reflect::TypeDescriptor_Struct& componentReflectedData = pClass->GetTypeDescription();
-		for (auto& member : componentReflectedData.members)
+		const reflect::TypeDescriptor_Struct& reflectedData = pClass->GetTypeDescription();
+		for (auto& member : reflectedData.members)
 		{
 			GB_CHECK_PTR(member.type, "Reflected member has a nullptr type descriptor, double check variable type");
 
@@ -866,8 +777,24 @@ namespace GB
 			}
 			case reflect::FieldType::Class:
 			{
-				GB_PTR(pClass, static_cast<BaseObject*>(memberPtr), "");
-				GB::DrawClass(pClass);
+				const std::string& typeDescriptorName = pTypeDescriptor->name;
+
+				// Bool workaround for bools within std::vector, just using a custom struct instead as a bool wrapper
+				if (typeDescriptorName == "GBBool")
+				{
+					GB_PTR(pGBBoolTypeDescriptor, static_cast<reflect::TypeDescriptor_Struct*>(pTypeDescriptor), "");
+					GB_PTR(pGBBoolStruct, static_cast<GBBool*>(memberPtr), "");
+					auto& reflectedBoolMember = pGBBoolTypeDescriptor->members[0];
+					void* pBoolMemberPtr = (void*)((char*)pGBBoolStruct + reflectedBoolMember.offset);
+
+					// Just want to draw the bool directly since this "class" is just a wrapper.
+					GB::DrawBool(name, pBoolMemberPtr, spacingAfterVariableName);
+				}
+				else
+				{
+					GB_PTR(pClass, static_cast<BaseObject*>(memberPtr), "");
+					GB::DrawClass(pClass);
+				}
 				break;
 			}
 			case reflect::FieldType::ClassPtr:
@@ -883,17 +810,17 @@ namespace GB
 			}
 			case reflect::FieldType::UniquePtr:
 			{
-				GB::DrawUniquePtr(pTypeDescriptor, memberPtr);
+				GB::DrawUniquePtr(pTypeDescriptor, name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::SharedPtr:
 			{
-				GB::DrawSharedPtr(pTypeDescriptor, memberPtr);
+				GB::DrawSharedPtr(pTypeDescriptor, name, memberPtr);
 				break;
 			}
 			case reflect::FieldType::WeakPtr:
 			{
-				GB::DrawWeakPtr(pTypeDescriptor, memberPtr);
+				GB::DrawWeakPtr(pTypeDescriptor, name, memberPtr);
 				break;
 			}
 			default:
@@ -1034,44 +961,44 @@ namespace GB
 	{
 		GB_PTR(pUniquePtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdUniquePtr*>(reflectedMemberData.type), "");
 		void* pUniquePtrValue = pUniquePtrTypeDescriptor->getTarget(memberPtr);
-		DrawMember(reflectedMemberData, pUniquePtrValue);
+		GB::DrawMember(reflectedMemberData, pUniquePtrValue);
 	}
 
 	void DrawSharedPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr)
 	{
 		GB_PTR(pSharedPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdSharedPtr*>(reflectedMemberData.type), "");
 		void* pSharedPtrValue = pSharedPtrTypeDescriptor->getTarget(memberPtr);
-		DrawMember(reflectedMemberData, pSharedPtrValue);
+		GB::DrawMember(reflectedMemberData, pSharedPtrValue);
 	}
 
 	void DrawWeakPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr)
 	{
 		GB_PTR(pWeakPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdWeakPtr*>(reflectedMemberData.type), "");
 		void* pWeakPtrValue = pWeakPtrTypeDescriptor->getTarget(memberPtr);
-		DrawMember(reflectedMemberData, pWeakPtrValue);
+		GB::DrawMember(reflectedMemberData, pWeakPtrValue);
 	}
 
-	void DrawUniquePtr(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr)
+	void DrawUniquePtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr)
 	{
 		GB_PTR(pUniquePtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdUniquePtr*>(pTypeDescriptor), "");
 		GB_PTR(pUniquePtrValueTypeDescriptor, pUniquePtrTypeDescriptor->targetType, "");
 		void* pUniquePtrValue = pUniquePtrTypeDescriptor->getTarget(memberPtr);
-		DrawMember(pUniquePtrValueTypeDescriptor, pUniquePtrValue);
+		GB::DrawMember(pUniquePtrValueTypeDescriptor, name, pUniquePtrValue);
 	}
 
-	void DrawSharedPtr(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr)
+	void DrawSharedPtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr)
 	{
 		GB_PTR(pSharedPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdSharedPtr*>(pTypeDescriptor), "");
 		GB_PTR(pSharedPtrValueTypeDescriptor, pSharedPtrTypeDescriptor->targetType, "");
 		void* pSharedPtrValue = pSharedPtrTypeDescriptor->getTarget(memberPtr);
-		DrawMember(pSharedPtrValueTypeDescriptor, pSharedPtrValue);
+		GB::DrawMember(pSharedPtrValueTypeDescriptor, name, pSharedPtrValue);
 	}
 
-	void DrawWeakPtr(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr)
+	void DrawWeakPtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr)
 	{
 		GB_PTR(pWeakPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdWeakPtr*>(pTypeDescriptor), "");
 		GB_PTR(pWeakPtrValueTypeDescriptor, pWeakPtrTypeDescriptor->targetType, "");
 		void* pWeakPtrValue = pWeakPtrTypeDescriptor->getTarget(memberPtr);
-		DrawMember(pWeakPtrValueTypeDescriptor, pWeakPtrValue);
+		GB::DrawMember(pWeakPtrValueTypeDescriptor, name, pWeakPtrValue);
 	}
 }

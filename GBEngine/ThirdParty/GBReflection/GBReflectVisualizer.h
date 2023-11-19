@@ -34,8 +34,8 @@ namespace GB
 	void BeginRemoveElementButtonStyle();
 	void EndRemoveElementButtonStyle();
 
+	void DrawMember(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr);
 	void DrawMember(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr);
-	void DrawMember(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr);
 
 	// ===================================
 	// FLOATS
@@ -98,7 +98,7 @@ namespace GB
 	void DrawSharedPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr);
 	void DrawWeakPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr);
 
-	void DrawUniquePtr(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr);
-	void DrawSharedPtr(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr);
-	void DrawWeakPtr(reflect::TypeDescriptor* pTypeDescriptor, void* memberPtr);
+	void DrawUniquePtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr);
+	void DrawSharedPtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr);
+	void DrawWeakPtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr);
 }

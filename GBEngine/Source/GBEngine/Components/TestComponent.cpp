@@ -65,7 +65,6 @@ namespace GB
 		m_pVectorOfClasses(),
 		m_pVectorOfUniquePtrClasses(),
 		m_pVectorOfSharedPtrClasses()
-		//m_pVectorOfWeakPtrClasses()
 	{}
 
 	TestComponent::~TestComponent()
@@ -105,6 +104,5 @@ namespace GB
 		m_pVectorOfClasses.clear();
 		m_pVectorOfUniquePtrClasses.clear();
 		m_pVectorOfSharedPtrClasses.clear();
-		//m_pVectorOfWeakPtrClasses.clear();
 	}
 }

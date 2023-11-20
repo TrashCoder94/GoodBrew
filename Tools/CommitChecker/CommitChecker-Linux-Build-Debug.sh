@@ -13,7 +13,7 @@ exit 1
 fi
 
 echo "Building Debug Configuration"
-make config=debug_x86_64
+make -B config=debug_x86_64
 if [ $? -ne 0 ] 
 then
 echo "Error: Building Debug Configuration failed"

@@ -13,7 +13,7 @@ exit 1
 fi
 
 echo "Building Shipping Configuration"
-make config=shipping_x86_64
+make -B config=shipping_x86_64
 if [ $? -ne 0 ] 
 then
 echo "Error: Building Shipping Configuration failed"

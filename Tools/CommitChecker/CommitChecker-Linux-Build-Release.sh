@@ -13,7 +13,7 @@ exit 1
 fi
 
 echo "Building Release Configuration"
-make config=release_x86_64
+make -B config=release_x86_64
 if [ $? -ne 0 ] 
 then
 echo "Error: Building Release Configuration failed"

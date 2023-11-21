@@ -7,9 +7,6 @@ namespace GB
 		m_pOwner(nullptr)
 	{}
 
-	BaseObject::~BaseObject()
-	{}
-
 	void BaseObject::Initialize()
 	{}
 

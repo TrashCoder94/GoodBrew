@@ -10,7 +10,7 @@
 namespace GB
 {
 	SpriteComponent::SpriteComponent() : Component(),
-		m_pTexture(nullptr),
+		m_pTexture(Texture2D::Create("Assets/Textures/T_WhiteSquare.png")),
 		m_pTransformComponent(nullptr)
 	{}
 
@@ -20,9 +20,6 @@ namespace GB
 	void SpriteComponent::Initialize()
 	{
 		m_pTransformComponent = GetOwner()->GetTransformComponent();
-
-		// TEMP, remove when reflection/level serializer has been implemented
-		m_pTexture = Texture2D::Create("Assets/Textures/Checkerboard.png");
 	}
 
 	void SpriteComponent::Update(const float deltaTime)

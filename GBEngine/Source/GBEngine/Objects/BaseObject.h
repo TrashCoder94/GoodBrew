@@ -11,7 +11,6 @@ namespace GB
 
 	public:
 		BaseObject();
-		virtual ~BaseObject();
 	
 		// When this BaseObject is first loaded up
 		virtual void Initialize();

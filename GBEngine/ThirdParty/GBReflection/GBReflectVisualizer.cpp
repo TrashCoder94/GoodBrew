@@ -877,10 +877,27 @@ namespace GB
 			addElementButtonLabel.append(vectorName);
 			if (ImGui::Button(addElementButtonLabel.c_str(), ImVec2{ lineHeight, lineHeight }))
 			{
-				// Adds a new empty element to the vector.
 				vectorType->addNewItem(memberPtr);
+
 				// Refreshing the size since the vector has been altered here, should be one new element
 				vectorSize = vectorType->getSize(memberPtr);
+
+				// Specific implementation for classes that need to manually Create (could be due to cross platform/cross renderer techniques)
+				if (vectorItemFieldType == reflect::FieldType::SharedPtr)
+				{
+					GB_PTR(pSharedPtrAsVoid, vectorType->getItem(memberPtr, vectorSize - 1), "");
+					GB_PTR(pSharedPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdSharedPtr*>(vectorItemTypeDescriptor), "");
+					
+					if (pSharedPtrTypeDescriptor->targetType->fieldType == reflect::FieldType::Texture)
+					{
+						// Get the vector from the memberPtr and update the latest element to a valid SharedPtr<Texture2D> by calling ::Create()...
+						// Then set the value back to memberPtr afterwards to update it properly
+						GB_PTR(pSharedPtrTexture, static_cast<SharedPtr<Texture2D>*>(const_cast<void*>(pSharedPtrAsVoid)), "");
+						std::vector<SharedPtr<Texture2D>> vectorOfTextures = *((std::vector<SharedPtr<Texture2D>>*)memberPtr);
+						vectorOfTextures.at(vectorSize - 1) = Texture2D::Create("Assets/Textures/T_WhiteSquare.png");
+						*((std::vector<SharedPtr<Texture2D>>*)memberPtr) = vectorOfTextures;
+					}
+				}
 			}
 		}
 		GB::EndAddElementButtonStyle();

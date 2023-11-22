@@ -25,7 +25,8 @@ namespace GB
 #if GB_IMGUI_ENABLED
 		GB_CHECK_PTR(m_pEditorLayer, "Editor layer is nullptr, make sure a valid editor layer was passed in the constructor!");
 		
-		ImGui::Begin("Details");
+		const ImGuiWindowFlags windowFlags = ImGuiWindowFlags_HorizontalScrollbar;
+		ImGui::Begin("Details", (bool*)0, windowFlags);
 		{
 			if (Object* pObject = m_pEditorLayer->GetSelectedObject())
 			{
@@ -123,9 +124,12 @@ namespace GB
 #if GB_IMGUI_ENABLED
 		GB_CHECK_PTR(pObject, "Cannot draw component details for an object that is nullptr");
 		
+		static constexpr float kDefaultSpacingAfterClassVariableNames			= 135.0f;
+		static constexpr float kDefaultSpacingAfterClassVariableNamesMultiplier	= 0.3f;
+
 		for (Component* pComponent : pObject->GetComponents())
 		{
-			GB::DrawClass(pComponent);
+			GB::DrawClass(pComponent, kDefaultSpacingAfterClassVariableNames + (kDefaultSpacingAfterClassVariableNames * kDefaultSpacingAfterClassVariableNamesMultiplier));
 		}
 
 #endif // GB_IMGUI_ENABLED

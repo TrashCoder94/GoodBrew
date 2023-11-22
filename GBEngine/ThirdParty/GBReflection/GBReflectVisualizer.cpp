@@ -53,8 +53,9 @@ namespace GB
 
 	static constexpr int kEditorVariableIntResetValue			= 0;
 	static constexpr float kEditorVariableFloatResetValue		= 0.0f;
-	static constexpr float kEditorVariableColumnWidth			= 100.0f;
-	static constexpr float kEditorVectorSpacingAfterIndex		= 20.0f;
+	static constexpr float kEditorNumberVariableWidth			= 75.0f;
+	static constexpr float kEditorVectorSpacingAfterIndex		= 125.0f;
+	static constexpr float kEditorClassSpacingMultiplier		= 0.3f;
 
 	// ===================================
 	// ImGui helpers
@@ -77,46 +78,30 @@ namespace GB
 	
 	// =================================== 
 	// SHARED - Used for all variable displays in the editor
-	void BeginEditorVariableTable(const char* tableName, const float spaceAfterVariableName/* = 100.0f*/)
-	{
-		ImGui::BeginTable("floatTable", 2);
-
-		// First column where variable name will be.
-		ImGui::TableSetupColumn("variableNameColumn", ImGuiTableColumnFlags_WidthFixed, spaceAfterVariableName);
-
-		// Second column where the values will be.
-		ImGui::TableSetupColumn("variableValuesColumn");
-
-		// This is the first row of the table (only have 1 row in this table and make use of multiple columns).
-		ImGui::TableNextRow();
-
-		// First column for variable name.
-		ImGui::TableSetColumnIndex(0);
-	}
-
-	void EndEditorVariableTable()
-	{
-		ImGui::EndTable();
-	}
-
-	void DrawMemberName(const char* name)
+	void DrawMemberName(const char* name, const float spaceAfterVariableName/* = 125.0f*/)
 	{
 		ImGui::TextUnformatted(name);
-		const ImVec2& textWidth = ImGui::CalcTextSize(name, nullptr, true);
-		ImGui::SameLine(textWidth.x);
+
+		// Tooltip to just display the name of the variable.
+		// Could update reflection system to include comments as part of GBVARIABLE.
+		// E.g. GBVARIABLE(Edit, Tooltip = "This is a comment to use as a tooltip").
+		if (ImGui::BeginItemTooltip())
+		{
+			ImGui::TextUnformatted(name);
+			ImGui::EndTooltip();
+		}
+
+		ImGui::SameLine(spaceAfterVariableName);
 	}
 
-	void BeginEditorVariable(const char* name, const float spaceAfterVariableName/* = 100.0f*/)
+	void BeginEditorVariable(const char* name, const float spaceAfterVariableName/* = 125.0f*/)
 	{
 		ImGui::PushID(name);
-		BeginEditorVariableTable(std::string(name).append("table").c_str(), spaceAfterVariableName);
-		DrawMemberName(name);
-		ImGui::TableSetColumnIndex(1);
+		DrawMemberName(name, spaceAfterVariableName);
 	}
 
 	void EndEditorVariable()
 	{
-		EndEditorVariableTable();
 		ImGui::PopID();
 	}
 
@@ -144,7 +129,7 @@ namespace GB
 		ImGui::PopStyleColor(3);
 	}
 
-	void DrawMember(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr)
+	void DrawMember(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
 		switch (pTypeDescriptor->getFieldType())
 		{
@@ -155,62 +140,62 @@ namespace GB
 			}
 			case reflect::FieldType::Float:
 			{
-				GB::DrawFloat(name, memberPtr);
+				GB::DrawFloat(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Float2:
 			{
-				GB::DrawFloat2(name, memberPtr);
+				GB::DrawFloat2(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Float3:
 			{
-				GB::DrawFloat3(name, memberPtr);
+				GB::DrawFloat3(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Float4:
 			{
-				GB::DrawFloat4(name, memberPtr);
+				GB::DrawFloat4(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Int:
 			{
-				GB::DrawInt(name, memberPtr);
+				GB::DrawInt(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Int2:
 			{
-				GB::DrawInt2(name, memberPtr);
+				GB::DrawInt2(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Int3:
 			{
-				GB::DrawInt3(name, memberPtr);
+				GB::DrawInt3(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Int4:
 			{
-				GB::DrawInt4(name, memberPtr);
+				GB::DrawInt4(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Bool:
 			{
-				GB::DrawBool(name, memberPtr);
+				GB::DrawBool(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::String:
 			{
-				GB::DrawString(name, memberPtr);
+				GB::DrawString(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Colour:
 			{
-				GB::DrawColours(name, memberPtr);
+				GB::DrawColours(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Texture:
 			{
-				GB::DrawTexture(name, memberPtr);
+				GB::DrawTexture(name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::Class:
@@ -226,39 +211,39 @@ namespace GB
 					void* pBoolMemberPtr = (void*)((char*)pGBBoolStruct + reflectedBoolMember.offset);
 
 					// Just want to draw the bool directly since this "class" is just a wrapper.
-					GB::DrawBool(typeDescriptorName.c_str(), pBoolMemberPtr);
+					GB::DrawBool(typeDescriptorName.c_str(), pBoolMemberPtr, spacingAfterMemberVariables);
 				}
 				else
 				{
 					GB_PTR(pClass, static_cast<BaseObject*>(memberPtr), "");
-					GB::DrawClass(pClass);
+					GB::DrawClass(pClass, spacingAfterMemberVariables + (spacingAfterMemberVariables * kEditorClassSpacingMultiplier));
 				}
 				break;
 			}
 			case reflect::FieldType::ClassPtr:
 			{
 				GB_PTR(pClass, *(BaseObject**)memberPtr, "");
-				GB::DrawClass(pClass);
+				GB::DrawClass(pClass, spacingAfterMemberVariables + (spacingAfterMemberVariables * kEditorClassSpacingMultiplier));
 				break;
 			}
 			case reflect::FieldType::Vector:
 			{
-				GB::DrawVector(pTypeDescriptor, name, memberPtr);
+				GB::DrawVector(pTypeDescriptor, name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::UniquePtr:
 			{
-				GB::DrawUniquePtr(pTypeDescriptor, name, memberPtr);
+				GB::DrawUniquePtr(pTypeDescriptor, name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::SharedPtr:
 			{
-				GB::DrawSharedPtr(pTypeDescriptor, name, memberPtr);
+				GB::DrawSharedPtr(pTypeDescriptor, name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			case reflect::FieldType::WeakPtr:
 			{
-				GB::DrawWeakPtr(pTypeDescriptor, name, memberPtr);
+				GB::DrawWeakPtr(pTypeDescriptor, name, memberPtr, spacingAfterMemberVariables);
 				break;
 			}
 			default:
@@ -269,9 +254,9 @@ namespace GB
 		}
 	}
 
-	void DrawMember(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr)
+	void DrawMember(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
-		DrawMember(reflectedMemberData.type, reflectedMemberData.name, memberPtr);
+		DrawMember(reflectedMemberData.type, reflectedMemberData.name, memberPtr, spacingAfterMemberVariables);
 	}
 
 	// ===================================
@@ -289,7 +274,9 @@ namespace GB
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
+		ImGui::PushItemWidth(kEditorNumberVariableWidth);
 		ImGui::DragFloat("##X", &value, 0.1f);
+		ImGui::PopItemWidth();
 	}
 
 	void DrawYFloatValue(float& value)
@@ -305,7 +292,9 @@ namespace GB
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
+		ImGui::PushItemWidth(kEditorNumberVariableWidth);
 		ImGui::DragFloat("##Y", &value, 0.1f);
+		ImGui::PopItemWidth();
 	}
 
 	void DrawZFloatValue(float& value)
@@ -321,7 +310,9 @@ namespace GB
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
+		ImGui::PushItemWidth(kEditorNumberVariableWidth);
 		ImGui::DragFloat("##Z", &value, 0.1f);
+		ImGui::PopItemWidth();
 	}
 
 	void DrawWFloatValue(float& value)
@@ -337,41 +328,42 @@ namespace GB
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
+		ImGui::PushItemWidth(kEditorNumberVariableWidth);
 		ImGui::DragFloat("##W", &value, 0.1f);
+		ImGui::PopItemWidth();
 	}
 
-	void DrawFloat(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawFloat(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
 			float floatValue = *((float*)memberPtr);
 			std::string uniqueLabel = "##";
 			uniqueLabel.append(name);
+			ImGui::PushItemWidth(kEditorNumberVariableWidth);
 			if (ImGui::DragFloat(uniqueLabel.c_str(), &floatValue))
 			{
 				*((float*)memberPtr) = floatValue;
 			}
+			ImGui::PopItemWidth();
 		}
 		EndEditorVariable();
 	}
 
-	void DrawFloat2(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawFloat2(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		float2 float2Value = *((float2*)memberPtr);
 
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
-			ImGui::PushMultiItemsWidths(2, ImGui::CalcItemWidth());
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5, 5 });
 
 			// X
 			DrawXFloatValue(float2Value.x);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// Y
 			DrawYFloatValue(float2Value.y);
-			ImGui::PopItemWidth();
 			ImGui::PopStyleVar();
 		}
 		EndEditorVariable();
@@ -379,28 +371,24 @@ namespace GB
 		*((float2*)memberPtr) = float2Value;
 	}
 
-	void DrawFloat3(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawFloat3(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		float3 float3Value = *((float3*)memberPtr);
 
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
-			ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5, 5 });
 
 			// X
 			DrawXFloatValue(float3Value.x);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// Y
 			DrawYFloatValue(float3Value.y);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// Z
 			DrawZFloatValue(float3Value.z);
-			ImGui::PopItemWidth();
 			ImGui::PopStyleVar();
 		}
 		EndEditorVariable();
@@ -408,33 +396,28 @@ namespace GB
 		*((float3*)memberPtr) = float3Value;
 	}
 
-	void DrawFloat4(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawFloat4(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		float4 float4Value = *((float4*)memberPtr);
 
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
-			ImGui::PushMultiItemsWidths(4, ImGui::CalcItemWidth());
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5, 5 });
 
 			// X
 			DrawXFloatValue(float4Value.x);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// Y
 			DrawYFloatValue(float4Value.y);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// Z
 			DrawZFloatValue(float4Value.z);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// W
 			DrawWFloatValue(float4Value.w);
-			ImGui::PopItemWidth();
 			ImGui::PopStyleVar();
 		}
 		EndEditorVariable();
@@ -457,7 +440,9 @@ namespace GB
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
+		ImGui::PushItemWidth(kEditorNumberVariableWidth);
 		ImGui::DragInt("##X", &value);
+		ImGui::PopItemWidth();
 	}
 
 	void DrawYIntValue(int& value)
@@ -473,7 +458,9 @@ namespace GB
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
+		ImGui::PushItemWidth(kEditorNumberVariableWidth);
 		ImGui::DragInt("##Y", &value);
+		ImGui::PopItemWidth();
 	}
 
 	void DrawZIntValue(int& value)
@@ -489,7 +476,9 @@ namespace GB
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
+		ImGui::PushItemWidth(kEditorNumberVariableWidth);
 		ImGui::DragInt("##Z", &value);
+		ImGui::PopItemWidth();
 	}
 
 	void DrawWIntValue(int& value)
@@ -505,41 +494,42 @@ namespace GB
 		ImGui::PopFont();
 		ImGui::PopStyleColor(3);
 		ImGui::SameLine();
+		ImGui::PushItemWidth(kEditorNumberVariableWidth);
 		ImGui::DragInt("##W", &value);
+		ImGui::PopItemWidth();
 	}
 
-	void DrawInt(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawInt(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
 			int intValue = *((int*)memberPtr);
 			std::string uniqueLabel = "##";
 			uniqueLabel.append(name);
+			ImGui::PushItemWidth(kEditorNumberVariableWidth);
 			if (ImGui::DragInt(uniqueLabel.c_str(), &intValue))
 			{
 				*((int*)memberPtr) = intValue;
 			}
+			ImGui::PopItemWidth();
 		}
 		EndEditorVariable();
 	}
 
-	void DrawInt2(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawInt2(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		int2 int2Value = *((int2*)memberPtr);
 
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
-			ImGui::PushMultiItemsWidths(2, ImGui::CalcItemWidth());
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5, 5 });
 
 			// X
 			DrawXIntValue(int2Value.x);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// Y
 			DrawYIntValue(int2Value.y);
-			ImGui::PopItemWidth();
 			ImGui::PopStyleVar();
 		}
 		EndEditorVariable();
@@ -547,28 +537,24 @@ namespace GB
 		*((int2*)memberPtr) = int2Value;
 	}
 
-	void DrawInt3(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawInt3(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		int3 int3Value = *((int3*)memberPtr);
 
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
-			ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5, 5 });
 
 			// X
 			DrawXIntValue(int3Value.x);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// Y
 			DrawYIntValue(int3Value.y);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// Z
 			DrawZIntValue(int3Value.z);
-			ImGui::PopItemWidth();
 			ImGui::PopStyleVar();
 		}
 		EndEditorVariable();
@@ -576,33 +562,28 @@ namespace GB
 		*((int3*)memberPtr) = int3Value;
 	}
 
-	void DrawInt4(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawInt4(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		int4 int4Value = *((int4*)memberPtr);
 
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
-			ImGui::PushMultiItemsWidths(4, ImGui::CalcItemWidth());
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5, 5 });
 
 			// X
 			DrawXIntValue(int4Value.x);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// Y
 			DrawYIntValue(int4Value.y);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// Z
 			DrawZIntValue(int4Value.z);
-			ImGui::PopItemWidth();
 			ImGui::SameLine();
 
 			// W
 			DrawWIntValue(int4Value.w);
-			ImGui::PopItemWidth();
 			ImGui::PopStyleVar();
 		}
 		EndEditorVariable();
@@ -612,7 +593,7 @@ namespace GB
 
 	// ===================================
 	// BOOLS
-	void DrawBool(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawBool(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
@@ -629,7 +610,7 @@ namespace GB
 	
 	// ===================================
 	// STRINGS
-	void DrawString(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawString(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
@@ -644,14 +625,11 @@ namespace GB
 
 	// ===================================
 	// COLOURS
-	void DrawColours(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawColours(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
 			Colour colourValue = *((Colour*)memberPtr);
-			// TODO: See if the data() function works as expected
-			// If not, then manually setup a float array with the float4 values from colour
-			// Then pass it into ColorEdit4 and then loop over them and reassign them to colourValue
 			ImGui::ColorEdit4("Colour", colourValue.data());
 			*((Colour*)memberPtr) = colourValue;
 		}
@@ -660,7 +638,7 @@ namespace GB
 	
 	// ===================================
 	// TEXTURES
-	void DrawTexture(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawTexture(const char* name, void* memberPtr, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		BeginEditorVariable(name, spacingAfterVariableName);
 		{
@@ -674,7 +652,7 @@ namespace GB
 
 	// ===================================
 	// CLASSES
-	void DrawClassMembers(BaseObject* pClass)
+	void DrawClassMembers(BaseObject* pClass, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
 		const reflect::TypeDescriptor_Struct& reflectedData = pClass->GetTypeDescription();
 		for (auto& member : reflectedData.members)
@@ -684,11 +662,11 @@ namespace GB
 			void* memberPtr = (void*)((char*)pClass + member.offset);
 			const reflect::FieldType fieldType = member.type->getFieldType();
 
-			DrawMember(member, memberPtr);
+			DrawMember(member, memberPtr, spacingAfterMemberVariables);
 		}
 	}
 
-	void DrawClass(BaseObject* pClass)
+	void DrawClass(BaseObject* pClass, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 		ImVec2 regionContentAvailable = ImGui::GetContentRegionAvail();
@@ -699,14 +677,14 @@ namespace GB
 
 		if (open)
 		{
-			DrawClassMembers(pClass);
+			DrawClassMembers(pClass, spacingAfterMemberVariables);
 			ImGui::TreePop();
 		}
 	}
 
 	// ===================================
 	// VECTORS
-	void DrawVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const reflect::FieldType type, const char* name, void* memberPtr, bool& removeElement, const float spacingAfterVariableName/* = 100.0f*/)
+	void DrawVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const reflect::FieldType type, const char* name, void* memberPtr, bool& removeElement, const float spacingAfterVariableName/* = 125.0f*/)
 	{
 		switch (type)
 		{
@@ -793,14 +771,14 @@ namespace GB
 				else
 				{
 					GB_PTR(pClass, static_cast<BaseObject*>(memberPtr), "");
-					GB::DrawClass(pClass);
+					GB::DrawClass(pClass, spacingAfterVariableName + (spacingAfterVariableName * kEditorClassSpacingMultiplier));
 				}
 				break;
 			}
 			case reflect::FieldType::ClassPtr:
 			{
 				GB_PTR(pClass, *(BaseObject**)memberPtr, "");
-				GB::DrawClass(pClass);
+				GB::DrawClass(pClass, spacingAfterVariableName + (spacingAfterVariableName * kEditorClassSpacingMultiplier));
 				break;
 			}
 			case reflect::FieldType::Vector:
@@ -810,17 +788,17 @@ namespace GB
 			}
 			case reflect::FieldType::UniquePtr:
 			{
-				GB::DrawUniquePtr(pTypeDescriptor, name, memberPtr);
+				GB::DrawUniquePtr(pTypeDescriptor, name, memberPtr, spacingAfterVariableName);
 				break;
 			}
 			case reflect::FieldType::SharedPtr:
 			{
-				GB::DrawSharedPtr(pTypeDescriptor, name, memberPtr);
+				GB::DrawSharedPtr(pTypeDescriptor, name, memberPtr, spacingAfterVariableName);
 				break;
 			}
 			case reflect::FieldType::WeakPtr:
 			{
-				GB::DrawWeakPtr(pTypeDescriptor, name, memberPtr);
+				GB::DrawWeakPtr(pTypeDescriptor, name, memberPtr, spacingAfterVariableName);
 				break;
 			}
 			default:
@@ -830,7 +808,7 @@ namespace GB
 			}
 		}
 
-		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 60.0f);
+		ImGui::SameLine();
 
 		// Remove element at specific index
 		GB::BeginRemoveElementButtonStyle();
@@ -846,7 +824,7 @@ namespace GB
 		GB::EndRemoveElementButtonStyle();
 	}
 	
-	void DrawVector(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr)
+	void DrawVector(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const float spacingAfterIndex/* = 125.0f*/)
 	{
 		GB_PTR(vectorType, static_cast<reflect::TypeDescriptor_StdVector*>(pTypeDescriptor), "");
 		GB_PTR(vectorItemTypeDescriptor, vectorType->itemType, "");
@@ -868,7 +846,7 @@ namespace GB
 		constexpr float kVectorButtonStartingPosition = 60.0f;
 		constexpr float kVectorElementButtonOffset = 30.0f;
 
-		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - (kVectorButtonStartingPosition + (kVectorElementButtonOffset * 2.0f)));
+		ImGui::SameLine();
 
 		// Add new elements
 		GB::BeginAddElementButtonStyle();
@@ -902,7 +880,7 @@ namespace GB
 		}
 		GB::EndAddElementButtonStyle();
 
-		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - (kVectorButtonStartingPosition + kVectorElementButtonOffset));
+		ImGui::SameLine();
 
 		// Remove last element
 		GB::BeginRemoveElementButtonStyle();
@@ -921,7 +899,7 @@ namespace GB
 		}
 		GB::EndRemoveElementButtonStyle();
 
-		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - kVectorButtonStartingPosition);
+		ImGui::SameLine();
 
 		// Clear all elements
 		GB::BeginRemoveElementButtonStyle();
@@ -950,7 +928,7 @@ namespace GB
 			{
 				std::string elementName = std::to_string(iV);
 				void* elementPtr = const_cast<void*>(vectorType->getItem(memberPtr, iV));
-				DrawVectorElement(vectorItemTypeDescriptor, vectorItemFieldType, elementName.c_str(), elementPtr, shouldRemoveIndex, kEditorVectorSpacingAfterIndex);
+				DrawVectorElement(vectorItemTypeDescriptor, vectorItemFieldType, elementName.c_str(), elementPtr, shouldRemoveIndex, spacingAfterIndex);
 
 				if (!hasSetRemoveIndexThisFrame)
 				{
@@ -974,48 +952,42 @@ namespace GB
 
 	// ===================================
 	// SMART PTRS
-	void DrawUniquePtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr)
+	void DrawUniquePtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
-		GB_PTR(pUniquePtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdUniquePtr*>(reflectedMemberData.type), "");
-		void* pUniquePtrValue = pUniquePtrTypeDescriptor->getTarget(memberPtr);
-		GB::DrawMember(reflectedMemberData, pUniquePtrValue);
+		GB::DrawUniquePtr(reflectedMemberData.type, reflectedMemberData.name, memberPtr, spacingAfterMemberVariables);
 	}
 
-	void DrawSharedPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr)
+	void DrawSharedPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
-		GB_PTR(pSharedPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdSharedPtr*>(reflectedMemberData.type), "");
-		void* pSharedPtrValue = pSharedPtrTypeDescriptor->getTarget(memberPtr);
-		GB::DrawMember(reflectedMemberData, pSharedPtrValue);
+		GB::DrawSharedPtr(reflectedMemberData.type, reflectedMemberData.name, memberPtr, spacingAfterMemberVariables);
 	}
 
-	void DrawWeakPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr)
+	void DrawWeakPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
-		GB_PTR(pWeakPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdWeakPtr*>(reflectedMemberData.type), "");
-		void* pWeakPtrValue = pWeakPtrTypeDescriptor->getTarget(memberPtr);
-		GB::DrawMember(reflectedMemberData, pWeakPtrValue);
+		GB::DrawWeakPtr(reflectedMemberData.type, reflectedMemberData.name, memberPtr, spacingAfterMemberVariables);
 	}
 
-	void DrawUniquePtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr)
+	void DrawUniquePtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
 		GB_PTR(pUniquePtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdUniquePtr*>(pTypeDescriptor), "");
 		GB_PTR(pUniquePtrValueTypeDescriptor, pUniquePtrTypeDescriptor->targetType, "");
 		void* pUniquePtrValue = pUniquePtrTypeDescriptor->getTarget(memberPtr);
-		GB::DrawMember(pUniquePtrValueTypeDescriptor, name, pUniquePtrValue);
+		GB::DrawMember(pUniquePtrValueTypeDescriptor, name, pUniquePtrValue, spacingAfterMemberVariables);
 	}
 
-	void DrawSharedPtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr)
+	void DrawSharedPtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
 		GB_PTR(pSharedPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdSharedPtr*>(pTypeDescriptor), "");
 		GB_PTR(pSharedPtrValueTypeDescriptor, pSharedPtrTypeDescriptor->targetType, "");
 		void* pSharedPtrValue = pSharedPtrTypeDescriptor->getTarget(memberPtr);
-		GB::DrawMember(pSharedPtrValueTypeDescriptor, name, pSharedPtrValue);
+		GB::DrawMember(pSharedPtrValueTypeDescriptor, name, pSharedPtrValue, spacingAfterMemberVariables);
 	}
 
-	void DrawWeakPtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr)
+	void DrawWeakPtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
 		GB_PTR(pWeakPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdWeakPtr*>(pTypeDescriptor), "");
 		GB_PTR(pWeakPtrValueTypeDescriptor, pWeakPtrTypeDescriptor->targetType, "");
 		void* pWeakPtrValue = pWeakPtrTypeDescriptor->getTarget(memberPtr);
-		GB::DrawMember(pWeakPtrValueTypeDescriptor, name, pWeakPtrValue);
+		GB::DrawMember(pWeakPtrValueTypeDescriptor, name, pWeakPtrValue, spacingAfterMemberVariables);
 	}
 }

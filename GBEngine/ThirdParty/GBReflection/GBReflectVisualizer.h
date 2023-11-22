@@ -88,6 +88,8 @@ namespace GB
 
 	// ===================================
 	// SMART PTRS
+	float CalculateSpacingForTargetType(const reflect::TypeDescriptor* pTargetTypeDescriptor, const float defaultSpacing = 125.0f);
+
 	void DrawUniquePtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr, const float spacingAfterMemberVariables = 125.0f);
 	void DrawSharedPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr, const float spacingAfterMemberVariables = 125.0f);
 	void DrawWeakPtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr, const float spacingAfterMemberVariables = 125.0f);

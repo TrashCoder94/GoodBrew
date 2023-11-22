@@ -51,11 +51,11 @@ namespace GB
 	// Sprite image size
 	static const ImVec2& kEditorVariableImageSize				= ImVec2{ 50.0f, 50.0f };
 
-	static constexpr int kEditorVariableIntResetValue			= 0;
-	static constexpr float kEditorVariableFloatResetValue		= 0.0f;
-	static constexpr float kEditorNumberVariableWidth			= 75.0f;
-	static constexpr float kEditorVectorSpacingAfterIndex		= 125.0f;
-	static constexpr float kEditorClassSpacingMultiplier		= 0.3f;
+	static constexpr int kEditorVariableIntResetValue					= 0;
+	static constexpr float kEditorVariableFloatResetValue				= 0.0f;
+	static constexpr float kEditorNumberVariableWidth					= 75.0f;
+	static constexpr float kEditorClassSpacingMultiplier				= 0.15f;
+	static constexpr float kEditorClassSpacingVectorElementMultiplier	= 0.3f;
 
 	// ===================================
 	// ImGui helpers
@@ -771,14 +771,14 @@ namespace GB
 				else
 				{
 					GB_PTR(pClass, static_cast<BaseObject*>(memberPtr), "");
-					GB::DrawClass(pClass, spacingAfterVariableName + (spacingAfterVariableName * kEditorClassSpacingMultiplier));
+					GB::DrawClass(pClass, spacingAfterVariableName + (spacingAfterVariableName * kEditorClassSpacingVectorElementMultiplier));
 				}
 				break;
 			}
 			case reflect::FieldType::ClassPtr:
 			{
 				GB_PTR(pClass, *(BaseObject**)memberPtr, "");
-				GB::DrawClass(pClass, spacingAfterVariableName + (spacingAfterVariableName * kEditorClassSpacingMultiplier));
+				GB::DrawClass(pClass, spacingAfterVariableName + (spacingAfterVariableName * kEditorClassSpacingVectorElementMultiplier));
 				break;
 			}
 			case reflect::FieldType::Vector:
@@ -788,17 +788,29 @@ namespace GB
 			}
 			case reflect::FieldType::UniquePtr:
 			{
-				GB::DrawUniquePtr(pTypeDescriptor, name, memberPtr, spacingAfterVariableName);
+				GB_PTR(pUniquePtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdUniquePtr*>(pTypeDescriptor), "");
+				GB_PTR(pTargetTypeDescriptor, pUniquePtrTypeDescriptor->targetType, "");
+				const float spacing = CalculateSpacingForTargetType(pTargetTypeDescriptor, spacingAfterVariableName);
+
+				GB::DrawUniquePtr(pTypeDescriptor, name, memberPtr, spacing);
 				break;
 			}
 			case reflect::FieldType::SharedPtr:
 			{
-				GB::DrawSharedPtr(pTypeDescriptor, name, memberPtr, spacingAfterVariableName);
+				GB_PTR(pSharedPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdSharedPtr*>(pTypeDescriptor), "");
+				GB_PTR(pTargetTypeDescriptor, pSharedPtrTypeDescriptor->targetType, "");
+				const float spacing = CalculateSpacingForTargetType(pTargetTypeDescriptor, spacingAfterVariableName);
+
+				GB::DrawSharedPtr(pTypeDescriptor, name, memberPtr, spacing);
 				break;
 			}
 			case reflect::FieldType::WeakPtr:
 			{
-				GB::DrawWeakPtr(pTypeDescriptor, name, memberPtr, spacingAfterVariableName);
+				GB_PTR(pWeakPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdWeakPtr*>(pTypeDescriptor), "");
+				GB_PTR(pTargetTypeDescriptor, pWeakPtrTypeDescriptor->targetType, "");
+				const float spacing = CalculateSpacingForTargetType(pTargetTypeDescriptor, spacingAfterVariableName);
+
+				GB::DrawWeakPtr(pTypeDescriptor, name, memberPtr, spacing);
 				break;
 			}
 			default:
@@ -952,6 +964,15 @@ namespace GB
 
 	// ===================================
 	// SMART PTRS
+	float CalculateSpacingForTargetType(const reflect::TypeDescriptor* pTargetTypeDescriptor, const float defaultSpacing /*= 125.0f*/)
+	{
+		const reflect::FieldType targetFieldType = pTargetTypeDescriptor->fieldType;
+		const bool isPointingToClassType = (pTargetTypeDescriptor->name != "GBBool"
+			&& (targetFieldType == reflect::FieldType::Class || targetFieldType == reflect::FieldType::ClassPtr));
+		const float spacing = (isPointingToClassType ? (defaultSpacing + (defaultSpacing * kEditorClassSpacingMultiplier)) : (defaultSpacing));
+		return spacing;
+	}
+
 	void DrawUniquePtr(const reflect::TypeDescriptor_Struct::Member& reflectedMemberData, void* memberPtr, const float spacingAfterMemberVariables/* = 125.0f*/)
 	{
 		GB::DrawUniquePtr(reflectedMemberData.type, reflectedMemberData.name, memberPtr, spacingAfterMemberVariables);

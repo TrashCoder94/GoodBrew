@@ -57,8 +57,6 @@ namespace GB
 		GB_CHECK_PTR(pObject, "Cannot add new components to an object that is nullptr");
 
 		// Add Component Button
-		ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 150.0f);
-
 		GB::BeginButtonStyle();
 		{
 			if (ImGui::Button("Add Component"))

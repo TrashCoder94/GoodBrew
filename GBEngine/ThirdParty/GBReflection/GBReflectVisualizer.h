@@ -80,10 +80,14 @@ namespace GB
 	// CLASSES
 	void DrawClassMembers(BaseObject* pClass, const float spacingAfterMemberVariables = 125.0f);
 	void DrawClass(BaseObject* pClass, const float spacingAfterMemberVariables = 125.0f);
+	
+	// Different to the function above because vector elements need to draw the "-" button to remove individual elements
+	// The class remove button should be placed onto the class bar
+	void DrawClassAsVectorElement(BaseObject* pClass, const size_t index, bool& removeElement, const float spacingAfterMemberVariables = 125.0f);
 
 	// ===================================
 	// VECTORS
-	void DrawVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const reflect::FieldType type, const char* name, void* memberPtr, bool& removeElement, const float spacingAfterVariableName = 125.0f);
+	void DrawVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const reflect::FieldType type, const char* name, void* memberPtr, const size_t index, bool& removeElement, const float spacingAfterVariableName = 125.0f);
 	void DrawVector(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const float spacingAfterIndex = 125.0f);
 
 	// ===================================
@@ -97,4 +101,8 @@ namespace GB
 	void DrawUniquePtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const float spacingAfterMemberVariables = 125.0f);
 	void DrawSharedPtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const float spacingAfterMemberVariables = 125.0f);
 	void DrawWeakPtr(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const float spacingAfterMemberVariables = 125.0f);
+
+	void DrawUniquePtrAsVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const size_t index, bool& removeElement, const float spacingAfterMemberVariables = 125.0f);
+	void DrawSharedPtrAsVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const size_t index, bool& removeElement, const float spacingAfterMemberVariables = 125.0f);
+	void DrawWeakPtrAsVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const size_t index, bool& removeElement, const float spacingAfterMemberVariables = 125.0f);
 }

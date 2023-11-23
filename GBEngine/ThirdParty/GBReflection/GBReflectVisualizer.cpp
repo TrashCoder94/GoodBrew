@@ -675,7 +675,61 @@ namespace GB
 		bool open = ImGui::TreeNodeEx((void*)pClass, treeNodeFlags, "%s", pClass->GetTypeDescription().getFullName().c_str());
 		ImGui::PopStyleVar();
 
+		if (ImGui::BeginItemTooltip())
+		{
+			ImGui::TextUnformatted(pClass->GetTypeDescription().getFullName().c_str());
+			ImGui::EndTooltip();
+		}
+
 		if (open)
+		{
+			DrawClassMembers(pClass, spacingAfterMemberVariables);
+			ImGui::TreePop();
+		}
+	}
+
+	void DrawClassAsVectorElement(BaseObject* pClass, const size_t index, bool& removeElement, const float spacingAfterMemberVariables)
+	{
+		std::string uniqueLabelForThisElement = std::to_string(index);
+		uniqueLabelForThisElement.append(pClass->GetTypeDescription().name);
+
+		std::string columnLabel = "##columnLabelForClassAsVectorElement";
+		columnLabel.append(uniqueLabelForThisElement);
+
+		bool opened = false;
+		ImGui::Columns(2, columnLabel.c_str(), false);
+		{
+			const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+			ImVec2 regionContentAvailable = ImGui::GetContentRegionAvail();
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			float lineHeight = GetEditorVariableLineHeight();
+			opened = ImGui::TreeNodeEx((void*)pClass, treeNodeFlags, "%d %s ##%s", index, pClass->GetTypeDescription().getFullName().c_str(), uniqueLabelForThisElement.c_str());
+			ImGui::PopStyleVar();
+
+			if (ImGui::BeginItemTooltip())
+			{
+				ImGui::TextUnformatted(pClass->GetTypeDescription().getFullName().c_str());
+				ImGui::EndTooltip();
+			}
+
+			ImGui::NextColumn();
+
+			// Remove element at specific index
+			GB::BeginRemoveElementButtonStyle();
+			{
+				std::string removeElementButtonLabel = "-##RemoveElementAtIndexForClassVectorElementButton";
+				removeElementButtonLabel.append(uniqueLabelForThisElement);
+				const float lineHeight = GetEditorVariableLineHeight();
+				if (ImGui::Button(removeElementButtonLabel.c_str(), ImVec2{ lineHeight, lineHeight }))
+				{
+					removeElement = true;
+				}
+			}
+			GB::EndRemoveElementButtonStyle();
+		}
+		ImGui::Columns(1);
+
+		if (opened)
 		{
 			DrawClassMembers(pClass, spacingAfterMemberVariables);
 			ImGui::TreePop();
@@ -684,8 +738,10 @@ namespace GB
 
 	// ===================================
 	// VECTORS
-	void DrawVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const reflect::FieldType type, const char* name, void* memberPtr, bool& removeElement, const float spacingAfterVariableName/* = 125.0f*/)
+	void DrawVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const reflect::FieldType type, const char* name, void* memberPtr, const size_t index, bool& removeElement, const float spacingAfterVariableName/* = 125.0f*/)
 	{
+		bool shouldDrawRemoveVectorElement = true;
+		
 		switch (type)
 		{
 			case reflect::FieldType::None:
@@ -771,14 +827,16 @@ namespace GB
 				else
 				{
 					GB_PTR(pClass, static_cast<BaseObject*>(memberPtr), "");
-					GB::DrawClass(pClass, spacingAfterVariableName + (spacingAfterVariableName * kEditorClassSpacingVectorElementMultiplier));
+					GB::DrawClassAsVectorElement(pClass, index, removeElement, spacingAfterVariableName + (spacingAfterVariableName * kEditorClassSpacingVectorElementMultiplier));
+					shouldDrawRemoveVectorElement = false;
 				}
 				break;
 			}
 			case reflect::FieldType::ClassPtr:
 			{
 				GB_PTR(pClass, *(BaseObject**)memberPtr, "");
-				GB::DrawClass(pClass, spacingAfterVariableName + (spacingAfterVariableName * kEditorClassSpacingVectorElementMultiplier));
+				GB::DrawClassAsVectorElement(pClass, index, removeElement, spacingAfterVariableName + (spacingAfterVariableName * kEditorClassSpacingVectorElementMultiplier));
+				shouldDrawRemoveVectorElement = false;
 				break;
 			}
 			case reflect::FieldType::Vector:
@@ -792,7 +850,8 @@ namespace GB
 				GB_PTR(pTargetTypeDescriptor, pUniquePtrTypeDescriptor->targetType, "");
 				const float spacing = CalculateSpacingForTargetType(pTargetTypeDescriptor, spacingAfterVariableName);
 
-				GB::DrawUniquePtr(pTypeDescriptor, name, memberPtr, spacing);
+				GB::DrawUniquePtrAsVectorElement(pTypeDescriptor, name, memberPtr, index, removeElement, spacing);
+				shouldDrawRemoveVectorElement = false;
 				break;
 			}
 			case reflect::FieldType::SharedPtr:
@@ -801,7 +860,8 @@ namespace GB
 				GB_PTR(pTargetTypeDescriptor, pSharedPtrTypeDescriptor->targetType, "");
 				const float spacing = CalculateSpacingForTargetType(pTargetTypeDescriptor, spacingAfterVariableName);
 
-				GB::DrawSharedPtr(pTypeDescriptor, name, memberPtr, spacing);
+				GB::DrawSharedPtrAsVectorElement(pTypeDescriptor, name, memberPtr, index, removeElement, spacing);
+				shouldDrawRemoveVectorElement = false;
 				break;
 			}
 			case reflect::FieldType::WeakPtr:
@@ -810,7 +870,8 @@ namespace GB
 				GB_PTR(pTargetTypeDescriptor, pWeakPtrTypeDescriptor->targetType, "");
 				const float spacing = CalculateSpacingForTargetType(pTargetTypeDescriptor, spacingAfterVariableName);
 
-				GB::DrawWeakPtr(pTypeDescriptor, name, memberPtr, spacing);
+				GB::DrawWeakPtrAsVectorElement(pTypeDescriptor, name, memberPtr, index, removeElement, spacing);
+				shouldDrawRemoveVectorElement = false;
 				break;
 			}
 			default:
@@ -820,20 +881,23 @@ namespace GB
 			}
 		}
 
-		ImGui::SameLine();
-
-		// Remove element at specific index
-		GB::BeginRemoveElementButtonStyle();
+		if (shouldDrawRemoveVectorElement)
 		{
-			std::string removeElementButtonLabel = "-##RemoveElementAtIndexButton";
-			removeElementButtonLabel.append(name);
-			const float lineHeight = GetEditorVariableLineHeight();
-			if (ImGui::Button(removeElementButtonLabel.c_str(), ImVec2{ lineHeight, lineHeight }))
+			ImGui::SameLine();
+
+			// Remove element at specific index
+			GB::BeginRemoveElementButtonStyle();
 			{
-				removeElement = true;
+				std::string removeElementButtonLabel = "-##RemoveElementAtIndexButton";
+				removeElementButtonLabel.append(name);
+				const float lineHeight = GetEditorVariableLineHeight();
+				if (ImGui::Button(removeElementButtonLabel.c_str(), ImVec2{ lineHeight, lineHeight }))
+				{
+					removeElement = true;
+				}
 			}
+			GB::EndRemoveElementButtonStyle();
 		}
-		GB::EndRemoveElementButtonStyle();
 	}
 	
 	void DrawVector(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const float spacingAfterIndex/* = 125.0f*/)
@@ -845,90 +909,107 @@ namespace GB
 		// Not const because there are Add Element and Remove Element buttons here which can alter the size of the vector.
 		size_t vectorSize = vectorType->getSize(memberPtr);
 
-		std::string vectorName = "";
-		vectorName.append(name);
-		vectorName.append(" " + std::to_string(vectorSize) + " Elements");
+		std::string vectorName = name;
 
-		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-		float lineHeight = GetEditorVariableLineHeight();
-		const bool opened = ImGui::TreeNodeEx(memberPtr, flags, "%s", vectorName.c_str());
-		ImGui::PopStyleVar();
+		std::string columnLabel = "##" + vectorName;
+		bool opened = false;
 
-		constexpr float kVectorButtonStartingPosition = 60.0f;
-		constexpr float kVectorElementButtonOffset = 30.0f;
-
-		ImGui::SameLine();
-
-		// Add new elements
-		GB::BeginAddElementButtonStyle();
+		ImGui::Columns(3, columnLabel.c_str(), false);
 		{
-			std::string addElementButtonLabel = "+##AddElementButton";
-			addElementButtonLabel.append(vectorName);
-			if (ImGui::Button(addElementButtonLabel.c_str(), ImVec2{ lineHeight, lineHeight }))
+			ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+			float lineHeight = GetEditorVariableLineHeight();
+			opened = ImGui::TreeNodeEx(memberPtr, flags, "%s", vectorName.c_str());
+			ImGui::PopStyleVar();
+
+			if (ImGui::BeginItemTooltip())
 			{
-				vectorType->addNewItem(memberPtr);
+				ImGui::TextUnformatted(vectorName.c_str());
+				ImGui::EndTooltip();
+			}
 
-				// Refreshing the size since the vector has been altered here, should be one new element
-				vectorSize = vectorType->getSize(memberPtr);
+			constexpr float kVectorButtonStartingPosition = 60.0f;
+			constexpr float kVectorElementButtonOffset = 30.0f;
 
-				// Specific implementation for classes that need to manually Create (could be due to cross platform/cross renderer techniques)
-				if (vectorItemFieldType == reflect::FieldType::SharedPtr)
+			ImGui::SetColumnWidth(1, 125.0f);
+			ImGui::NextColumn();
+
+			const std::string& numberOfElements = std::to_string(vectorSize) + " Elements";
+			ImGui::TextUnformatted(numberOfElements.c_str());
+
+			ImGui::NextColumn();
+
+			// Add new elements
+			GB::BeginAddElementButtonStyle();
+			{
+				std::string addElementButtonLabel = "+##AddElementButton";
+				addElementButtonLabel.append(vectorName);
+				if (ImGui::Button(addElementButtonLabel.c_str(), ImVec2{ lineHeight, lineHeight }))
 				{
-					GB_PTR(pSharedPtrAsVoid, vectorType->getItem(memberPtr, vectorSize - 1), "");
-					GB_PTR(pSharedPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdSharedPtr*>(vectorItemTypeDescriptor), "");
-					
-					if (pSharedPtrTypeDescriptor->targetType->fieldType == reflect::FieldType::Texture)
+					vectorType->addNewItem(memberPtr);
+
+					// Refreshing the size since the vector has been altered here, should be one new element
+					vectorSize = vectorType->getSize(memberPtr);
+
+					// Specific implementation for classes that need to manually Create (could be due to cross platform/cross renderer techniques)
+					if (vectorItemFieldType == reflect::FieldType::SharedPtr)
 					{
-						// Get the vector from the memberPtr and update the latest element to a valid SharedPtr<Texture2D> by calling ::Create()...
-						// Then set the value back to memberPtr afterwards to update it properly
-						GB_PTR(pSharedPtrTexture, static_cast<SharedPtr<Texture2D>*>(const_cast<void*>(pSharedPtrAsVoid)), "");
-						std::vector<SharedPtr<Texture2D>> vectorOfTextures = *((std::vector<SharedPtr<Texture2D>>*)memberPtr);
-						vectorOfTextures.at(vectorSize - 1) = Texture2D::Create("Assets/Textures/T_WhiteSquare.png");
-						*((std::vector<SharedPtr<Texture2D>>*)memberPtr) = vectorOfTextures;
+						GB_PTR(pSharedPtrAsVoid, vectorType->getItem(memberPtr, vectorSize - 1), "");
+						GB_PTR(pSharedPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdSharedPtr*>(vectorItemTypeDescriptor), "");
+
+						if (pSharedPtrTypeDescriptor->targetType->fieldType == reflect::FieldType::Texture)
+						{
+							// Get the vector from the memberPtr and update the latest element to a valid SharedPtr<Texture2D> by calling ::Create()...
+							// Then set the value back to memberPtr afterwards to update it properly
+							GB_PTR(pSharedPtrTexture, static_cast<SharedPtr<Texture2D>*>(const_cast<void*>(pSharedPtrAsVoid)), "");
+							std::vector<SharedPtr<Texture2D>> vectorOfTextures = *((std::vector<SharedPtr<Texture2D>>*)memberPtr);
+							vectorOfTextures.at(vectorSize - 1) = Texture2D::Create("Assets/Textures/T_WhiteSquare.png");
+							*((std::vector<SharedPtr<Texture2D>>*)memberPtr) = vectorOfTextures;
+						}
 					}
 				}
 			}
-		}
-		GB::EndAddElementButtonStyle();
+			GB::EndAddElementButtonStyle();
 
-		ImGui::SameLine();
+			ImGui::SameLine();
 
-		// Remove last element
-		GB::BeginRemoveElementButtonStyle();
-		{
-			std::string removeElementButtonLabel = "-##RemoveElementButton";
-			removeElementButtonLabel.append(vectorName);
-			if (ImGui::Button(removeElementButtonLabel.c_str(), ImVec2{ lineHeight, lineHeight }))
+			// Remove last element
+			GB::BeginRemoveElementButtonStyle();
 			{
-				if (vectorSize > 0)
+				std::string removeElementButtonLabel = "-##RemoveElementButton";
+				removeElementButtonLabel.append(vectorName);
+				if (ImGui::Button(removeElementButtonLabel.c_str(), ImVec2{ lineHeight, lineHeight }))
 				{
-					// Always remove the last element with this button
-					vectorType->removeItem(memberPtr, vectorSize - 1);
-					vectorSize = vectorType->getSize(memberPtr);
+					if (vectorSize > 0)
+					{
+						// Always remove the last element with this button
+						vectorType->removeItem(memberPtr, vectorSize - 1);
+						vectorSize = vectorType->getSize(memberPtr);
+					}
 				}
 			}
-		}
-		GB::EndRemoveElementButtonStyle();
+			GB::EndRemoveElementButtonStyle();
 
-		ImGui::SameLine();
+			ImGui::SameLine();
 
-		// Clear all elements
-		GB::BeginRemoveElementButtonStyle();
-		{
-			std::string clearAllElementsButtonLabel = "Clear##ClearAllElementsButton";
-			clearAllElementsButtonLabel.append(vectorName);
-			if (ImGui::Button(clearAllElementsButtonLabel.c_str(), ImVec2{ 60.0f, lineHeight }))
+			// Clear all elements
+			GB::BeginRemoveElementButtonStyle();
 			{
-				if (vectorSize > 0)
+				std::string clearAllElementsButtonLabel = "Clear##ClearAllElementsButton";
+				clearAllElementsButtonLabel.append(vectorName);
+				if (ImGui::Button(clearAllElementsButtonLabel.c_str(), ImVec2{ 60.0f, lineHeight }))
 				{
-					// Always remove the last element with this button
-					vectorType->clearAllItems(memberPtr);
-					vectorSize = vectorType->getSize(memberPtr);
+					if (vectorSize > 0)
+					{
+						// Always remove the last element with this button
+						vectorType->clearAllItems(memberPtr);
+						vectorSize = vectorType->getSize(memberPtr);
+					}
 				}
 			}
+			GB::EndRemoveElementButtonStyle();
 		}
-		GB::EndRemoveElementButtonStyle();
+		ImGui::Columns(1);
 
 		if (opened)
 		{
@@ -940,7 +1021,7 @@ namespace GB
 			{
 				std::string elementName = std::to_string(iV);
 				void* elementPtr = const_cast<void*>(vectorType->getItem(memberPtr, iV));
-				DrawVectorElement(vectorItemTypeDescriptor, vectorItemFieldType, elementName.c_str(), elementPtr, shouldRemoveIndex, spacingAfterIndex);
+				DrawVectorElement(vectorItemTypeDescriptor, vectorItemFieldType, elementName.c_str(), elementPtr, iV, shouldRemoveIndex, spacingAfterIndex);
 
 				if (!hasSetRemoveIndexThisFrame)
 				{
@@ -1010,5 +1091,29 @@ namespace GB
 		GB_PTR(pWeakPtrValueTypeDescriptor, pWeakPtrTypeDescriptor->targetType, "");
 		void* pWeakPtrValue = pWeakPtrTypeDescriptor->getTarget(memberPtr);
 		GB::DrawMember(pWeakPtrValueTypeDescriptor, name, pWeakPtrValue, spacingAfterMemberVariables);
+	}
+
+	void DrawUniquePtrAsVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const size_t index, bool& removeElement, const float spacingAfterMemberVariables)
+	{
+		GB_PTR(pUniquePtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdUniquePtr*>(pTypeDescriptor), "");
+		GB_PTR(pUniquePtrValueTypeDescriptor, pUniquePtrTypeDescriptor->targetType, "");
+		void* pUniquePtrValue = pUniquePtrTypeDescriptor->getTarget(memberPtr);
+		GB::DrawVectorElement(pUniquePtrValueTypeDescriptor, pUniquePtrValueTypeDescriptor->fieldType, name, pUniquePtrValue, index, removeElement, spacingAfterMemberVariables);
+	}
+	
+	void DrawSharedPtrAsVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const size_t index, bool& removeElement, const float spacingAfterMemberVariables)
+	{
+		GB_PTR(pSharedPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdSharedPtr*>(pTypeDescriptor), "");
+		GB_PTR(pSharedPtrValueTypeDescriptor, pSharedPtrTypeDescriptor->targetType, "");
+		void* pSharedPtrValue = pSharedPtrTypeDescriptor->getTarget(memberPtr);
+		GB::DrawVectorElement(pSharedPtrValueTypeDescriptor, pSharedPtrValueTypeDescriptor->fieldType, name, pSharedPtrValue, index, removeElement, spacingAfterMemberVariables);
+	}
+	
+	void DrawWeakPtrAsVectorElement(reflect::TypeDescriptor* pTypeDescriptor, const char* name, void* memberPtr, const size_t index, bool& removeElement, const float spacingAfterMemberVariables)
+	{
+		GB_PTR(pWeakPtrTypeDescriptor, static_cast<reflect::TypeDescriptor_StdWeakPtr*>(pTypeDescriptor), "");
+		GB_PTR(pWeakPtrValueTypeDescriptor, pWeakPtrTypeDescriptor->targetType, "");
+		void* pWeakPtrValue = pWeakPtrTypeDescriptor->getTarget(memberPtr);
+		GB::DrawVectorElement(pWeakPtrValueTypeDescriptor, pWeakPtrValueTypeDescriptor->fieldType, name, pWeakPtrValue, index, removeElement, spacingAfterMemberVariables);
 	}
 }
